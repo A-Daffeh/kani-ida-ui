@@ -1,14 +1,36 @@
-import './App.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import Home from './pages/Home'
+import {
+  createBrowserRouter,
+  RouterProvider
+} from "react-router-dom";
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Home from './pages/Home';
+import SavorySeasoning from "./components/product/SavorySeasoning";
+import Spices from "./components/product/Spices";
+import NotFoundPage from "./pages/NotFoundPage";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/products/savory",
+    element: <SavorySeasoning />,
+  },
+  {
+    path: "/products/spices",
+    element: <Spices />,
+  },
+]);
 
 function App() {
-
   return (
     <div className='app'>
-      <Home />
+      <RouterProvider router={router} />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

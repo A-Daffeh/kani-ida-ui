@@ -9,19 +9,17 @@ const About = () => {
                 <h2>About Us</h2>
                 <Row className="mb-5">
                     <Col xs={6}>
-                        <div className="about-entry">
-                            <p>
-                                Welcome to Savory Seasonings & Spices, a Gambian-owned haven 
-                                for exquisite seasonings and spices! Founded by Ida, 
-                                our passion is to infuse every dish with unparalleled flavor. 
-                                Whether you're a home chef or a culinary professional, 
-                                let us be your trusted companion on your flavor-filled journey. 
-                                Dive into our collection and discover the essence of Gambian cuisine with Kani IDA
-                            </p>
-                        </div>
+                        <p>
+                            Welcome to Savory Seasonings & Spices, a Gambian-owned haven 
+                            for exquisite seasonings and spices! Founded by Ida, 
+                            our passion is to infuse every dish with unparalleled flavor. 
+                            Whether you're a home chef or a culinary professional, 
+                            let us be your trusted companion on your flavor-filled journey. 
+                            Dive into our collection and discover the essence of Gambian cuisine with Kani IDA
+                        </p>
                     </Col>
                     <Col xs={6}>
-                        <div className="education-entry">
+                        <div className="about-img">
                             <img src={assets.about_img} alt="About Image" />
                         </div>
                     </Col>

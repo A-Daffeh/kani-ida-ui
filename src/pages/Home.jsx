@@ -6,7 +6,7 @@ const Home = () => {
     return (
         <>
             <NavBar />
-            <Banner banner_title="Savory, Seasoning & Spices"/>
+            <Banner banner_title="Savory, Seasoning & Spices"  content="Flavor your world with our savory sensations!" className="home-banner" />
             <About />
         </>
     )

@@ -1,5 +1,4 @@
 .banner {
-    background-image: url('../../assets/header_img.png');
     background-position: center;
     box-sizing: border-box;
     background-size: cover;
@@ -9,4 +8,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.home-banner {
+    background-image: url('../../assets/header_img.png');
+}
+
+.spices-banner {
+    background-image: url('../../assets/logo.png');
+}
+
+.savory-banner {
+    background-image: url('../../assets/about_img.png');
 }
