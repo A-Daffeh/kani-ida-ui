@@ -1,0 +1,12 @@
+.banner {
+    background-image: url('../../assets/header_img.png');
+    background-position: center;
+    box-sizing: border-box;
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

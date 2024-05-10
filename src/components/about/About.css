@@ -1,0 +1,16 @@
+.about {
+    background-image: url('../../assets/header_img.png');
+    background-position: center;
+    box-sizing: border-box;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.about h2 {
+    text-align: center;
+    font-weight: 700;
+}
