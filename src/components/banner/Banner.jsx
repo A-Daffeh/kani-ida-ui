@@ -22,3 +22,9 @@ const Banner = ({ banner_title, content = "", className }) => {
 }
 
 export default Banner;
+
+
+// do sign up button, make it a modal, with username and password, dont have account yet? Register, when that is clicked a new modal shows up
+// change the about us text (done)
+// finish contact page, with routing (done)
+// shopping cart icon, and cart (done)

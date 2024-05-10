@@ -9,7 +9,7 @@ const About = () => {
                 <h2>About Us</h2>
                 <Row className="mb-5">
                     <Col xs={6}>
-                        <p>
+                        <p className='about-para'>
                             Welcome to Savory Seasonings & Spices, a Gambian-owned haven 
                             for exquisite seasonings and spices! Founded by Ida, 
                             our passion is to infuse every dish with unparalleled flavor. 

@@ -13,7 +13,6 @@ body {
     font-weight: 400;
     overflow-x: hidden;
     position: relative;
-    background-color: #121212 !important;
     color: #fff !important;
     font-family: 'Centra', sans-serif !important;
 }
@@ -62,4 +61,9 @@ p.success {
 
 p.danger {
     color: red;
+}
+
+.about-para {
+    font-size: 1.5rem;
+    margin-top: 50px;
 }

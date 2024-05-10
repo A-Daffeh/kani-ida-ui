@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import SavorySeasoning from "./components/product/SavorySeasoning";
 import Spices from "./components/product/Spices";
 import NotFoundPage from "./pages/NotFoundPage";
+import Contact from "./components/contact/Contact";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,11 @@ const router = createBrowserRouter([
     path: "/products/spices",
     element: <Spices />,
   },
+
+  {
+    path : "/contact",
+    element : <Contact />
+  }
 ]);
 
 function App() {
