@@ -6,15 +6,23 @@ import { assets } from '../../assets/assets';
 const NavBar = () => {
     const [activeLink, setActiveLink] = useState('banner');
 
-    const onUpdateActiveLink = (e, link) => {
-        e.preventDefault();
+    const onUpdateActiveLink = (link) => {
+        if (window.location.pathname === "/") {
+            if (link === '#about') {
+                document.querySelector(link).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        } else {
+            window.location.href = "/";
+        }
         setActiveLink(link);
     }
 
     return (
         <Navbar expand="lg">
             <Container>
-                <Navbar.Brand href="#">
+                <Navbar.Brand href="/">
                     <img src={assets.logo} alt="Logo" />
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav">
@@ -22,11 +30,16 @@ const NavBar = () => {
                 </Navbar.Toggle>
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link href="#banner" className={activeLink === '#banner' ? 'active navbar-link' : 'navbar-link' } onClick={() => onUpdateActiveLink('#banner')}>Home</Nav.Link>
+                        <Nav.Link href="/" className={activeLink === '#banner' ? 'active navbar-link' : 'navbar-link' }>Home</Nav.Link>
                         <Nav.Link href="#about" className={activeLink === '#about' ? 'active navbar-link' : 'navbar-link' } onClick={() => onUpdateActiveLink('#about')}>About</Nav.Link>
                         <NavDropdown title="Products" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="#" className="prod-category">Savory & Seasoning</NavDropdown.Item>
-                            <NavDropdown.Item href="#" className="prod-category">Spices</NavDropdown.Item>
+                            <NavDropdown.Item href="/products/savory" className="prod-category">
+                                Savory & Seasoning
+                            </NavDropdown.Item>
+                        
+                            <NavDropdown.Item href="/products/spices" className="prod-category">
+                                Spices
+                            </NavDropdown.Item>
                         </NavDropdown>    
                         <Nav.Link href="#" className={activeLink === '#' ? 'active navbar-link' : 'navbar-link' } onClick={() => onUpdateActiveLink('#')}>Contact</Nav.Link>
                     </Nav>

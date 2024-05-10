@@ -1,11 +1,21 @@
+import { useEffect, useState } from 'react';
 import './Banner.css';
 
-const Banner = ({ banner_title }) => {
+const Banner = ({ banner_title, content = "", className }) => {
+    const [description, setDescription] = useState(false);
+    const combinedClassName = `banner ${className}`;
+
+    useEffect(() => {
+        if (content.length > 0) {
+            setDescription(true);
+        }
+    }, []);
+
     return (
-        <div className="banner" id="banner">
+        <div className={combinedClassName} id="banner">
             <div>
                 <h3>{banner_title}</h3>
-                <h5>Flavor your world with our savory sensations!</h5>
+                {description && <h5>{content}</h5>}
             </div>
         </div>
     )
