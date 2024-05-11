@@ -11,7 +11,7 @@ nav.navbar.scrolled {
     background-color: #121212;
 }
 nav.navbar a.navbar-brand {
-    width: 6%;
+    width: 5%;
 }
 
 nav.navbar a.navbar-brand img {
@@ -65,12 +65,12 @@ span.navbar-text {
 .social-icon a:hover::before {
     transform: scale(1);
 }
-.social-icon a img {
+.social-icon a .svg-inline--fa {
     width: 40%;
     z-index: 1;
     transition: 0.3s ease-in-out;
 }
-.social-icon a:hover img {
+.social-icon a:hover .svg-inline--fa {
     filter: brightness(0) saturate(100%) invert(0%) sepia(7%) saturate(98%) hue-rotate(346deg) brightness(95%) contrast(86%);
 }
 .navbar-text button {
@@ -166,5 +166,37 @@ nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
 .prod-category:focus {
     opacity: 1;
     color: #f33434 !important;
+}
+
+.form-label {
+    color: black;
+}
+
+.checkbox-text {
+    color: black;
+}
+
+.form { /* for now */
+   max-width: 500px;
+    margin: auto; 
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.forgot-password  {
+ text-decoration: none;
+ color: black;
+}
+
+.checkbox-text {
+    margin-top: -40px; 
+
+}
+
+.forgot-password:hover {
+    color: red;
 }
 

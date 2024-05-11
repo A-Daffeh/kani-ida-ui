@@ -8,7 +8,7 @@ import Home from './pages/Home';
 import SavorySeasoning from "./components/product/SavorySeasoning";
 import Spices from "./components/product/Spices";
 import NotFoundPage from "./pages/NotFoundPage";
-import Contact from "./components/contact/Contact";
+import Contact from "./pages/Contact";
 
 const router = createBrowserRouter([
   {

@@ -63,49 +63,7 @@ p.danger {
     color: red;
 }
 
-.about-para {
-    font-size: 1.5rem;
-    margin-top: 50px;
-}
-/*
-.low-width {
-    height: 80px;
-}
-*/
-
-.modal-margin {
-    margin-top: 250px;
-}
-
-.form-label {
-color: black;
-}
-
-.checkbox-text {
-    color: black;
-}
-
-.form { /* for now */
-   max-width: 500px;
-    margin: auto; 
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-}
-
-.forgot-password  {
- text-decoration: none;
- color: black;
-}
-
-.checkbox-text {
-    margin-top: -40px; 
-
-}
-
-
-.forgot-password:hover {
-    color: red;
+.contact {
+    position: relative;
+    top: 150px;
 }

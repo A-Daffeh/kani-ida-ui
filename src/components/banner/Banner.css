@@ -12,11 +12,19 @@
 
 }
 
+.banner h3 {
+    font-size: 3.0rem; 
+    color: #fff; 
+    font-family: 'Great Vibes', cursive;
+}
+
+.banner h5 {
+    font-size: 1.9rem; 
+    color: #fff; 
+}
+
 .home-banner {
     background-image: url('../../assets/Vegetables1.png');
-  
-    font-family: great-vibes;
-
 }
 
 .spices-banner {
@@ -25,17 +33,6 @@
 
 .savory-banner {
     background-image: url('../../assets/about_img.png');
-}
-
-.home-banner h3 {
-    font-size: 3.0rem; 
-    color: #fff; 
-    font-family: 'Great Vibes', cursive;
-}
-
-.home-banner h5 {
-    font-size: 1.9rem; 
-    color: #fff; 
 }
 
 .modal-color {
