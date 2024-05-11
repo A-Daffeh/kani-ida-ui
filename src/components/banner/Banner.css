@@ -38,3 +38,10 @@
     color: #fff; 
 }
 
+.modal-color {
+    color: black;
+}
+
+body.modal-open {
+    overflow-y: scroll;
+}
