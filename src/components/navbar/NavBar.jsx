@@ -11,10 +11,16 @@ import Form from 'react-bootstrap/Form';
 
 
 const NavBar = () => {
-    const [show, setShow] = useState(false); // state variable, who's state will change, and then the setter function which will change the state of the modal (setting it to true will keep the modal visible. its false by default )
-   
+    // i first need to initalize the modal with the modal i think should be shown first
+    const [show, setShow] = useState(false); // state variable for the login form after the button is clicked, it will change the state to true from its being false thus, rendering the login form
+   const [isLogin, setIsLogin] = useState(true); // this usestate true for login form, since its picking up from when the login modal is shown
+
     const handleClose = () => setShow(false); // handleClose method  means to show the modal when its clicked 
-    
+
+    const toggleForm = () => {
+        setIsLogin(!isLogin); // when the register link is clicked, the login modal would go away
+    }
+   
     const [activeLink, setActiveLink] = useState('banner');
 
     const onUpdateActiveLink = (link) => {
@@ -61,19 +67,24 @@ const NavBar = () => {
                             <a href="#"><FontAwesomeIcon icon={faMagnifyingGlass} alt="Search" /></a>
                             <a href="#"><FontAwesomeIcon icon={faCartShopping} alt="Add to Cart" /></a>
                             </div>
-                            <button onClick={() => setShow(true)} className="vvd"><span>Login</span></button>
+                           <button onClick={() => setShow(true)} className="vvd"><span>Login</span></button> 
+                           
                         </span>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
 
     
-            <Modal show={show} onHide={handleClose} style={{ zIndex: 9999 }}>
-                <Modal.Header closeButton>
-                    <Modal.Title className="modal-color">Log in</Modal.Title>
+            <Modal show={show} onHide={handleClose} style={{ zIndex: 9999 }} className="">
+                <Modal.Header className="modal-header" closeButton>
+                    <Modal.Title>{isLogin ? 'Log in' : 'Sign up'}</Modal.Title> {/* what this does is it checks if islogin is true, if it is, show the log in modal, if not show the sign up modal */ }
                 </Modal.Header>
                 <div className="container-fluid mb-4">
                     <Form className="form">
+                        {/* here the modal will be adjusted to display different content based on whether isLogin' is true or false 
+                        you use conditional rendering to decide which content will be rendered , if its true it will show  the form will show the login stuff, if not, it will 
+
+                        */}
                         <Form.Group className="mb-3" controlId="formBasicText">
                             <Form.Control type="form-text" placeholder="Username" />
                         </Form.Group>
@@ -88,10 +99,22 @@ const NavBar = () => {
                         
                         <Form.Group className="mb-3" controlId="formBasicCheckbox" />
                         <Form.Check className="checkbox-text mb-5" type="checkbox" label="Remember me" />
-                        <Button variant="primary" type="submit">Login</Button>
+
+{/* if you want two elements to be in the same line but with space between the two use space-between and make sure the two elements are on the same line */ }
+                        <span className="forgotpass-login "> 
+                                <Button variant="success" type="submit">Login</Button> 
+                                <a className="forgot-password mb-0" href="#">Don't have an account? Sign up </a>
+                            </span>
+
+                       
+
+                      
+                      
+                       
                     </Form>
                 </div>
             </Modal>
+
         </>
     );
 }
