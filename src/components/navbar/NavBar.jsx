@@ -85,6 +85,10 @@ const NavBar = () => {
                         you use conditional rendering to decide which content will be rendered , if its true it will show  the form will show the login stuff, if not, it will 
 
                         */}
+                        {/* its purpuse here is to conditionally render the content of the modal based on whether the user is in login or signup mode */}
+                        {isLogin ? ( 
+                            <>
+                            {/* show the login modal */}
                         <Form.Group className="mb-3" controlId="formBasicText">
                             <Form.Control type="form-text" placeholder="Username" />
                         </Form.Group>
@@ -100,25 +104,44 @@ const NavBar = () => {
                         <Form.Group className="mb-3" controlId="formBasicCheckbox" />
                         <Form.Check className="checkbox-text mb-5" type="checkbox" label="Remember me" />
 
-{/* if you want two elements to be in the same line but with space between the two use space-between and make sure the two elements are on the same line */ }
+
                         <span className="forgotpass-login "> 
                                 <Button variant="success" type="submit">Login</Button> 
-                                <a className="forgot-password mb-0" href="#">Don't have an account? Sign up </a>
+                                <a className="forgot-password mb-0" href="#"  onClick={toggleForm}>Don't have an account? Sign up </a>
                             </span>
+                            </>
+
+                  
+                        ) : (  
+                            <>
+                           <Form.Group className="mb-3" controlId="formBasicText">
+                            <Form.Control type="form-text" placeholder="Full Name" />
+                        </Form.Group>
+                       
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Control type="email" placeholder="Email" />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formBasicNumber">
+                            <Form.Control type="form-text" placeholder="Phone Number" />
+                        </Form.Group>
+                        <span className="forgotpass-login">
+                         <Button variant="success" type="submit">Sign Up</Button>
+                         <a className="forgot-password mb-0" href="#" onClick={toggleForm}>Already have an account? Log in</a>
+                                </span>
+                        
 
                        
-
-                      
-                      
                        
+                            </>
+                    
+                        )}
                     </Form>
                 </div>
             </Modal>
-
         </>
     );
 }
 
 export default NavBar;
 
-// there is an issue where when the sign up button is hit and the modal comes the navbar shifts from left to right
+{/* if you want two elements to be in the same line but with space between the two use space-between and make sure the two elements are on the same line */ }
