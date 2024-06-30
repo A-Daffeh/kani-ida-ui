@@ -168,16 +168,15 @@ nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
     color: #f33434 !important;
 }
 
-.form-label {
-    color: black;
-}
-
+.form-label,
+.form-check-label,
 .checkbox-text {
     color: black;
 }
 
+
 .form { /* for now */
-   max-width: 500px;
+    max-width: 500px;
     margin: auto; 
     padding: 20px;
     background-color: #fff;
@@ -186,14 +185,9 @@ nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
     margin-top: 20px;
 }
 
-.forgot-password  {
- text-decoration: none;
- color: black;
-}
-
-.checkbox-text {
-    margin-top: -40px; 
-
+.have-account  {
+    text-decoration: none;
+    color: black;
 }
 
 .forgot-password:hover {
@@ -207,7 +201,7 @@ nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
 }
 
 .modal-header {
-    background-color: #f33434;
- 
+    background: linear-gradient(to right, #f33434, #4CAF50);
 }
+
 

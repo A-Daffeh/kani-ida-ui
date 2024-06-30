@@ -7,19 +7,125 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
+
+
+const states = [
+    { name: 'Alabama', code: 'AL' },
+    { name: 'Alaska', code: 'AK' },
+    { name: 'Arizona', code: 'AZ' },
+    { name: 'Arkansas', code: 'AR' },
+    { name: 'California', code: 'CA' },
+    { name: 'Colorado', code: 'CO' },
+    { name: 'Connecticut', code: 'CT' },
+    { name: 'Delaware', code: 'DE' },
+    { name: 'Florida', code: 'FL' },
+    { name: 'Georgia', code: 'GA' },
+    { name: 'Hawaii', code: 'HI' },
+    { name: 'Idaho', code: 'ID' },
+    { name: 'Illinois', code: 'IL' },
+    { name: 'Indiana', code: 'IN' },
+    { name: 'Iowa', code: 'IA' },
+    { name: 'Kansas', code: 'KS' },
+    { name: 'Kentucky', code: 'KY' },
+    { name: 'Louisiana', code: 'LA' },
+    { name: 'Maine', code: 'ME' },
+    { name: 'Maryland', code: 'MD' },
+    { name: 'Massachusetts', code: 'MA' },
+    { name: 'Michigan', code: 'MI' },
+    { name: 'Minnesota', code: 'MN' },
+    { name: 'Mississippi', code: 'MS' },
+    { name: 'Missouri', code: 'MO' },
+    { name: 'Montana', code: 'MT' },
+    { name: 'Nebraska', code: 'NE' },
+    { name: 'Nevada', code: 'NV' },
+    { name: 'New Hampshire', code: 'NH' },
+    { name: 'New Jersey', code: 'NJ' },
+    { name: 'New Mexico', code: 'NM' },
+    { name: 'New York', code: 'NY' },
+    { name: 'North Carolina', code: 'NC' },
+    { name: 'North Dakota', code: 'ND' },
+    { name: 'Ohio', code: 'OH' },
+    { name: 'Oklahoma', code: 'OK' },
+    { name: 'Oregon', code: 'OR' },
+    { name: 'Pennsylvania', code: 'PA' },
+    { name: 'Rhode Island', code: 'RI' },
+    { name: 'South Carolina', code: 'SC' },
+    { name: 'South Dakota', code: 'SD' },
+    { name: 'Tennessee', code: 'TN' },
+    { name: 'Texas', code: 'TX' },
+    { name: 'Utah', code: 'UT' },
+    { name: 'Vermont', code: 'VT' },
+    { name: 'Virginia', code: 'VA' },
+    { name: 'Washington', code: 'WA' },
+    { name: 'West Virginia', code: 'WV' },
+    { name: 'Wisconsin', code: 'WI' },
+    { name: 'Wyoming', code: 'WY' }
+];
 
 
 const NavBar = () => {
-    // i first need to initalize the modal with the modal i think should be shown first
-    const [show, setShow] = useState(false); // state variable for the login form after the button is clicked, it will change the state to true from its being false thus, rendering the login form
-   const [isLogin, setIsLogin] = useState(true); // this usestate true for login form, since its picking up from when the login modal is shown
+    const [show, setShow] = useState(false); 
+    const [isLogin, setIsLogin] = useState(true);
+    const [userLogin, setUserLogin] = useState({
+        email: "",
+        password: ""
+    });
+    const [userRegister, setUserRegister] = useState({
+        fullName: "",
+        email: "",
+        password: "",
+        address: {
+            street: "",
+            city: "",
+            state: "",
+            postalCode: ""
+        }
+    });
+    
+    const handleClose = () => setShow(false);
+    
+    const handleLoginChange = (e) => {
+        const { name, value } = e.target;
+        setUserLogin((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
 
-    const handleClose = () => setShow(false); // handleClose method  means to show the modal when its clicked 
-
+    const handleRegisterChange = (e) => {
+        const { name, value } = e.target;
+        
+        if (name in userRegister.address) {
+            setUserRegister((prev) => ({
+                ...prev,
+                address: {
+                    ...prev.address,
+                    [name]: value
+                }
+            }));
+        } else {
+            setUserRegister((prev) => ({
+                ...prev,
+                [name]: value,
+            }));
+        }
+    };
+    
     const toggleForm = () => {
-        setIsLogin(!isLogin); // when the register link is clicked, the login modal would go away
-    }
+        setIsLogin(!isLogin);
+    };
+
+    const handleUserLogin = (e) => {
+        e.preventDefault();
+        console.log("User Login", userLogin);
+        
+    };
+
+    const handleUserRegistration = (e) => {
+        e.preventDefault();
+        console.log("User Registration", userRegister);
+        
+    };
    
     const [activeLink, setActiveLink] = useState('banner');
 
@@ -77,65 +183,167 @@ const NavBar = () => {
     
             <Modal show={show} onHide={handleClose} style={{ zIndex: 9999 }} className="">
                 <Modal.Header className="modal-header" closeButton>
-                    <Modal.Title>{isLogin ? 'Log in' : 'Sign up'}</Modal.Title> {/* what this does is it checks if islogin is true, if it is, show the log in modal, if not show the sign up modal */ }
+                    <Modal.Title style={{ fontFamily: 'Great Vibes' }}>{isLogin ? 'Login' : 'Register'}</Modal.Title> 
                 </Modal.Header>
                 <div className="container-fluid mb-4">
-                    <Form className="form">
-                        {/* here the modal will be adjusted to display different content based on whether isLogin' is true or false 
-                        you use conditional rendering to decide which content will be rendered , if its true it will show  the form will show the login stuff, if not, it will 
+                        { isLogin ? ( 
+                            <form onSubmit={handleUserLogin}>
+                                <div className="form-group text-dark m-2">
+                                    <label htmlFor="inputEmail">Email</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        id="inputEmail"
+                                        name="email"
+                                        value={userLogin.email}
+                                        onChange={handleLoginChange}
+                                    />
+                                </div>
+                                <div className="form-group text-dark m-2">
+                                    <label htmlFor="inputPassword">Password</label>
+                                    <input
+                                        type="password"
+                                        className="form-control"
+                                        id="inputPassword"
+                                        name="password"
+                                        value={userLogin.password}
+                                        onChange={handleLoginChange}
+                                    />
+                                </div>
+                                
+                                <div className="form-check mb-3 d-flex justify-content-between">
+                                    <span>
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            id="rememberMeCheckbox"
+                                            name="rememberMe"
+                                            checked={userLogin.rememberMe}
+                                            onChange={handleLoginChange}
+                                        />
+                                        <label className="form-check-label" htmlFor="rememberMeCheckbox">
+                                            Remember me
+                                        </label>
+                                    </span>
+                                    
 
-                        */}
-                        {/* its purpuse here is to conditionally render the content of the modal based on whether the user is in login or signup mode */}
-                        {isLogin ? ( 
-                            <>
-                            {/* show the login modal */}
-                        <Form.Group className="mb-3" controlId="formBasicText">
-                            <Form.Control type="form-text" placeholder="Username" />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formBasicPassword">
-                            <Form.Control type="password" placeholder="Password" />
-                        </Form.Group>
-                        <Form.Group>
-                            <span className="d-flex justify-content-end">
-                                <a className="forgot-password" href="#">Forgot password?</a>
-                            </span>
-                        </Form.Group>
-                        
-                        <Form.Group className="mb-3" controlId="formBasicCheckbox" />
-                        <Form.Check className="checkbox-text mb-5" type="checkbox" label="Remember me" />
-
-
-                        <span className="forgotpass-login "> 
-                                <Button variant="success" type="submit">Login</Button> 
-                                <a className="forgot-password mb-0" href="#"  onClick={toggleForm}>Don't have an account? Sign up </a>
-                            </span>
-                            </>
+                                    <span>
+                                        <a className="forgot-password" href="#">Forgot password?</a>
+                                    </span>
+                                </div>
+                                <span className="forgotpass-login">
+                                    <button className="btn btn-success" type="submit">Login</button>
+                                    <span className="have-account">
+                                        Don't have an account?{' '}
+                                        <a className="forgot-password mb-0" href="#" onClick={toggleForm}>
+                                            register
+                                        </a>
+                                    </span>
+                                </span>
+                            </form>
 
                   
                         ) : (  
-                            <>
-                           <Form.Group className="mb-3" controlId="formBasicText">
-                            <Form.Control type="form-text" placeholder="Full Name" />
-                        </Form.Group>
-                       
-                        <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Control type="email" placeholder="Email" />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formBasicNumber">
-                            <Form.Control type="form-text" placeholder="Phone Number" />
-                        </Form.Group>
-                        <span className="forgotpass-login">
-                         <Button variant="success" type="submit">Sign Up</Button>
-                         <a className="forgot-password mb-0" href="#" onClick={toggleForm}>Already have an account? Log in</a>
-                                </span>
+                            <form onSubmit={handleUserRegistration}>
+                            <div className="form-group text-dark m-2">
+                                <label htmlFor="registerFullName">Full Name</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="registerFullName"
+                                    name="fullName"
+                                    value={userRegister.fullName}
+                                    onChange={handleRegisterChange}
+                                />
+                            </div>
                         
+                            <div className="form-group text-dark m-2">
+                                <label htmlFor="registerEmail">Email address</label>
+                                <input
+                                    type="email"
+                                    className="form-control"
+                                    id="registerEmail"
+                                    name="email"
+                                    value={userRegister.email}
+                                    onChange={handleRegisterChange}
+                                />
+                            </div>
 
-                       
-                       
-                            </>
-                    
+                            <div className="form-group text-dark m-2">
+                                <label htmlFor="registerPassword">Password</label>
+                                <input
+                                    type="password"
+                                    className="form-control"
+                                    id="registerPassword"
+                                    name="password"
+                                    value={userRegister.password}
+                                    onChange={handleRegisterChange}
+                                />
+                            </div>
+
+                            <div className="form-group text-dark m-2">
+                                <label htmlFor="registerStreet">Street</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="registerStreet"
+                                    name="street"
+                                    value={userRegister.address.street}
+                                    onChange={handleRegisterChange}
+                                />
+                            </div>
+
+                            <div className="form-group text-dark m-2">
+                                <label htmlFor="registerCity">City</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="registerCity"
+                                    name="city"
+                                    value={userRegister.address.city}
+                                    onChange={handleRegisterChange}
+                                />
+                            </div>
+
+                            <div className="form-group text-dark m-2">
+                                <label htmlFor="registerState">State</label>
+                                <select
+                                    className="form-control"
+                                    id="registerState"
+                                    name="state"
+                                    value={userRegister.address.state}
+                                    onChange={handleRegisterChange}
+                                >
+                                    <option value="">Select a state</option>
+                                    {states.map((state) => (
+                                        <option key={state.code} value={state.code}>{state.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="form-group text-dark m-2">
+                                <label htmlFor="registerPostalCode">Postal Code</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="registerPostalCode"
+                                    name="postalCode"
+                                    value={userRegister.address.postalCode}
+                                    onChange={handleRegisterChange}
+                                />
+                            </div>
+
+                            <span className="forgotpass-login">
+                                <Button variant="success" type="submit">Register</Button>
+                                <span className="have-account">
+                                    Already have an account?{' '}
+                                    <a className="forgot-password mb-0" href="#" onClick={toggleForm}>
+                                        Login
+                                    </a>
+                                </span>
+                            </span>
+                        </form>
                         )}
-                    </Form>
                 </div>
             </Modal>
         </>
@@ -143,5 +351,3 @@ const NavBar = () => {
 }
 
 export default NavBar;
-
-{/* if you want two elements to be in the same line but with space between the two use space-between and make sure the two elements are on the same line */ }
