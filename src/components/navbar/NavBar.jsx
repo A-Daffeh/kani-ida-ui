@@ -1,12 +1,12 @@
+import React, { useState } from "react";
 import { Nav, Navbar, NavDropdown, Container } from "react-bootstrap";
-import "./NavBar.css";
-import { assets } from "../../assets/assets";
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { faCartShopping, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import "./NavBar.css";
+import { assets } from "../../assets/assets";
 
 const states = [
   { name: "Alabama", code: "AL" },
@@ -17,62 +17,21 @@ const states = [
 const NavBar = () => {
   const [show, setShow] = useState(false);
   const [viewStatus, setViewStatus] = useState("login");
-  const [userLogin, setUserLogin] = useState({
-    email: "",
-    password: "",
-  });
-  const [userRegister, setUserRegister] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-    address: {
-      street: "",
-      city: "",
-      state: "",
-      postalCode: "",
-    },
-  });
+  const [activeLink, setActiveLink] = useState("banner");
+
+  const {
+    register: registerLogin,
+    handleSubmit: handleSubmitLogin,
+    formState: { errors: loginErrors },
+  } = useForm();
+
+  const {
+    register: registerRegister,
+    handleSubmit: handleSubmitRegister,
+    formState: { errors: registerErrors },
+  } = useForm();
 
   const handleClose = () => setShow(false);
-
-  const handleLoginChange = (e) => {
-    const { name, value } = e.target;
-    setUserLogin((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleRegisterChange = (e) => {
-    const { name, value } = e.target;
-
-    if (name in userRegister.address) {
-      setUserRegister((prev) => ({
-        ...prev,
-        address: {
-          ...prev.address,
-          [name]: value,
-        },
-      }));
-    } else {
-      setUserRegister((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-  };
-
-  const handleUserLogin = (e) => {
-    e.preventDefault();
-    console.log("User Login", userLogin);
-  };
-
-  const handleUserRegistration = (e) => {
-    e.preventDefault();
-    console.log("User Registration", userRegister);
-  };
-
-  const [activeLink, setActiveLink] = useState("banner");
 
   const onUpdateActiveLink = (link) => {
     if (window.location.pathname === "/") {
@@ -85,6 +44,14 @@ const NavBar = () => {
       window.location.href = "/";
     }
     setActiveLink(link);
+  };
+
+  const onSubmitLogin = (data) => {
+    console.log("User Login", data);
+  };
+
+  const onSubmitRegister = (data) => {
+    console.log("User Registration", data);
   };
 
   return (
@@ -175,18 +142,18 @@ const NavBar = () => {
         </Modal.Header>
         <div className="container-fluid mb-4">
           {viewStatus === "login" && (
-            <form onSubmit={handleUserLogin}>
+            <form onSubmit={handleSubmitLogin(onSubmitLogin)}>
               <div className="form-group text-dark m-2">
                 <label htmlFor="inputEmail">Email</label>
                 <input
-                  type="text"
+                  type="email"
                   className="form-control"
                   id="inputEmail"
-                  name="email"
-                  value={userLogin.email}
-                  onChange={handleLoginChange}
-                  required
+                  {...registerLogin("email", { required: true })}
                 />
+                {loginErrors.email && (
+                  <span style={{ color: "red" }}>This field is required</span>
+                )}
               </div>
               <div className="form-group text-dark m-2">
                 <label htmlFor="inputPassword">Password</label>
@@ -194,10 +161,11 @@ const NavBar = () => {
                   type="password"
                   className="form-control"
                   id="inputPassword"
-                  name="password"
-                  value={userLogin.password}
-                  onChange={handleLoginChange}
+                  {...registerLogin("password", { required: true })}
                 />
+                {loginErrors.password && (
+                  <span style={{ color: "red" }}>This field is required</span>
+                )}
               </div>
               <div className="form-check mb-3 d-flex justify-content-between">
                 <span>
@@ -205,9 +173,7 @@ const NavBar = () => {
                     className="form-check-input"
                     type="checkbox"
                     id="rememberMeCheckbox"
-                    name="rememberMe"
-                    checked={userLogin.rememberMe}
-                    onChange={handleLoginChange}
+                    {...registerLogin("rememberMe")}
                   />
                   <label
                     className="form-check-label"
@@ -244,18 +210,18 @@ const NavBar = () => {
             </form>
           )}
           {viewStatus === "register" && (
-            <form onSubmit={handleUserRegistration}>
+            <form onSubmit={handleSubmitRegister(onSubmitRegister)}>
               <div className="form-group text-dark m-2">
                 <label htmlFor="registerFullName">Full Name</label>
                 <input
                   type="text"
                   className="form-control"
                   id="registerFullName"
-                  name="fullName"
-                  value={userRegister.fullName}
-                  onChange={handleRegisterChange}
-                  required
+                  {...registerRegister("fullName", { required: true })}
                 />
+                {registerErrors.fullName && (
+                  <span style={{ color: "red" }}>This field is required</span>
+                )}
               </div>
               <div className="form-group text-dark m-2">
                 <label htmlFor="registerEmail">Email address</label>
@@ -263,10 +229,11 @@ const NavBar = () => {
                   type="email"
                   className="form-control"
                   id="registerEmail"
-                  name="email"
-                  value={userRegister.email}
-                  onChange={handleRegisterChange}
+                  {...registerRegister("email", { required: true })}
                 />
+                {registerErrors.email && (
+                  <span style={{ color: "red" }}>This field is required</span>
+                )}
               </div>
               <div className="form-group text-dark m-2">
                 <label htmlFor="registerPassword">Password</label>
@@ -274,10 +241,27 @@ const NavBar = () => {
                   type="password"
                   className="form-control"
                   id="registerPassword"
-                  name="password"
-                  value={userRegister.password}
-                  onChange={handleRegisterChange}
+                  {...registerRegister("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 8,
+                      message: "Password must be at least 8 characters",
+                    },
+                    maxLength: {
+                      value: 12,
+                      message: "Password must be no more than 12 characters",
+                    },
+                    pattern: {
+                      value: /^(?=.*[A-Za-z])/,
+                      message: "Password must contain at least one letter",
+                    },
+                  })}
                 />
+                {registerErrors.password && (
+                  <span style={{ color: "red" }}>
+                    {registerErrors.password.message}
+                  </span>
+                )}
               </div>
               <div className="form-group text-dark m-2">
                 <label htmlFor="registerStreet">Street</label>
@@ -285,11 +269,11 @@ const NavBar = () => {
                   type="text"
                   className="form-control"
                   id="registerStreet"
-                  name="street"
-                  value={userRegister.address.street}
-                  onChange={handleRegisterChange}
-                  required
+                  {...registerRegister("address.street", { required: true })}
                 />
+                {registerErrors.address?.street && (
+                  <span style={{ color: "red" }}>This field is required</span>
+                )}
               </div>
               <div className="form-group text-dark m-2">
                 <label htmlFor="registerCity">City</label>
@@ -297,20 +281,18 @@ const NavBar = () => {
                   type="text"
                   className="form-control"
                   id="registerCity"
-                  name="city"
-                  value={userRegister.address.city}
-                  onChange={handleRegisterChange}
+                  {...registerRegister("address.city", { required: true })}
                 />
+                {registerErrors.address?.city && (
+                  <span style={{ color: "red" }}>This field is required</span>
+                )}
               </div>
               <div className="form-group text-dark m-2">
                 <label htmlFor="registerState">State</label>
                 <select
                   className="form-control"
                   id="registerState"
-                  name="state"
-                  value={userRegister.address.state}
-                  onChange={handleRegisterChange}
-                  required
+                  {...registerRegister("address.state", { required: true })}
                 >
                   {states.map((state) => (
                     <option key={state.code} value={state.code}>
@@ -318,6 +300,9 @@ const NavBar = () => {
                     </option>
                   ))}
                 </select>
+                {registerErrors.address?.state && (
+                  <span style={{ color: "red" }}>This field is required</span>
+                )}
               </div>
               <div className="form-group text-dark m-2">
                 <label htmlFor="registerPostalCode">Postal Code</label>
@@ -325,11 +310,19 @@ const NavBar = () => {
                   type="text"
                   className="form-control"
                   id="registerPostalCode"
-                  name="postalCode"
-                  value={userRegister.address.postalCode}
-                  onChange={handleRegisterChange}
-                  required
+                  {...registerRegister("address.postalCode", {
+                    required: "Postal Code is required",
+                    pattern: {
+                      value: /^[0-9]{5}(?:-[0-9]{4})?$/,
+                      message: "postal code format is numbers only",
+                    },
+                  })}
                 />
+                {registerErrors.address?.postalCode && (
+                  <span style={{ color: "red" }}>
+                    {registerErrors.address?.postalCode.message}
+                  </span>
+                )}
               </div>
               <span className="forgotpass-login">
                 <button className="btn btn-success" type="submit">
@@ -356,11 +349,11 @@ const NavBar = () => {
                   type="email"
                   className="form-control"
                   id="forgotPasswordEmail"
-                  name="email"
-                  value={userLogin.email}
-                  onChange={handleLoginChange}
-                  required
+                  {...registerLogin("email", { required: true })}
                 />
+                {loginErrors.email && (
+                  <span style={{ color: "red" }}>This field is required</span>
+                )}
               </div>
               <span className="forgotpass-login">
                 <button className="btn btn-success" type="submit">
@@ -386,3 +379,6 @@ const NavBar = () => {
 };
 
 export default NavBar;
+
+
+

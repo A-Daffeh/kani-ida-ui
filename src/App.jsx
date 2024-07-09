@@ -9,6 +9,8 @@ import SavorySeasoning from "./components/product/SavorySeasoning";
 import Spices from "./components/product/Spices";
 import NotFoundPage from "./pages/NotFoundPage";
 import Contact from "./pages/Contact";
+import Dashboard from "./pages/Dashboard";
+
 
 const router = createBrowserRouter([
   {
@@ -28,6 +30,11 @@ const router = createBrowserRouter([
   {
     path : "/contact",
     element : <Contact />
+  },
+
+  {
+    path : "/dashboard",
+    element : <Dashboard />
   }
 ]);
 
