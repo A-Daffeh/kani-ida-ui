@@ -2,16 +2,68 @@ import React, { useState } from "react";
 import { Nav, Navbar, NavDropdown, Container } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from 'react-router-dom';
+import {
+  faCartShopping,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import "./NavBar.css";
 import { assets } from "../../assets/assets";
 
+
 const states = [
   { name: "Alabama", code: "AL" },
   { name: "Alaska", code: "AK" },
-  // ... (remaining states)
+  { name: "Arizona", code: "AZ" },
+  { name: "Arkansas", code: "AR" },
+  { name: "California", code: "CA" },
+  { name: "Colorado", code: "CO" },
+  { name: "Connecticut", code: "CT" },
+  { name: "Delaware", code: "DE" },
+  { name: "Florida", code: "FL" },
+  { name: "Georgia", code: "GA" },
+  { name: "Hawaii", code: "HI" },
+  { name: "Idaho", code: "ID" },
+  { name: "Illinois", code: "IL" },
+  { name: "Indiana", code: "IN" },
+  { name: "Iowa", code: "IA" },
+  { name: "Kansas", code: "KS" },
+  { name: "Kentucky", code: "KY" },
+  { name: "Louisiana", code: "LA" },
+  { name: "Maine", code: "ME" },
+  { name: "Maryland", code: "MD" },
+  { name: "Massachusetts", code: "MA" },
+  { name: "Michigan", code: "MI" },
+  { name: "Minnesota", code: "MN" },
+  { name: "Mississippi", code: "MS" },
+  { name: "Missouri", code: "MO" },
+  { name: "Montana", code: "MT" },
+  { name: "Nebraska", code: "NE" },
+  { name: "Nevada", code: "NV" },
+  { name: "New Hampshire", code: "NH" },
+  { name: "New Jersey", code: "NJ" },
+  { name: "New Mexico", code: "NM" },
+  { name: "New York", code: "NY" },
+  { name: "North Carolina", code: "NC" },
+  { name: "North Dakota", code: "ND" },
+  { name: "Ohio", code: "OH" },
+  { name: "Oklahoma", code: "OK" },
+  { name: "Oregon", code: "OR" },
+  { name: "Pennsylvania", code: "PA" },
+  { name: "Rhode Island", code: "RI" },
+  { name: "South Carolina", code: "SC" },
+  { name: "South Dakota", code: "SD" },
+  { name: "Tennessee", code: "TN" },
+  { name: "Texas", code: "TX" },
+  { name: "Utah", code: "UT" },
+  { name: "Vermont", code: "VT" },
+  { name: "Virginia", code: "VA" },
+  { name: "Washington", code: "WA" },
+  { name: "West Virginia", code: "WV" },
+  { name: "Wisconsin", code: "WI" },
+  { name: "Wyoming", code: "WY" },
 ];
 
 const NavBar = () => {
@@ -19,6 +71,7 @@ const NavBar = () => {
   const [viewStatus, setViewStatus] = useState("login");
   const [activeLink, setActiveLink] = useState("banner");
 
+  const navigate = useNavigate();
   const {
     register: registerLogin,
     handleSubmit: handleSubmitLogin,
@@ -52,6 +105,10 @@ const NavBar = () => {
 
   const onSubmitRegister = (data) => {
     console.log("User Registration", data);
+  };
+
+  const handleLoginClick = () => {
+    navigate('/dashboard');
   };
 
   return (
@@ -161,12 +218,29 @@ const NavBar = () => {
                   type="password"
                   className="form-control"
                   id="inputPassword"
-                  {...registerLogin("password", { required: true })}
+                  {...registerLogin("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 8,
+                      message: "Password must be at least 8 characters",
+                    },
+                    maxLength: {
+                      value: 12,
+                      message: "Password must be no more than 12 characters",
+                    },
+                    pattern: {
+                      value: /^(?=.*[A-Za-z])/,
+                      message: "Password must contain at least one letter",
+                    },
+                  })}
                 />
                 {loginErrors.password && (
-                  <span style={{ color: "red" }}>This field is required</span>
+                  <span style={{ color: "red" }}>
+                    {loginErrors.password.message}
+                  </span>
                 )}
               </div>
+
               <div className="form-check mb-3 d-flex justify-content-between">
                 <span>
                   <input
@@ -193,7 +267,7 @@ const NavBar = () => {
                 </span>
               </div>
               <span className="forgotpass-login">
-                <button className="btn btn-success" type="submit">
+                <button className="btn btn-success" onClick={handleLoginClick} type="submit">
                   Login
                 </button>
                 <span className="have-account">
@@ -201,8 +275,7 @@ const NavBar = () => {
                   <a
                     className="forgot-password mb-0"
                     href="#"
-                    onClick={() => setViewStatus("register")}
-                  >
+                    onClick={() => setViewStatus("register") } >
                     Register
                   </a>
                 </span>
@@ -229,10 +302,18 @@ const NavBar = () => {
                   type="email"
                   className="form-control"
                   id="registerEmail"
-                  {...registerRegister("email", { required: true })}
+                  {...registerRegister("email", {
+                    required: "This field is required",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Invalid email address",
+                    },
+                  })}
                 />
                 {registerErrors.email && (
-                  <span style={{ color: "red" }}>This field is required</span>
+                  <span style={{ color: "red" }}>
+                    {registerErrors.email.message}
+                  </span>
                 )}
               </div>
               <div className="form-group text-dark m-2">
@@ -316,6 +397,15 @@ const NavBar = () => {
                       value: /^[0-9]{5}(?:-[0-9]{4})?$/,
                       message: "postal code format is numbers only",
                     },
+                    minLength: {
+                      value: 5,
+                      message: "Postal code must be at least 5 characters",
+                    },
+
+                    maxLength: {
+                      value: 5,
+                      message: "Postal code must be no more than 5 characters",
+                    },
                   })}
                 />
                 {registerErrors.address?.postalCode && (
@@ -379,6 +469,3 @@ const NavBar = () => {
 };
 
 export default NavBar;
-
-
-
