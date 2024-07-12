@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Nav, Navbar, NavDropdown, Container } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,9 +9,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import axios from 'axios';
 import "./NavBar.css";
 import { assets } from "../../assets/assets";
-
 
 const states = [
   { name: "Alabama", code: "AL" },
@@ -70,6 +70,8 @@ const NavBar = () => {
   const [show, setShow] = useState(false);
   const [viewStatus, setViewStatus] = useState("login");
   const [activeLink, setActiveLink] = useState("banner");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loginError, setLoginError] = useState(""); // State to hold the error message
 
   const navigate = useNavigate();
   const {
@@ -83,6 +85,19 @@ const NavBar = () => {
     handleSubmit: handleSubmitRegister,
     formState: { errors: registerErrors },
   } = useForm();
+
+  useEffect(() => {
+    // Check if user is authenticated by checking the presence of the auth cookies
+    const cookies = document.cookie.split(";").reduce((acc, cookie) => {
+      const [key, value] = cookie.split("=");
+      acc[key.trim()] = value;
+      return acc;
+    }, {});
+
+    if (cookies['access-token']) {
+      setIsAuthenticated(true);
+    }
+  }, []);
 
   const handleClose = () => setShow(false);
 
@@ -99,16 +114,44 @@ const NavBar = () => {
     setActiveLink(link);
   };
 
-  const onSubmitLogin = (data) => {
-    console.log("User Login", data);
+  const onSubmitLogin = async (data) => {
+    try {
+      const response = await axios.post('http://localhost:8082/auth/login', data, { withCredentials: true });
+      if (response.status === 200) {
+        setIsAuthenticated(true);
+        setShow(false);
+        navigate('/dashboard');
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log('Error response:', error.response);
+        if (error.response.data.code === 400) {
+          setLoginError("Incorrect username or password");
+        } else {
+          setLoginError("An error occurred. Please try again later.");
+        }
+      } else {
+        console.log('Error', error); 
+        setLoginError("An error occurred. Please try again later.");
+      }
+    }
   };
 
-  const onSubmitRegister = (data) => {
-    console.log("User Registration", data);
+  const onSubmitRegister = async (data) => {
+    try {
+      const response = await axios.post('http://localhost:8082/auth/register', data);
+      if (response.status === 200) {
+        setShow(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleLoginClick = () => {
-    navigate('/dashboard');
+  const handleLogout = async () => {
+    // Implement logout logic here
+    setIsAuthenticated(false);
+    navigate('/');
   };
 
   return (
@@ -176,9 +219,15 @@ const NavBar = () => {
                   <FontAwesomeIcon icon={faCartShopping} alt="Add to Cart" />
                 </a>
               </div>
-              <button onClick={() => setShow(true)} className="vvd">
-                <span>Login</span>
-              </button>
+              {isAuthenticated ? (
+                <button onClick={handleLogout} className="vvd">
+                  <span>Logout</span>
+                </button>
+              ) : (
+                <button onClick={() => setShow(true)} className="vvd">
+                  <span>Login</span>
+                </button>
+              )}
             </span>
           </Navbar.Collapse>
         </Container>
@@ -200,6 +249,11 @@ const NavBar = () => {
         <div className="container-fluid mb-4">
           {viewStatus === "login" && (
             <form onSubmit={handleSubmitLogin(onSubmitLogin)}>
+              {loginError && (
+                <div className="alert alert-danger" role="alert">
+                  {loginError}
+                </div>
+              )}
               <div className="form-group text-dark m-2">
                 <label htmlFor="inputEmail">Email</label>
                 <input
@@ -267,7 +321,7 @@ const NavBar = () => {
                 </span>
               </div>
               <span className="forgotpass-login">
-                <button className="btn btn-success" onClick={handleLoginClick} type="submit">
+                <button className="btn btn-success" type="submit">
                   Login
                 </button>
                 <span className="have-account">
@@ -275,7 +329,8 @@ const NavBar = () => {
                   <a
                     className="forgot-password mb-0"
                     href="#"
-                    onClick={() => setViewStatus("register") } >
+                    onClick={() => setViewStatus("register")}
+                  >
                     Register
                   </a>
                 </span>
