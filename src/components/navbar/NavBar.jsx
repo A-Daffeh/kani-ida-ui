@@ -86,6 +86,12 @@ const NavBar = () => {
     formState: { errors: registerErrors },
   } = useForm();
 
+  const {
+    register: registerForgotPassword,
+    handleSubmit: handleSubmitForgotPassword,
+    formState: { errors: forgotErrors },
+  } = useForm();
+
   useEffect(() => {
     // Check if user is authenticated by checking the presence of the auth cookies
     const cookies = document.cookie.split(";").reduce((acc, cookie) => {
@@ -145,6 +151,16 @@ const NavBar = () => {
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const onSubmitForgotPassword = async (data) => {
+    console.log(data);
+    try {
+      const response = await axios.post('http://localhost:8082/auth/reset/password', data);
+      console.log(response.data);
+    } catch (error) {
+      console("Error: ", error);
     }
   };
 
@@ -487,17 +503,25 @@ const NavBar = () => {
             </form>
           )}
           {viewStatus === "forgot" && (
-            <form>
+            <form onSubmit={handleSubmitForgotPassword(onSubmitForgotPassword)}>
               <div className="form-group text-dark m-2">
                 <label htmlFor="forgotPasswordEmail">Email address</label>
                 <input
                   type="email"
                   className="form-control"
                   id="forgotPasswordEmail"
-                  {...registerLogin("email", { required: true })}
+                  {...registerForgotPassword("email", {
+                    required: "This field is required",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Invalid email address",
+                    },
+                  })}
                 />
-                {loginErrors.email && (
-                  <span style={{ color: "red" }}>This field is required</span>
+                {forgotErrors.email && (
+                  <span style={{ color: "red" }}>
+                    {forgotErrors.email.message}
+                  </span>
                 )}
               </div>
               <span className="forgotpass-login">
