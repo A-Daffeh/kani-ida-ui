@@ -149,7 +149,6 @@ const NavBar = () => {
   };
 
   const handleLogout = async () => {
-    // Implement logout logic here
     setIsAuthenticated(false);
     navigate('/');
   };
