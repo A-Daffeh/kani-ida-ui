@@ -14,6 +14,9 @@ import ProductCategory from './pages/ProductCategory';
 import Product from './pages/Product';
 import UserManagement from './pages/UserManagement';
 import OrderedProduct from './pages/OrderedProduct';
+import Login from './components/login/Login';
+import Register from './components/register/Register';
+import ForgotPassword from './components/forgot-password/ForgotPassword';
 
 const router = createBrowserRouter([
   {
@@ -24,6 +27,30 @@ const router = createBrowserRouter([
       </WithoutSidebarLayout>
     ),
     errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/login",
+    element: (
+      <WithoutSidebarLayout>
+        <Login />
+      </WithoutSidebarLayout>
+    ),
+  },
+  {
+    path: "/register",
+    element: (
+      <WithoutSidebarLayout>
+        <Register />
+      </WithoutSidebarLayout>
+    ),
+  },
+  {
+    path: "/forgot-password",
+    element: (
+      <WithoutSidebarLayout>
+        <ForgotPassword />
+      </WithoutSidebarLayout>
+    ),
   },
   {
     path: "/products/savory",
