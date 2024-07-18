@@ -30,7 +30,7 @@ const ForgotPassword = () => {
             <NavBar />
             <div className="container">
             <div className='forgotPassword' id='forgotPassword'>
-                <h3 className="text-danger text-center my-5">Forgot Password</h3>
+                <h2 className="text-danger text-center my-5">Forgot Password</h2>
                 <form onSubmit={handleSubmitForgotPassword(onSubmitForgotPassword)}>
                     <div className="form-group text-dark m-2">
                     <label className='form-label' htmlFor="forgotPasswordEmail">Email address</label>

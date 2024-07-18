@@ -42,7 +42,7 @@ const Login = () => {
             <NavBar />
             <div className="container">
             <div className='login' id='login'>
-                <h3 className="text-danger text-center my-5">Login</h3>
+                <h2 className="text-danger text-center my-5">Login</h2>
                 <form onSubmit={handleSubmitLogin(onSubmitLogin)}>
                     {loginError && (
                         <div className="alert alert-danger" role="alert">

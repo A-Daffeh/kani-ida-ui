@@ -86,7 +86,7 @@ const Register = () => {
             <NavBar />
             <div className="container">
             <div className="register" id="register">
-                <h3 className="text-danger text-center my-5">Registration</h3>
+                <h2 className="text-danger text-center my-5">Registration</h2>
                 <form onSubmit={handleSubmitRegister(onSubmitRegister)}>
                     <div className="row g-3">
                         <div className="col-md-6 text-dark">
