@@ -1,6 +1,9 @@
 import NavBar from "../navbar/NavBar";
 import Banner from "../banner/Banner";
 import ProductCardListing from "./ProductCardListing";
+import axios from "axios";
+import { useState } from "react";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 const products = [
     {
@@ -53,16 +56,54 @@ const products = [
     },
 ];
 
+// const fetchProducts = async (page, size) => {
+//     const { data } = await axios.get("http://localhost:5173/api/products", {
+//         params: { page, size }
+//     });
+
+//     return data;
+// }
+
 const SavorySeasoning = () => {
+    // const [page, setPage] = useState(0);
+    // const [size, setSize] = useState(4);
+
+    // const { data, isLoading, isError } = useQuery(
+    //     ['products', page, size],
+    //     () => fetchProducts(page, size),
+    //     {
+    //         keepPreviousData: true,
+    //     }
+    // );
+
+    // if (isLoading) {
+    //     return <div>Loading....</div>
+    // }
+
+    // if (isError) {
+    //     return <div>Error fetching products</div>
+    // }
+
+    // const handleNextPage = () => setPage((prevPage) => prevPage + 1);
+    // const handlePreviousPage = () => setPage((prevPage) => Math.max(prevPage - 1, 0));
+
     return (
         <>
-            <NavBar />
-            <Banner banner_title="Savory & Seasoning" className="savory-banner"/>
-            <div className="container-fluid">
-                <ProductCardListing products={products} />
-            </div>
+        <NavBar />
+        <Banner banner_title="Savory & Seasoning" className="savory-banner"/>
+        <div className="container-fluid">
+            <ProductCardListing products={products} />
+            {/* <div className="pagination">
+            <button onClick={handlePreviousPage} disabled={page === 0}>
+                Previous
+            </button>
+            <button onClick={handleNextPage} disabled={!data.hasNext}>
+                Next
+            </button>
+            </div> */}
+        </div>
         </>
-    )
-}
+    );
+};
 
 export default SavorySeasoning;

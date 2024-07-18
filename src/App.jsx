@@ -17,6 +17,7 @@ import OrderedProduct from './pages/OrderedProduct';
 import Login from './components/login/Login';
 import Register from './components/register/Register';
 import ForgotPassword from './components/forgot-password/ForgotPassword';
+import ResetPassword from './components/reset-password/ResetPassword';
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,14 @@ const router = createBrowserRouter([
     element: (
       <WithoutSidebarLayout>
         <ForgotPassword />
+      </WithoutSidebarLayout>
+    ),
+  },
+  {
+    path: "/reset-password",
+    element: (
+      <WithoutSidebarLayout>
+        <ResetPassword />
       </WithoutSidebarLayout>
     ),
   },

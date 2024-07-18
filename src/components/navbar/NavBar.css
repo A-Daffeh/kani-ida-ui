@@ -178,7 +178,8 @@ nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
     max-width: 100%;
 }
 
-.login {
+.login,
+.resetPassword {
     max-width: 60%;
 }
 
@@ -188,7 +189,8 @@ nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
 
 .login,
 .register,
-.forgotPassword {
+.forgotPassword,
+.resetPassword {
     margin: auto; 
     padding: 20px;
     background-color: #fff;

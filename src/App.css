@@ -66,7 +66,8 @@ p.danger {
 .contact,
 .login,
 .register,
-.forgotPassword {
+.forgotPassword,
+.resetPassword {
     position: relative;
     top: 150px;
 }
