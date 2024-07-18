@@ -71,7 +71,7 @@ const Register = () => {
     const onSubmitRegister = async (data) => {
         try {
             const response = await axios.post('http://localhost:8082/auth/register', data);
-            if (response.status === 200) {
+            if (response.data.code === 200) {
                 navigate("/login");
             }
         } catch (error) {

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import NavBar from '../navbar/NavBar';
+import axios from 'axios';
 import './Login.css';
 
 const Login = () => {
@@ -17,9 +18,7 @@ const Login = () => {
     const onSubmitLogin = async (data) => {
         try {
           const response = await axios.post('http://localhost:8082/auth/login', data, { withCredentials: true });
-          if (response.status === 200) {
-            setIsAuthenticated(true);
-            setShow(false);
+          if (response.data.code === 200) {
             navigate('/dashboard');
           }
         } catch (error) {
