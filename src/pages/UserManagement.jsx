@@ -5,7 +5,7 @@ const UserManagement = () => {
     <>
       <Header pageTitle="User Management" />
       <h2>User Management</h2>
-      <table class="table">
+      <table className="table">
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -29,7 +29,7 @@ const UserManagement = () => {
           </tr>
           <tr>
             <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
+            <td colSpan="2">Larry the Bird</td>
             <td>@twitter</td>
           </tr>
         </tbody>

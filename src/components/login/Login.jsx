@@ -18,7 +18,8 @@ const Login = () => {
     const onSubmitLogin = async (data) => {
         try {
           const response = await axios.post('http://localhost:8082/auth/login', data, { withCredentials: true });
-          if (response.data.code === 200) {
+          if (response.status === 200) {
+            console.log(response);
             navigate('/dashboard');
           }
         } catch (error) {

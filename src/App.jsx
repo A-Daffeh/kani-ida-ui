@@ -19,6 +19,7 @@ import ResetPassword from './components/reset-password/ResetPassword';
 import AddNewProduct from './components/product/AddNewProduct';
 import SavorySeasoning from './pages/SavorySeasoning';
 import Spices from './pages/Spices';
+import AddProductCategory from './components/product-category/AddProductCategory';
 
 const router = createBrowserRouter([
   {
@@ -99,6 +100,14 @@ const router = createBrowserRouter([
     element: (
       <WithSidebarLayout>
         <ProductCategory />
+      </WithSidebarLayout>
+    ),
+  },
+  {
+    path: "/new/product/category",
+    element: (
+      <WithSidebarLayout>
+        <AddProductCategory />
       </WithSidebarLayout>
     ),
   },

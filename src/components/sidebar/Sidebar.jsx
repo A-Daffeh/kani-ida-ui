@@ -12,7 +12,7 @@ function Sidebar() {
     try {
       const response = await axios.post('http://localhost:8082/auth/logout');
       if (response.status === 200) {
-        navigate("/");
+        navigate("/login");
       }
     } catch (error) {
       console.log(error);

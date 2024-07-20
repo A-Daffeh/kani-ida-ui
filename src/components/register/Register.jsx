@@ -69,9 +69,11 @@ const Register = () => {
     } = useForm();
 
     const onSubmitRegister = async (data) => {
+        console.log(data);
         try {
             const response = await axios.post('http://localhost:8082/auth/register', data);
-            if (response.data.code === 200) {
+            console.log(response);
+            if (response.status === 201) {
                 navigate("/login");
             }
         } catch (error) {
