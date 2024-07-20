@@ -1,6 +1,6 @@
-import NavBar from "../navbar/NavBar";
-import Banner from "../banner/Banner";
-import ProductCardListing from "./ProductCardListing";
+import Banner from "../components/banner/Banner";
+import NavBar from "../components/navbar/NavBar";
+import ProductCardListing from "../components/product/ProductCardListing";
 import axios from "axios";
 import { useState } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";

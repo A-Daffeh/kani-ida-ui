@@ -27,30 +27,30 @@ function Sidebar() {
             Dashboard
           </Link>
         </li>
-        <li className={`nav-item ${currentPath === '/product-category' ? 'active' : ''}`}>
-          <Link className="nav-link text-white" to="/product-category">
+        <li className={`nav-item ${currentPath === '/products' ? 'active' : ''}`}>
+          <Link className="nav-link text-white" to="/products">
             Products
           </Link>
         </li>
-        <li className={`nav-item ${currentPath === '/add-products' ? 'active' : ''}`}>
-          <Link className="nav-link text-white" to="/add-products">
-           Add Categories
+        <li className={`nav-item ${currentPath === '/product/category' ? 'active' : ''}`}>
+          <Link className="nav-link text-white" to="/product/category">
+           Product Categories
           </Link>
         </li>
-        <li className={`nav-item ${currentPath === '/user-management' ? 'active' : ''}`}>
-          <Link className="nav-link text-white" to="/user-management">
+        <li className={`nav-item ${currentPath === '/user/management' ? 'active' : ''}`}>
+          <Link className="nav-link text-white" to="/user/management">
             User Management
           </Link>
         </li>
-        <li className={`nav-item ${currentPath === '/ordered-products' ? 'active' : ''}`}>
-          <Link className="nav-link text-white" to="/ordered-products">
+        <li className={`nav-item ${currentPath === '/ordered/products' ? 'active' : ''}`}>
+          <Link className="nav-link text-white" to="/ordered/products">
             Ordered Products
           </Link>
         </li>
       </ul>
       <ul className="nav flex-column">
         <li className="nav-item mt-auto">
-          <a className="nav-link text-white" href="#" onClick={handleLogout}>
+          <a className="nav-link text-white" onClick={handleLogout}>
             Logout
           </a>
         </li>

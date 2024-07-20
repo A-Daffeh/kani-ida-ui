@@ -3,22 +3,22 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from './pages/Home';
-import SavorySeasoning from "./components/product/SavorySeasoning";
-import Spices from "./components/product/Spices";
 import NotFoundPage from "./pages/NotFoundPage";
 import Contact from "./pages/Contact";
 import Dashboard from "./pages/Dashboard";
 import WithSidebarLayout from './components/layouts/WithSidebarLayout';
 import WithoutSidebarLayout from './components/layouts/WithoutSidebarLayout';
 import ProductCategory from './pages/ProductCategory';
-import Product from './pages/Product';
+import Product from './components/product/Product';
 import UserManagement from './pages/UserManagement';
 import OrderedProduct from './pages/OrderedProduct';
 import Login from './components/login/Login';
 import Register from './components/register/Register';
 import ForgotPassword from './components/forgot-password/ForgotPassword';
 import ResetPassword from './components/reset-password/ResetPassword';
-import AddNewProduct from './pages/AddNewProduct';
+import AddNewProduct from './components/product/AddNewProduct';
+import SavorySeasoning from './pages/SavorySeasoning';
+import Spices from './pages/Spices';
 
 const router = createBrowserRouter([
   {
@@ -95,7 +95,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/product-category",
+    path: "/product/category",
     element: (
       <WithSidebarLayout>
         <ProductCategory />
@@ -103,7 +103,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/add-products",
+    path: "/products",
     element: (
       <WithSidebarLayout>
         <Product />
@@ -111,7 +111,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/user-management",
+    path: "/user/management",
     element: (
       <WithSidebarLayout>
         <UserManagement />
@@ -119,20 +119,19 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/ordered-products",
+    path: "/ordered/products",
     element: (
       <WithSidebarLayout>
         <OrderedProduct />
       </WithSidebarLayout>
     ),
   },
-
   {
-    path : "/Add-new-product",
+    path : "/new/product",
     element : (
       <WithSidebarLayout>
-      <AddNewProduct />
-    </WithSidebarLayout>
+        <AddNewProduct />
+      </WithSidebarLayout>
 
     ),
   }

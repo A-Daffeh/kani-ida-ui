@@ -1,40 +1,39 @@
 import React from 'react';
-import Header from "../components/header/Header";
-
+import { useNavigate } from 'react-router-dom';
+import Header from "../header/Header";
 
 const AddNewProduct = () => {
+  const navigate = useNavigate();
+
   return (
     <>
-      <Header pageTitle={"Dashboard"} />
+      <Header pageTitle="Products" />
       <div className="container form-container">
-        <h2 className="text-danger text-center mt-5">Add New Product</h2>
         <div className="register" id="register">
+          <h2 className="text-danger text-center my-5">Add New Product</h2>
           <form>
             <div className="row g-3">
-              <div className="col-12 text-dark">
+              <div className="col-md-6 text-dark">
                 <label className="form-label" htmlFor="imageUrl">
                   Image URL
                 </label>
-                <input type="text" className="form-control" id="imageUrl" />
+                <input type="file" className="form-control" id="imageUrl" />
               </div>
-            </div>
 
-            <div className="row g-3">
               <div className="col-md-6 text-dark">
                 <label className="form-label" htmlFor="name">
                   Name
                 </label>
                 <input type="text" className="form-control" id="name" />
               </div>
+
               <div className="col-md-6 text-dark">
                 <label className="form-label" htmlFor="price">
                   Price $
                 </label>
                 <input type="text" className="form-control" id="price" />
               </div>
-            </div>
 
-            <div className="row g-3">
               <div className="col-md-6 text-dark">
                 <label className="form-label" htmlFor="availability">
                   Availability
@@ -47,9 +46,7 @@ const AddNewProduct = () => {
                 </label>
                 <input type="text" className="form-control" id="quantity" />
               </div>
-            </div>
 
-            <div className="row g-3">
               <div className="col-md-6 text-dark">
                 <label className="form-label" htmlFor="category">
                   Category
@@ -61,10 +58,8 @@ const AddNewProduct = () => {
                   <option value="fruit">Fruit</option>
                 </select>
               </div>
-            </div>
 
-            <div className="row g-3">
-              <div className="col-12 text-dark">
+              <div className="col-md-12 text-dark">
                 <label className="form-label" htmlFor="description">
                   Description
                 </label>
@@ -72,11 +67,14 @@ const AddNewProduct = () => {
               </div>
             </div>
 
-            <span className="forgotpass-login mt-5">
+            <div className="d-flex justify-content-between mt-5">
               <button className="btn btn-danger" type="submit">
-                Add New Product
+                Create
               </button>
-            </span>
+              <button className="btn btn-secondary" type="button" onClick={() => navigate(-1)}>
+                Back
+              </button>
+            </div>
           </form>
         </div>
       </div>
