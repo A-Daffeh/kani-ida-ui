@@ -5,6 +5,7 @@ const Product = () => {
         <>
             <Header pageTitle="Products" />
             <h2>Products</h2>
+            
         </>
     )
 }

@@ -29,12 +29,12 @@ function Sidebar() {
         </li>
         <li className={`nav-item ${currentPath === '/product-category' ? 'active' : ''}`}>
           <Link className="nav-link text-white" to="/product-category">
-            Product Category
+            Products
           </Link>
         </li>
         <li className={`nav-item ${currentPath === '/add-products' ? 'active' : ''}`}>
           <Link className="nav-link text-white" to="/add-products">
-            Products
+           Add Categories
           </Link>
         </li>
         <li className={`nav-item ${currentPath === '/user-management' ? 'active' : ''}`}>

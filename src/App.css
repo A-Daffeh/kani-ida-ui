@@ -75,3 +75,27 @@ p.danger {
 body {
     font-family: Arial, sans-serif;
 }
+
+
+.header-border {
+    border: 1px solid black;
+}
+
+
+.pagination-custom .page-link {
+  border: none;
+  background: none;
+  color: #007bff;
+}
+.pagination-custom .page-link:hover {
+  text-decoration: underline;
+  background: none;
+}
+
+.form-container {
+    margin-top:-140px; 
+  }
+  
+  .register {
+    padding: 20px; 
+  }
