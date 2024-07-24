@@ -9,13 +9,22 @@ function Header({ pageTitle }) {
         <h1 className="text-dark">{pageTitle}</h1>
         <p className="text-dark">Welcome back, Ida</p>
       </div>
-      <div className="d-flex align-items-center text-right">
-        <div className="avatar-group">
-          <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" className="profile-image" />
+      <div className="d-flex align-items-center">
+        <div className="search-bar mr-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search for your item"
+          />
         </div>
-        <div className="ml-3">
-          <h5 className="text-dark">Ida Bojang</h5>
-          <p className="text-dark">idabojang@gmail.com</p>
+        <div className="d-flex align-items-center text-right">
+          <div className="avatar-group">
+            <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" className="profile-image" />
+          </div>
+          <div className="ml-2">
+            <h5 className="text-dark">Ida Bojang</h5>
+            <p className="text-dark">idabojang@gmail.com</p>
+          </div>
         </div>
       </div>
     </div>

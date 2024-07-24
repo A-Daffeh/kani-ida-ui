@@ -10,7 +10,16 @@
   }
   
   .avatar-group img {
-    margin-left: -10px; /* Adjust as needed for spacing */
-    border: 2px solid white; /* Optional: To add a border around images */
+    margin-left: -10px;
+    border: 2px solid white; 
   }
   
+
+  .search-bar {
+    width: 300px; 
+    margin-right: 4rem; 
+  }
+  
+  .ml-2 {
+    margin-left: 0.5rem; 
+  }

@@ -99,3 +99,44 @@ body {
   .register {
     padding: 20px; 
   }
+
+  .status-badge {
+    padding: 0.5em 1em;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+  
+  .status-badge.new-order {
+    background-color: #ff4d4d;
+  }
+  
+  .status-badge.on-delivery {
+    background-color: #4da6ff;
+  }
+  
+  .status-badge.delivered {
+    background-color: #4dff4d;
+  }
+  
+  .options-btn {
+    background: none;
+    border: none;
+    color: #000;
+    font-size: 1.8em;
+    cursor: pointer;
+  }
+  
+  .options-btn:hover {
+    color: #007bff;
+  }
+
+  .badge-admin {
+    background-color: #ff4d4d;
+  }
+  
+  .badge-user {
+    background-color: #4da6ff;
+  }
+  

@@ -4,141 +4,121 @@ const UserManagement = () => {
   return (
     <>
       <Header pageTitle="User Management" />
-      <h2>User Management</h2>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h2>User Management</h2>
+      </div>
       <table className="table">
         <thead>
-          
           <tr className="header-border">
             <th scope="col">Full Name</th>
             <th scope="col">Phone Number</th>
             <th scope="col">Joined</th>
             <th scope="col">Status</th>
             <th scope="col">Permissions</th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-
-          <tr>
-          
-            <td>@twitter</td>
-            <td>@fat</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>...</td>
-          </tr>
-
-          <tr>
-           
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>...</td>
+            <td>Ida Bojang</td>
+            <td>425-212-2322</td>
+            <td>July 1st 2024</td>
+            <td>Active</td>
+            <td><span className="badge badge-admin">Admin</span></td>
+            <td><button className="options-btn">...</button></td>
           </tr>
           <tr>
-       
-            <td> Larry the Bird</td>
-            <td>@twitter</td>
-            <td>@fat</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>...</td>
+            <td>Amadou Trawally</td>
+            <td>425-323-3456</td>
+            <td>July 1st 2024</td>
+            <td>Active</td>
+            <td><span className="badge badge-user">User</span></td>
+            <td><button className="options-btn">...</button></td>
           </tr>
-
           <tr>
-       
-            <td> Larry the Bird</td>
-            <td>@twitter</td>
-            <td>@fat</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>...</td>
+            <td>Bakary Jammeh</td>
+            <td>425-234-4389</td>
+            <td>July 2nd 2024</td>
+            <td>Inactive</td>
+            <td><span className="badge badge-user">User</span></td>
+            <td><button className="options-btn">...</button></td>
           </tr>
-
           <tr>
-       
-            <td> Larry the Bird</td>
-            <td>@twitter</td>
-            <td>@fat</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>...</td>
+            <td>Bakary Jammeh</td>
+            <td>425-214-2222</td>
+            <td>July 4th 2024</td>
+            <td>Active</td>
+            <td><span className="badge badge-user">User</span></td>
+            <td><button className="options-btn">...</button></td>
           </tr>
-
           <tr>
-       
-            <td> Larry the Bird</td>
-            <td>@twitter</td>
-            <td>@fat</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>...</td>
+            <td>Khadija Drammeh</td>
+            <td>425-445-5545</td>
+            <td>July 6th 2024</td>
+            <td>Active</td>
+            <td><span className="badge badge-user">User</span></td>
+            <td><button className="options-btn">...</button></td>
           </tr>
-
           <tr>
-       
-            <td> Larry the Bird</td>
-            <td>@twitter</td>
-            <td>@fat</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>...</td>
+            <td>Yaya Colley</td>
+            <td>425-332-2211</td>
+            <td>July 7th 2024</td>
+            <td>Inactive</td>
+            <td><span className="badge badge-admin">Admin</span></td>
+            <td><button className="options-btn">...</button></td>
           </tr>
-
           <tr>
-       
-            <td> Larry the Bird</td>
-            <td>@twitter</td>
-            <td>@fat</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>...</td>
+            <td>Momodou Jallow</td>
+            <td>206-343-3422</td>
+            <td>July 7th 2024</td>
+            <td>Inactive</td>
+            <td><span className="badge badge-user">User</span></td>
+            <td><button className="options-btn">...</button></td>
           </tr>
-
-          <td>Mark</td>
-            <td>Otto</td>
-            <td>...</td>
-
-    
+          <tr>
+            <td>Musa Janneh</td>
+            <td>206-234-7578</td>
+            <td>July 7th 2024</td>
+            <td>Active</td>
+            <td><span className="badge badge-user">User</span></td>
+            <td><button className="options-btn">...</button></td>
+          </tr>
+          <tr>
+            <td>Saikou Sanyang</td>
+            <td>206-234-7578</td>
+            <td>July 7th 2024</td>
+            <td>Active</td>
+            <td><span className="badge badge-user">User</span></td>
+            <td><button className="options-btn">...</button></td>
+          </tr>
         </tbody>
       </table>
-
       <nav aria-label="Page navigation example">
         <ul className="pagination pagination-custom">
           <li className="page-item">
-              <a className="page-link" href="#" aria-label="Previous">
+            <a className="page-link" href="#" aria-label="Previous">
               <span aria-hidden="true">&laquo;</span>
-              </a>
+            </a>
           </li>
           <li className="page-item">
-              <a className="page-link" href="#">
+            <a className="page-link" href="#">
               1
-              </a>
+            </a>
           </li>
           <li className="page-item">
-              <a className="page-link" href="#">
+            <a className="page-link" href="#">
               2
-              </a>
+            </a>
           </li>
           <li className="page-item">
-              <a className="page-link" href="#">
+            <a className="page-link" href="#">
               3
-              </a>
+            </a>
           </li>
           <li className="page-item">
-              <a className="page-link" href="#" aria-label="Next">
+            <a className="page-link" href="#" aria-label="Next">
               <span aria-hidden="true">&raquo;</span>
-              </a>
+            </a>
           </li>
         </ul>
       </nav>

@@ -1,13 +1,15 @@
-import Header from "../components/header/Header"
+import Header from "../components/header/Header";
 
 const OrderedProduct = () => {
-    return (
-        <>
+  return (
+    <>
       <Header pageTitle="Ordered Products" />
-      <h2>Ordered Products</h2>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h2>Ordered Products</h2>
+        
+      </div>
       <table className="table">
         <thead>
-          
           <tr className="header-border">
             <th scope="col">Order ID</th>
             <th scope="col">Date</th>
@@ -15,137 +17,80 @@ const OrderedProduct = () => {
             <th scope="col">Location</th>
             <th scope="col">Amount</th>
             <th scope="col">Status</th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-
-          <tr>
-          
-            <td>@twitter</td>
-            <td>@fat</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>...</td>
-          </tr>
-
-          <tr>
-           
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>...</td>
+            <td>#5522351</td>
+            <td>July 1st 2024, 9:37 AM</td>
+            <td>Mustapha Samura</td>
+            <td>1216 126th St SE Everett, WA 98208</td>
+            <td>$164.52</td>
+            <td><span className="status-badge new-order">New Order</span></td>
+            <td><button className="options-btn">...</button></td>
           </tr>
           <tr>
-       
-            <td> Larry the Bird</td>
-            <td>@twitter</td>
-            <td>@fat</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>...</td>
+            <td>#5532030</td>
+            <td>July 1st 2024, 11:23 AM</td>
+            <td>Modoulamin Sanneh</td>
+            <td>1216 126th St SE Everett, WA 98208</td>
+            <td>$32.58</td>
+            <td><span className="status-badge on-delivery">On Delivery</span></td>
+            <td><button className="options-btn">...</button></td>
           </tr>
-
           <tr>
-       
-            <td> Larry the Bird</td>
-            <td>@twitter</td>
-            <td>@fat</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>...</td>
+            <td>#5383201</td>
+            <td>July 2nd 2024, 7:42 AM</td>
+            <td>Bakary Jammeh</td>
+            <td>1216 126th St SE Everett, WA 98208</td>
+            <td>$43.32</td>
+            <td><span className="status-badge on-delivery">On Delivery</span></td>
+            <td><button className="options-btn">...</button></td>
           </tr>
-
           <tr>
-       
-            <td> Larry the Bird</td>
-            <td>@twitter</td>
-            <td>@fat</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>...</td>
+            <td>#5383201</td>
+            <td>July 3rd 2024, 11:25 AM</td>
+            <td>Ebrima Darboe</td>
+            <td>1216 126th St SE Everett, WA 98208</td>
+            <td>$12.22</td>
+            <td><span className="status-badge delivered">Delivered</span></td>
+            <td><button className="options-btn">...</button></td>
           </tr>
-
-          <tr>
-       
-            <td> Larry the Bird</td>
-            <td>@twitter</td>
-            <td>@fat</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>...</td>
-          </tr>
-
-          <tr>
-       
-            <td> Larry the Bird</td>
-            <td>@twitter</td>
-            <td>@fat</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>...</td>
-          </tr>
-
-          <tr>
-       
-            <td> Larry the Bird</td>
-            <td>@twitter</td>
-            <td>@fat</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>...</td>
-          </tr>
-
-          <td>Mark</td>
-            <td>Otto</td>
-            <td>...</td>
-
-    
+          {/* Repeat similar rows for other orders */}
         </tbody>
       </table>
-
       <nav aria-label="Page navigation example">
         <ul className="pagination pagination-custom">
           <li className="page-item">
-              <a className="page-link" href="#" aria-label="Previous">
+            <a className="page-link" href="#" aria-label="Previous">
               <span aria-hidden="true">&laquo;</span>
-              </a>
+            </a>
           </li>
           <li className="page-item">
-              <a className="page-link" href="#">
+            <a className="page-link" href="#">
               1
-              </a>
+            </a>
           </li>
           <li className="page-item">
-              <a className="page-link" href="#">
+            <a className="page-link" href="#">
               2
-              </a>
+            </a>
           </li>
           <li className="page-item">
-              <a className="page-link" href="#">
+            <a className="page-link" href="#">
               3
-              </a>
+            </a>
           </li>
           <li className="page-item">
-              <a className="page-link" href="#" aria-label="Next">
+            <a className="page-link" href="#" aria-label="Next">
               <span aria-hidden="true">&raquo;</span>
-              </a>
+            </a>
           </li>
         </ul>
       </nav>
     </>
-      
-    )
-}
+  );
+};
 
-export default OrderedProduct
+export default OrderedProduct;
