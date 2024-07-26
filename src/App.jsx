@@ -1,5 +1,7 @@
 import React from 'react';
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Provider } from 'react-redux';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import store from './components/store/store';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from './pages/Home';
@@ -20,6 +22,7 @@ import AddNewProduct from './components/product/AddNewProduct';
 import SavorySeasoning from './pages/SavorySeasoning';
 import Spices from './pages/Spices';
 import AddProductCategory from './components/product-category/AddProductCategory';
+import Cart from './pages/Cart';
 
 const router = createBrowserRouter([
   {
@@ -88,6 +91,14 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/cart",
+    element: (
+      <WithoutSidebarLayout>
+        <Cart />
+      </WithoutSidebarLayout>
+    ),
+  },
+  {
     path: "/dashboard",
     element: (
       <WithSidebarLayout>
@@ -141,17 +152,17 @@ const router = createBrowserRouter([
       <WithSidebarLayout>
         <AddNewProduct />
       </WithSidebarLayout>
-
     ),
   }
-
 ]);
 
 function App() {
   return (
-    <div className='app'>
-      <RouterProvider router={router} />
-    </div>
+    <Provider store={store}>
+      <div className='app'>
+        <RouterProvider router={router} />
+      </div>
+    </Provider>
   );
 }
 

@@ -83,12 +83,12 @@ const NavBar = () => {
             </Nav>
             <span className="navbar-text">
               <div className="social-icon">
-                <a href="#">
+                <Link to="#" className="soc-icon">
                   <FontAwesomeIcon icon={faMagnifyingGlass} alt="Search" />
-                </a>
-                <a href="#">
+                </Link>
+                <Link to="/cart" className="soc-icon">
                   <FontAwesomeIcon icon={faCartShopping} alt="Add to Cart" />
-                </a>
+                </Link>
               </div>
                 <Link className="vvd" to="/login">
                   Login

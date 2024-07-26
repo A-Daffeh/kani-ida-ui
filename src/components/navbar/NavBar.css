@@ -40,7 +40,7 @@ span.navbar-text {
     display: inline-block;
     margin-left: 14px;
 }
-.social-icon a {
+.social-icon .soc-icon {
     width: 42px;
     height: 42px;
     background: rgba(217, 217, 217, 0.1);
@@ -52,7 +52,7 @@ span.navbar-text {
     line-height: 1;
     border: 1px solid rgba(255, 255, 255, 0.5);
 }
-.social-icon a::before {
+.social-icon .soc-icon::before {
     content: "";
     width: 42px;
     height: 42px;
@@ -62,15 +62,15 @@ span.navbar-text {
     transform: scale(0);
     transition: 0.3s ease-in-out;
 }
-.social-icon a:hover::before {
+.social-icon .soc-icon:hover::before {
     transform: scale(1);
 }
-.social-icon a .svg-inline--fa {
+.social-icon .soc-icon .svg-inline--fa {
     width: 40%;
     z-index: 1;
     transition: 0.3s ease-in-out;
 }
-.social-icon a:hover .svg-inline--fa {
+.social-icon .soc-icon:hover .svg-inline--fa {
     filter: brightness(0) saturate(100%) invert(0%) sepia(7%) saturate(98%) hue-rotate(346deg) brightness(95%) contrast(86%);
 }
 .navbar-text .vvd {
