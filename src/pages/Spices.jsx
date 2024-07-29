@@ -1,6 +1,7 @@
 import Banner from "../components/banner/Banner";
 import NavBar from "../components/navbar/NavBar";
 import ProductCardListing from "../components/product/ProductCardListing";
+import Footer from "../components/layouts/Footer";
 
 const products = [
     {
@@ -61,6 +62,7 @@ const Spices = () => {
             <div className="container-fluid">
                 <ProductCardListing products={products} />
             </div>
+            <Footer />
         </>
     )
 }

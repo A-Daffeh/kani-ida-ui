@@ -3,6 +3,9 @@ import NavBar from "../components/navbar/NavBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { Card } from "react-bootstrap";
+import Footer from "../components/layouts/Footer";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Contact() {
   const [formState, setFormState] = useState({
@@ -11,6 +14,8 @@ function Contact() {
     phone: "",
     reason: "",
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,10 +29,8 @@ function Contact() {
     e.preventDefault();
     console.log("Form Data:", formState);
     axios
-      .post
-      // "http://localhost:8080/public/contact/create",formState
-      ()
-      .then(navigate("/thankyoupage")) // should navigate to the thank you page
+      .post("http://localhost:8080/public/contact/create", formState)
+      .then(() => navigate("/thankyoupage")) // should navigate to the thank you page
       .catch((err) => console.log(err));
   };
 
@@ -38,34 +41,28 @@ function Contact() {
         <div className="container">
           <div className="row mb-2">
             <div className="col-12">
-              <h2 className="text-center text-dark">
-                Fill out the following form to contact us
-              </h2>
+              <h2 className="text-center text-dark">contact us</h2>
             </div>
           </div>
           <div className="row">
             <div className="col-12 col-lg-4">
-              <Card 
-                style={{ width: "100%", height: "8rem" }}
-                className="mt-4"
-              >
+              <Card style={{ width: "100%", height: "8rem" }} className="mt-4">
                 <Card.Body>
-                    <FontAwesomeIcon icon={faPhone} className="me-2" />
-                    Phone Number
-                    <br /><br />
-                    +1 - (234) - 567 - 8910
+                  <FontAwesomeIcon icon={faPhone} className="me-2" />
+                  Phone Number
+                  <br />
+                  <br />
+                  +1 - (234) - 567 - 8910
                 </Card.Body>
               </Card>
 
-              <Card
-                style={{ width: "100%", height: "8rem" }}
-                className="mt-5"
-              >
+              <Card style={{ width: "100%", height: "8rem" }} className="mt-5">
                 <Card.Body>
-                    <FontAwesomeIcon icon={faEnvelope} className="me-2" />
-                    Address
-                    <br /><br />
-                    abc@hotmail.com
+                  <FontAwesomeIcon icon={faEnvelope} className="me-2" />
+                  Address
+                  <br />
+                  <br />
+                  abc@hotmail.com
                 </Card.Body>
               </Card>
             </div>
@@ -125,10 +122,10 @@ function Contact() {
                 </div>
               </form>
             </div>
+           
           </div>
         </div>
       </div>
-      
     </>
   );
 }

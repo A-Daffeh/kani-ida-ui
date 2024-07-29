@@ -4,6 +4,7 @@ import ProductCardListing from "../components/product/ProductCardListing";
 import axios from "axios";
 import { useState } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import Footer from "../components/layouts/Footer";
 
 const products = [
     {
@@ -102,6 +103,7 @@ const SavorySeasoning = () => {
             </button>
             </div> */}
         </div>
+        <Footer />
         </>
     );
 };
