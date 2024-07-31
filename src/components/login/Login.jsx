@@ -26,7 +26,11 @@ const Login = () => {
 
     useEffect(() => {
         if (authState.error) {
-            setLoginError(authState.error);
+            if (typeof authState.error === 'object') {
+                setLoginError(authState.error.message || 'An error occurred');
+            } else {
+                setLoginError(authState.error);
+            }
         }
     }, [authState.error]);
 

@@ -1,70 +1,37 @@
+import React, { useEffect } from 'react';
 import Banner from "../components/banner/Banner";
+import { fetchProducts } from '../components/store/actions/ProductActions';
+import { useDispatch, useSelector } from 'react-redux';
 import NavBar from "../components/navbar/NavBar";
 import ProductCardListing from "../components/product/ProductCardListing";
 import Footer from "../components/layouts/Footer";
 
-const products = [
-    {
-        id: "1",
-        image: 'https://res.cloudinary.com/demo/image/upload/sample.jpg',
-        category: 'Fruits',
-        title: 'Grapes',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt',
-        price: '$4.99',
-    },
-    {
-        id: "2",
-        image: 'https://res.cloudinary.com/demo/image/upload/sample.jpg',
-        category: 'Fruits',
-        title: 'Apples',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt',
-        price: '$3.99',
-    },
-    {
-        id: "3",
-        image: 'https://res.cloudinary.com/demo/image/upload/sample.jpg',
-        category: 'Fruits',
-        title: 'Apples',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt',
-        price: '$3.99',
-    },
-    {
-        id: "4",
-        image: 'https://res.cloudinary.com/demo/image/upload/sample.jpg',
-        category: 'Fruits',
-        title: 'Apples',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt',
-        price: '$3.99',
-    },
-    {
-        id: "5",
-        image: 'https://res.cloudinary.com/demo/image/upload/sample.jpg',
-        category: 'Fruits',
-        title: 'Apples',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt',
-        price: '$3.99',
-    },
-    {
-        id: "6",
-        image: 'https://res.cloudinary.com/demo/image/upload/sample.jpg',
-        category: 'Fruits',
-        title: 'Apples',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt',
-        price: '$3.99',
-    },
-];
-
 const Spices = () => {
+    
+    const dispatch = useDispatch();
+    const { loading, products, error } = useSelector((state) => state.products);
+
+    useEffect(() => {
+        dispatch(fetchProducts({ page: 0, size: 10 }));
+    }, [dispatch]);
+
     return (
         <>
             <NavBar />
             <Banner banner_title="Spices" className="spices-banner" />
             <div className="container-fluid">
-                <ProductCardListing products={products} />
+                {loading && <p>Loading...</p>}
+                {error && <p>Error: {error}</p>}
+                {!loading && !error && products.length > 0 && (
+                    <ProductCardListing products={products} />
+                )}
+                {!loading && !error && products.length === 0 && (
+                    <p>No products available</p>
+                )}
             </div>
             <Footer />
         </>
-    )
+    );
 }
 
 export default Spices;

@@ -23,6 +23,7 @@ import SavorySeasoning from './pages/SavorySeasoning';
 import Spices from './pages/Spices';
 import AddProductCategory from './components/product-category/AddProductCategory';
 import Cart from './pages/Cart';
+import AuthenticatedRoute from './components/AuthenticatedRoute';
 
 const router = createBrowserRouter([
   {
@@ -101,57 +102,71 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: (
-      <WithSidebarLayout>
-        <Dashboard />
-      </WithSidebarLayout>
+      <AuthenticatedRoute>
+        <WithSidebarLayout>
+          <Dashboard />
+        </WithSidebarLayout>
+      </AuthenticatedRoute>
     ),
   },
   {
     path: "/product/category",
     element: (
-      <WithSidebarLayout>
-        <ProductCategory />
-      </WithSidebarLayout>
+      <AuthenticatedRoute>
+        <WithSidebarLayout>
+          <ProductCategory />
+        </WithSidebarLayout>
+      </AuthenticatedRoute>
     ),
   },
   {
     path: "/new/product/category",
     element: (
-      <WithSidebarLayout>
-        <AddProductCategory />
-      </WithSidebarLayout>
+      <AuthenticatedRoute>
+        <WithSidebarLayout>
+          <AddProductCategory />
+        </WithSidebarLayout>
+      </AuthenticatedRoute>
     ),
   },
   {
     path: "/products",
     element: (
-      <WithSidebarLayout>
-        <Product />
-      </WithSidebarLayout>
+      <AuthenticatedRoute>
+        <WithSidebarLayout>
+          <Product />
+        </WithSidebarLayout>
+      </AuthenticatedRoute>
     ),
   },
   {
     path: "/user/management",
     element: (
-      <WithSidebarLayout>
-        <UserManagement />
-      </WithSidebarLayout>
+      <AuthenticatedRoute>
+        <WithSidebarLayout>
+          <UserManagement />
+        </WithSidebarLayout>
+      </AuthenticatedRoute>
     ),
   },
   {
     path: "/ordered/products",
     element: (
-      <WithSidebarLayout>
-        <OrderedProduct />
-      </WithSidebarLayout>
+      <AuthenticatedRoute>
+        <WithSidebarLayout>
+          <OrderedProduct />
+        </WithSidebarLayout>
+      </AuthenticatedRoute>
     ),
   },
   {
-    path : "/new/product",
-    element : (
-      <WithSidebarLayout>
-        <AddNewProduct />
-      </WithSidebarLayout>
+    path: "/new/product",
+    element: (
+      <AuthenticatedRoute>
+        <WithSidebarLayout>
+          <AddNewProduct />
+        </WithSidebarLayout>
+      </AuthenticatedRoute>
     ),
   }
 ]);

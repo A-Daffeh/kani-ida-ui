@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 // import { FaHome, FaPhone, FaEnvelope } from "react-icons/fa";
 
 const Footer = () => {
-  const pages = ["Home", "About", "Locations", "Contact"];
+  const pages = ["Home", "About", "Contact"];
 
   return (
     <footer className="text-center text-lg-start text-muted bg-danger">

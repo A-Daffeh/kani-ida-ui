@@ -10,7 +10,8 @@ function Sidebar() {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post('http://localhost:8082/auth/logout');
+      const response = await axios.post('http://localhost:8082/api/auth/logout', { withCredentials: true });
+      console.log(response);
       if (response.status === 200) {
         navigate("/login");
       }

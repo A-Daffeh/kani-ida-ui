@@ -2,8 +2,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../config/api';
 
 export const fetchProducts = createAsyncThunk('products/fetchProducts', async ({ page = 0, size = 10 }) => {
-    const response = await api.get(`/products?page=${page}&size=${size}`);
-    return response.data.products;
+    const response = await api.get(`/public/products?page=${page}&size=${size}`);
+    return response.data;
 });
 
 
