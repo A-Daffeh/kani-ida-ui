@@ -24,6 +24,7 @@ import Spices from './pages/Spices';
 import AddProductCategory from './components/product-category/AddProductCategory';
 import Cart from './pages/Cart';
 import AuthenticatedRoute from './components/AuthenticatedRoute';
+import Toast from './components/layouts/Toast';
 
 const router = createBrowserRouter([
   {
@@ -175,6 +176,7 @@ function App() {
   return (
     <Provider store={store}>
       <div className='app'>
+        <Toast />
         <RouterProvider router={router} />
       </div>
     </Provider>

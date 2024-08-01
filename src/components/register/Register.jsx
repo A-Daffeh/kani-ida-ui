@@ -4,6 +4,7 @@ import './Register.css';
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { useState } from "react";
+import { showToast } from "../layouts/Toast";
 
 const states = [
     { name: "Alabama", code: "AL" },
@@ -75,15 +76,18 @@ const Register = () => {
             const response = await axios.post('http://localhost:8082/auth/register', data);
             console.log(response);
             if (response.status === 201) {
+                showToast("Registration successful!", "success");
                 navigate("/login");
             }
         } catch (error) {
             if (error.response && error.response.status === 400) {
-                // Set the error message based on the response from the server
-                setErrorMessage(error.response.data.message || "Registration failed");
+                const errorMessage = error.response.data.message || "Registration failed";
+                setErrorMessage(errorMessage);
+                showToast(errorMessage, "error");
             } else {
-                // Handle other types of errors (e.g., network issues)
-                setErrorMessage("An unexpected error occurred. Please try again later.");
+                const errorMessage = "An unexpected error occurred. Please try again later.";
+                setErrorMessage(errorMessage);
+                showToast(errorMessage, "error");
             }
         }
     };
@@ -96,11 +100,6 @@ const Register = () => {
             <div className="container">
             <div className="register" id="register">
                 <h2 className="text-danger text-center my-5">Registration</h2>
-                {errorMessage && (
-                    <div className="alert alert-danger" role="alert">
-                        {errorMessage}
-                    </div>
-                )}
                 <form onSubmit={handleSubmitRegister(onSubmitRegister)}>
                     <div className="row g-3">
                         <div className="col-md-6 text-dark">

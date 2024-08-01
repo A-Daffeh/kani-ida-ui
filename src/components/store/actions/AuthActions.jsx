@@ -13,3 +13,16 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (credentials, 
         }
     }
 });
+
+export const logoutUser = createAsyncThunk('auth/logoutUser', async (_, { rejectWithValue }) => {
+    try {
+        const response = await api.post('/auth/logout', {}, { withCredentials: true });
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.data) {
+            return rejectWithValue(error.response.data);
+        } else {
+            return rejectWithValue(error.message);
+        }
+    }
+});

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../store/actions/AuthActions';
 import NavBar from '../navbar/NavBar';
 import './Login.css';
+import { showToast } from '../layouts/Toast';
 
 const Login = () => {
     const [loginError, setLoginError] = useState("");
@@ -20,6 +21,8 @@ const Login = () => {
 
     useEffect(() => {
         if (authState.user) {
+            console.log(authState.user);
+            showToast(authState.user.message, "success");
             navigate('/dashboard');
         }
     }, [authState.user, navigate]);
@@ -27,9 +30,11 @@ const Login = () => {
     useEffect(() => {
         if (authState.error) {
             if (authState.error.code === 400) {
-                setLoginError("Incorrect username/password.");
+                setLoginError(authState.error.message);
+                showToast(authState.error.message, "error");
             } else {
                 setLoginError(authState.error);
+                showToast(authState.error, "error");
             }
         }
     }, [authState.error]);
@@ -41,11 +46,6 @@ const Login = () => {
                 <div className='login' id='login'>
                     <h2 className="text-danger text-center my-5">Login</h2>
                     <form onSubmit={handleSubmit(onSubmitLogin)}>
-                        {loginError && (
-                            <div className="alert alert-danger" role="alert">
-                                {loginError}
-                            </div>
-                        )}
                         <div className="form-group text-dark m-2">
                             <label className='form-label' htmlFor="inputEmail">Email</label>
                             <input

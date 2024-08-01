@@ -1,21 +1,23 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import axios from 'axios';
+import { Link, useLocation } from "react-router-dom";
 import './Sidebar.css';
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../store/actions/AuthActions";
+import { showToast } from "../layouts/Toast";
 
 function Sidebar() {
-  const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
+  const dispatch = useDispatch();
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post('http://localhost:8082/auth/logout', { withCredentials: true });
-      console.log(response.status);
-      if (response.status === 200) {
-        navigate("/login");
+      const response = await dispatch(logoutUser()).unwrap();
+      if (response.code === 200) {
+        window.location.href = "/login";
+        showToast("Logout successful", "success");
       }
     } catch (error) {
-      console.log(error);
+      showToast(error, "error");
     }
   };
 
@@ -50,9 +52,9 @@ function Sidebar() {
       </ul>
       <ul className="nav flex-column">
         <li className="nav-item mt-auto">
-          <a className="nav-link text-white" onClick={handleLogout}>
+          <Link className="nav-link text-white" onClick={handleLogout}>
             Logout
-          </a>
+          </Link>
         </li>
       </ul>
     </div>
