@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import './Register.css';
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { useState } from "react";
 
 const states = [
     { name: "Alabama", code: "AL" },
@@ -58,7 +59,7 @@ const states = [
 ];
 
 const Register = () => {
-
+    const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
 
     const {
@@ -69,7 +70,7 @@ const Register = () => {
     } = useForm();
 
     const onSubmitRegister = async (data) => {
-        console.log(data);
+        setErrorMessage(""); // Clear previous error message
         try {
             const response = await axios.post('http://localhost:8082/auth/register', data);
             console.log(response);
@@ -77,7 +78,13 @@ const Register = () => {
                 navigate("/login");
             }
         } catch (error) {
-            console.log(error);
+            if (error.response && error.response.status === 400) {
+                // Set the error message based on the response from the server
+                setErrorMessage(error.response.data.message || "Registration failed");
+            } else {
+                // Handle other types of errors (e.g., network issues)
+                setErrorMessage("An unexpected error occurred. Please try again later.");
+            }
         }
     };
 
@@ -89,6 +96,11 @@ const Register = () => {
             <div className="container">
             <div className="register" id="register">
                 <h2 className="text-danger text-center my-5">Registration</h2>
+                {errorMessage && (
+                    <div className="alert alert-danger" role="alert">
+                        {errorMessage}
+                    </div>
+                )}
                 <form onSubmit={handleSubmitRegister(onSubmitRegister)}>
                     <div className="row g-3">
                         <div className="col-md-6 text-dark">

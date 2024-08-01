@@ -26,8 +26,8 @@ const Login = () => {
 
     useEffect(() => {
         if (authState.error) {
-            if (typeof authState.error === 'object') {
-                setLoginError(authState.error.message || 'An error occurred');
+            if (authState.error.code === 400) {
+                setLoginError("Incorrect username/password.");
             } else {
                 setLoginError(authState.error);
             }
@@ -55,7 +55,7 @@ const Login = () => {
                                 {...register("email", { required: true })}
                             />
                             {errors.email && (
-                                <span style={{ color: "red" }}>This field is required</span>
+                                <span style={{ color: "red" }}>Email is required</span>
                             )}
                         </div>
                         <div className="form-group text-dark m-2">
@@ -65,15 +65,7 @@ const Login = () => {
                                 className="form-control"
                                 id="inputPassword"
                                 {...register("password", {
-                                    required: "Password is required",
-                                    minLength: {
-                                        value: 8,
-                                        message: "Password must be at least 8 characters",
-                                    },
-                                    pattern: {
-                                        value: /^(?=.*[A-Za-z])/,
-                                        message: "Password must contain at least one letter",
-                                    },
+                                    required: "Password is required"
                                 })}
                             />
                             {errors.password && (

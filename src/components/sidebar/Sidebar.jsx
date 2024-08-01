@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import './Sidebar.css';
@@ -10,8 +9,8 @@ function Sidebar() {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post('http://localhost:8082/api/auth/logout', { withCredentials: true });
-      console.log(response);
+      const response = await axios.post('http://localhost:8082/auth/logout', { withCredentials: true });
+      console.log(response.status);
       if (response.status === 200) {
         navigate("/login");
       }
