@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { useState } from "react";
 import { showToast } from "../layouts/Toast";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const states = [
     { name: "Alabama", code: "AL" },
@@ -61,6 +63,8 @@ const states = [
 
 const Register = () => {
     const [errorMessage, setErrorMessage] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const navigate = useNavigate();
 
     const {
@@ -79,14 +83,12 @@ const Register = () => {
                 showToast("Registration successful!", "success");
                 navigate("/login");
             }
-        } catch (error) {
+        } catch (error) { 
             if (error.response && error.response.status === 400) {
-                const errorMessage = error.response.data.message || "Registration failed";
-                setErrorMessage(errorMessage);
+                setErrorMessage(error.response.message || "Registration failed");
                 showToast(errorMessage, "error");
             } else {
-                const errorMessage = "An unexpected error occurred. Please try again later.";
-                setErrorMessage(errorMessage);
+                setErrorMessage("An unexpected error occurred. Please try again later.");
                 showToast(errorMessage, "error");
             }
         }
@@ -137,7 +139,7 @@ const Register = () => {
                         <div className="col-md-6 text-dark">
                             <label className="form-label" htmlFor="registerPassword">Password</label>
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 className="form-control"
                                 id="registerPassword"
                                 {...registerRegister("password", {
@@ -152,6 +154,12 @@ const Register = () => {
                                     },
                                 })}
                             />
+                            <FontAwesomeIcon
+                                icon={showPassword ? faEyeSlash : faEye}
+                                className="position-absolute"
+                                style={{ top: "45%", right: "0px", cursor: "pointer" }}
+                                onClick={() => setShowPassword(!showPassword)}
+                            />
                             {registerErrors.password && (
                                 <span style={{ color: "red" }}>
                                     {registerErrors.password.message}
@@ -161,13 +169,19 @@ const Register = () => {
                         <div className="col-md-6 text-dark">
                             <label className="form-label" htmlFor="confirmPassword">Confirm Password</label>
                             <input
-                                type="password"
+                                type={showConfirmPassword ? "text" : "password"}
                                 className="form-control"
                                 id="confirmPassword"
                                 {...registerRegister("confirmPassword", {
                                     required: "Please confirm your password",
                                     validate: (value) => value === password || "Passwords do not match"
                                 })}
+                            />
+                            <FontAwesomeIcon
+                                icon={showConfirmPassword ? faEyeSlash : faEye}
+                                className="position-absolute"
+                                style={{ top: "45%", right: "10px", cursor: "pointer" }}
+                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                             />
                             {registerErrors.confirmPassword && (
                                 <span style={{ color: "red" }}>
@@ -181,7 +195,6 @@ const Register = () => {
                                 type="text"
                                 className="form-control"
                                 id="registerStreet"
-                                placeholder="1234 Main St"
                                 {...registerRegister("address.street", { required: true })}
                             />
                             {registerErrors.address?.street && (

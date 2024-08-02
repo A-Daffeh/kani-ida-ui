@@ -7,9 +7,12 @@ import { loginUser } from '../store/actions/AuthActions';
 import NavBar from '../navbar/NavBar';
 import './Login.css';
 import { showToast } from '../layouts/Toast';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const Login = () => {
     const [loginError, setLoginError] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const authState = useSelector((state) => state.auth);
@@ -21,7 +24,6 @@ const Login = () => {
 
     useEffect(() => {
         if (authState.user) {
-            console.log(authState.user);
             showToast(authState.user.message, "success");
             navigate('/dashboard');
         }
@@ -31,10 +33,10 @@ const Login = () => {
         if (authState.error) {
             if (authState.error.code === 400) {
                 setLoginError(authState.error.message);
-                showToast(authState.error.message, "error");
+                showToast(loginError, "error");
             } else {
                 setLoginError(authState.error);
-                showToast(authState.error, "error");
+                showToast(loginError, "error");
             }
         }
     }, [authState.error]);
@@ -61,12 +63,18 @@ const Login = () => {
                         <div className="form-group text-dark m-2">
                             <label className='form-label' htmlFor="inputPassword">Password</label>
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 className="form-control"
                                 id="inputPassword"
                                 {...register("password", {
                                     required: "Password is required"
                                 })}
+                            />
+                            <FontAwesomeIcon
+                                icon={showPassword ? faEyeSlash : faEye}
+                                className="position-absolute"
+                                style={{ top: "65%", right: "0px", cursor: "pointer" }}
+                                onClick={() => setShowPassword(!showPassword)}
                             />
                             {errors.password && (
                                 <span style={{ color: "red" }}>

@@ -1,66 +1,66 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 75px;
+  scroll-behavior: smooth;
+  scroll-padding-top: 75px;
 }
 
 body {
-    font-weight: 400;
-    overflow-x: hidden;
-    position: relative;
-    color: #fff !important;
-    font-family: 'Centra', sans-serif !important;
+  font-weight: 400;
+  overflow-x: hidden;
+  position: relative;
+  color: #fff !important;
+  font-family: 'Centra', sans-serif !important;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    margin: 0;
-    padding: 0;
-    line-height: normal;
+  margin: 0;
+  padding: 0;
+  line-height: normal;
 }
 
 p, a, li, button, ul {
-    margin: 0;
-    padding: 0;
-    line-height: normal;
-    text-decoration: none;
+  margin: 0;
+  padding: 0;
+  line-height: normal;
+  text-decoration: none;
 }
 
 a:hover {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 img {
-    width: 100%;
-    height: auto;
+  width: 100%;
+  height: auto;
 }
 
 button {
-    border: 0;
-    background-color: transparent;
+  border: 0;
+  background-color: transparent;
 }
 
 input:focus, textarea:focus, select:focus {
-    outline: none;
+  outline: none;
 }
 
 @media (min-width:1700px) {
     main .container {
-        max-width: 100%;
-        padding: 0 150px;
+      max-width: 100%;
+      padding: 0 150px;
     }
 }
 
 p.success {
-    color: green;
+  color: green;
 }
 
 p.danger {
-    color: red;
+  color: red;
 }
 
 .contact,
@@ -68,17 +68,17 @@ p.danger {
 .register,
 .forgotPassword,
 .resetPassword {
-    position: relative;
-    top: 150px;
+  position: relative;
+  top: 150px;
 }
 
 body {
-    font-family: Arial, sans-serif;
+  font-family: Arial, sans-serif;
 }
 
 
 .header-border {
-    border: 1px solid black;
+  border: 1px solid black;
 }
 
 
@@ -93,50 +93,50 @@ body {
 }
 
 .form-container {
-    margin-top:-140px; 
-  }
-  
-  .register {
-    padding: 20px; 
-  }
+  margin-top:-140px; 
+}
 
-  .status-badge {
-    padding: 0.5em 1em;
-    border-radius: 12px;
-    color: white;
-    font-weight: bold;
-    white-space: nowrap;
-  }
-  
-  .status-badge.new-order {
-    background-color: #ff4d4d;
-  }
-  
-  .status-badge.on-delivery {
-    background-color: #4da6ff;
-  }
-  
-  .status-badge.delivered {
-    background-color: #4dff4d;
-  }
-  
-  .options-btn {
-    background: none;
-    border: none;
-    color: #000;
-    font-size: 1.8em;
-    cursor: pointer;
-  }
-  
-  .options-btn:hover {
-    color: #007bff;
-  }
+.register {
+  padding: 20px; 
+}
 
-  .badge-admin {
-    background-color: #ff4d4d;
-  }
-  
-  .badge-user {
-    background-color: #4da6ff;
-  }
+.status-badge {
+  padding: 0.5em 1em;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.status-badge.new-order {
+  background-color: #ff4d4d;
+}
+
+.status-badge.on-delivery {
+  background-color: #4da6ff;
+}
+
+.status-badge.delivered {
+  background-color: #4dff4d;
+}
+
+.options-btn {
+  background: none;
+  border: none;
+  color: #000;
+  font-size: 1.8em;
+  cursor: pointer;
+}
+
+.options-btn:hover {
+  color: #007bff;
+}
+
+.badge-admin {
+  background-color: #ff4d4d;
+}
+
+.badge-user {
+  background-color: #4da6ff;
+}
   
