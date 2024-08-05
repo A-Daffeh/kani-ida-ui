@@ -4,6 +4,7 @@ import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Header from '../components/header/Header';
 import { fetchCategories } from '../components/store/actions/CategoryActions';
+import SearchBar from '../components/layouts/SearchBar';
 
 const ProductCategory = () => {
     const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const ProductCategory = () => {
     return (
         <>
             <Header pageTitle="Product Categories" />
+            <SearchBar />
             <span className="d-flex justify-content-end mb-2">
                 <Link to="/new/product/category">
                     <Button variant="light product-btn">Add Product Category</Button>{' '}

@@ -4,6 +4,7 @@ import { fetchProducts } from '../store/actions/ProductActions';
 import Header from '../header/Header';
 import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
+import SearchBar from '../layouts/SearchBar';
 
 const Product = () => {
     const dispatch = useDispatch();
@@ -15,9 +16,16 @@ const Product = () => {
 
     return (
         <>
+
             <Header pageTitle="Products" />
+            <SearchBar />
             {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}
+            <span className="d-flex justify-content-end mb-2">
+                <Link to="/new/product">
+                    <Button variant="light product-btn">Add new Product</Button>{' '}
+                </Link>
+            </span>
             <table className="table">
                 <thead>
                     <tr className="header-border">
@@ -73,11 +81,7 @@ const Product = () => {
                     </li>
                 </ul>
             </nav>
-            <span className="d-flex justify-content-end mb-2">
-                <Link to="/new/product">
-                    <Button variant="light product-btn">Add new Product</Button>{' '}
-                </Link>
-            </span>
+           
         </>
     );
 }

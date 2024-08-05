@@ -1,9 +1,11 @@
 import Header from "../components/header/Header";
+import SearchBar from "../components/layouts/SearchBar";
 
 const OrderedProduct = () => {
   return (
     <>
       <Header pageTitle="Ordered Products" />
+      <SearchBar />
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Ordered Products</h2>
         

@@ -1,5 +1,6 @@
 import Card from "react-bootstrap/Card";
 import Header from "../components/header/Header";
+import { faHouse } from "@fortawesome/free-solid-svg-icons";
 
 function Dashboard() {
   return (

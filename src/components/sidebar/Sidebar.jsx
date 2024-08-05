@@ -26,26 +26,31 @@ function Sidebar() {
       <ul className="nav flex-column flex-grow-1">
         <li className={`nav-item ${currentPath === '/dashboard' ? 'active' : ''}`}>
           <Link className="nav-link text-white" to="/dashboard">
+            <FontAwesomeIcon icon={faHouse} className="me-2" />
             Dashboard
           </Link>
         </li>
         <li className={`nav-item ${currentPath === '/products' ? 'active' : ''}`}>
           <Link className="nav-link text-white" to="/products">
+            <FontAwesomeIcon icon={faShoppingBag} className="me-2" />
             Products
           </Link>
         </li>
         <li className={`nav-item ${currentPath === '/product/category' ? 'active' : ''}`}>
           <Link className="nav-link text-white" to="/product/category">
-           Product Categories
+            <FontAwesomeIcon icon={faThList} className="me-2" />
+            Categories
           </Link>
         </li>
         <li className={`nav-item ${currentPath === '/user/management' ? 'active' : ''}`}>
           <Link className="nav-link text-white" to="/user/management">
+            <FontAwesomeIcon icon={faUser} className="me-2" />
             User Management
           </Link>
         </li>
         <li className={`nav-item ${currentPath === '/ordered/products' ? 'active' : ''}`}>
           <Link className="nav-link text-white" to="/ordered/products">
+            <FontAwesomeIcon icon={faBox} className="me-2" />
             Ordered Products
           </Link>
         </li>
@@ -62,3 +67,4 @@ function Sidebar() {
 }
 
 export default Sidebar;
+

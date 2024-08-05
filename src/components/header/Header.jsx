@@ -13,13 +13,16 @@ function Header({ pageTitle }) {
         <p className="text-dark">Welcome back, {user?.fullName}</p>
       </div>
       <div className="d-flex align-items-center">
-        <div className="search-bar mr-3">
+        {/*
+       
+        <div className="search-bar ">
           <input
             type="text"
             className="form-control"
             placeholder="Search for your item"
           />
         </div>
+         */}
         <div className="d-flex align-items-center text-right">
           <div className="avatar-group">
             <img src={user?.imageUrl} alt="Profile" className="profile-image" />

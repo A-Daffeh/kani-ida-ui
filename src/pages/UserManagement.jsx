@@ -1,12 +1,21 @@
 import Header from "../components/header/Header";
+import { Link } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+import SearchBar from "../components/layouts/SearchBar";
 
 const UserManagement = () => {
   return (
     <>
       <Header pageTitle="User Management" />
+      <SearchBar />
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>User Management</h2>
       </div>
+      <span className="d-flex justify-content-end mb-2">
+                <Link to="/new/user">
+                    <Button variant="light product-btn">Add new User </Button>{' '}
+                </Link>
+            </span>
       <table className="table">
         <thead>
           <tr className="header-border">

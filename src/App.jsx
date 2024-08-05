@@ -101,75 +101,88 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/dashboard",
+    path: "/dashboard", // took out the AuthenticatedRoute, it was wrapping everything
     element: (
-      <AuthenticatedRoute>
+     
         <WithSidebarLayout>
           <Dashboard />
         </WithSidebarLayout>
-      </AuthenticatedRoute>
+      
     ),
   },
   {
     path: "/product/category",
     element: (
-      <AuthenticatedRoute>
+    
         <WithSidebarLayout>
           <ProductCategory />
         </WithSidebarLayout>
-      </AuthenticatedRoute>
+     
     ),
   },
   {
     path: "/new/product/category",
     element: (
-      <AuthenticatedRoute>
+    
         <WithSidebarLayout>
           <AddProductCategory />
         </WithSidebarLayout>
-      </AuthenticatedRoute>
+    
     ),
   },
   {
     path: "/products",
     element: (
-      <AuthenticatedRoute>
+    
         <WithSidebarLayout>
           <Product />
         </WithSidebarLayout>
-      </AuthenticatedRoute>
+ 
     ),
   },
   {
     path: "/user/management",
     element: (
-      <AuthenticatedRoute>
+     
         <WithSidebarLayout>
           <UserManagement />
         </WithSidebarLayout>
-      </AuthenticatedRoute>
+     
     ),
   },
   {
     path: "/ordered/products",
     element: (
-      <AuthenticatedRoute>
+ 
         <WithSidebarLayout>
           <OrderedProduct />
         </WithSidebarLayout>
-      </AuthenticatedRoute>
+     
     ),
   },
   {
     path: "/new/product",
     element: (
-      <AuthenticatedRoute>
+     
         <WithSidebarLayout>
           <AddNewProduct />
         </WithSidebarLayout>
-      </AuthenticatedRoute>
+    
     ),
-  }
+  },
+
+  {
+    path: "/new/user",
+    element: (
+     
+        <WithSidebarLayout>
+          <AddNewUser />
+        </WithSidebarLayout>
+    
+    ),
+  },
+
+  
 ]);
 
 function App() {
