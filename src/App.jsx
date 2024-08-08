@@ -25,6 +25,7 @@ import AddProductCategory from './components/product-category/AddProductCategory
 import Cart from './pages/Cart';
 import AuthenticatedRoute from './components/AuthenticatedRoute';
 import Toast from './components/layouts/Toast';
+import AddNewUser from './components/User Management/AddNewUser';
 
 const router = createBrowserRouter([
   {
