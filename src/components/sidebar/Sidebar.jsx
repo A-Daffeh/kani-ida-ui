@@ -1,23 +1,23 @@
-import { Link, useLocation } from "react-router-dom";
-import './Sidebar.css';
-import { useDispatch } from "react-redux";
-import { logoutUser } from "../store/actions/AuthActions";
+import React from 'react';
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHouse, faShoppingBag, faThList, faUser, faBox } from '@fortawesome/free-solid-svg-icons';
 import { showToast } from "../layouts/Toast";
+import './Sidebar.css';
+import { logout } from "../../services/AuthService"; // Correctly import logout function
 
 function Sidebar() {
+  const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
-  const dispatch = useDispatch();
 
   const handleLogout = async () => {
     try {
-      const response = await dispatch(logoutUser()).unwrap();
-      if (response.code === 200) {
-        window.location.href = "/login";
-        showToast("Logout successful", "success");
-      }
+      await logout(); // Directly call the logout function
+      showToast("Logout successful", "success");
+      navigate('/login');
     } catch (error) {
-      showToast(error, "error");
+      showToast(error.message, "error");
     }
   };
 
@@ -57,9 +57,9 @@ function Sidebar() {
       </ul>
       <ul className="nav flex-column">
         <li className="nav-item mt-auto">
-          <Link className="nav-link text-white" onClick={handleLogout}>
+          <button className="nav-link text-white" onClick={handleLogout} style={{ background: 'none', border: 'none', padding: 0 }}>
             Logout
-          </Link>
+          </button>
         </li>
       </ul>
     </div>
@@ -67,4 +67,3 @@ function Sidebar() {
 }
 
 export default Sidebar;
-

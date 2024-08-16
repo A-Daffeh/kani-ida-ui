@@ -1,26 +1,19 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts } from '../store/actions/ProductActions';
-import Header from '../header/Header';
+import React from 'react';
+import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
+import Header from '../header/Header';
 import SearchBar from '../layouts/SearchBar';
+import { useFetchProducts } from '../../services/ProductService';
 
 const Product = () => {
-    const dispatch = useDispatch();
-    const { products, loading, error } = useSelector((state) => state.products);
-
-    useEffect(() => {
-        dispatch(fetchProducts({ page: 0, size: 10 }));
-    }, [dispatch]);
+    const { data: products, isLoading, error } = useFetchProducts({ page: 0, size: 10 });
 
     return (
         <>
-
             <Header pageTitle="Products" />
             <SearchBar />
-            {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
+            {isLoading && <p>Loading...</p>}
+            {error && <p>{error.message}</p>}
             <span className="d-flex justify-content-end mb-2">
                 <Link to="/new/product">
                     <Button variant="light product-btn">Add new Product</Button>{' '}
@@ -39,7 +32,7 @@ const Product = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {products.map((product, index) => (
+                    {products && products.content.map((product, index) => (
                         <tr key={product.id}>
                             <th scope="row">{index + 1}</th>
                             <td>{product.name}</td>
@@ -52,36 +45,29 @@ const Product = () => {
                     ))}
                 </tbody>
             </table>
-            <nav aria-label="Page navigation example">
-                <ul className="pagination pagination-custom">
-                    <li className="page-item">
-                        <a className="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li className="page-item">
-                        <a className="page-link" href="#">
-                            1
-                        </a>
-                    </li>
-                    <li className="page-item">
-                        <a className="page-link" href="#">
-                            2
-                        </a>
-                    </li>
-                    <li className="page-item">
-                        <a className="page-link" href="#">
-                            3
-                        </a>
-                    </li>
-                    <li className="page-item">
-                        <a className="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-           
+            {products && products.pageable && (
+                <nav aria-label="Page navigation example">
+                    <ul className="pagination pagination-custom">
+                        <li className={`page-item ${products.pageable.pageNumber === 0 ? 'disabled' : ''}`}>
+                            <button className="page-link" onClick={() => useFetchProducts({ page: products.pageable.pageNumber - 1, size: 10 })} aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </button>
+                        </li>
+                        {[...Array(products.pageable.totalPages)].map((_, pageIndex) => (
+                            <li key={pageIndex} className={`page-item ${pageIndex === products.pageable.pageNumber ? 'active' : ''}`}>
+                                <button className="page-link" onClick={() => useFetchProducts({ page: pageIndex, size: 10 })}>
+                                    {pageIndex + 1}
+                                </button>
+                            </li>
+                        ))}
+                        <li className={`page-item ${products.pageable.pageNumber === products.pageable.totalPages - 1 ? 'disabled' : ''}`}>
+                            <button className="page-link" onClick={() => useFetchProducts({ page: products.pageable.pageNumber + 1, size: 10 })} aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            )}
         </>
     );
 }

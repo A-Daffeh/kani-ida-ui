@@ -1,21 +1,35 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Header from '../components/header/Header';
-import { fetchCategories } from '../components/store/actions/CategoryActions';
 import SearchBar from '../components/layouts/SearchBar';
+import { useFetchCategories, useAddCategory } from '../services/ProductCategoryService';
 
 const ProductCategory = () => {
-    const dispatch = useDispatch();
-    const { categories, loading, error, pageable } = useSelector((state) => state.categories);
+    const [currentPage, setCurrentPage] = useState(0);
+    const { data: categories, isLoading, error } = useFetchCategories({ page: currentPage, size: 10 });
+    const { mutate: addCategory, isLoading: isAdding } = useAddCategory();
 
-    useEffect(() => {
-        dispatch(fetchCategories({ page: 0, size: 10 }));
-    }, [dispatch]);
+    const [newCategory, setNewCategory] = useState({ name: '', description: '' });
 
     const handlePageChange = (pageNumber) => {
-        dispatch(fetchCategories({ page: pageNumber, size: pageable.pageSize }));
+        setCurrentPage(pageNumber);
+    };
+
+    const handleInputChange = (e) => {
+        setNewCategory({
+            ...newCategory,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const handleAddCategory = (e) => {
+        e.preventDefault();
+        addCategory(newCategory, {
+            onSuccess: () => {
+                setNewCategory({ name: '', description: '' }); // Reset the form
+            },
+        });
     };
 
     return (
@@ -27,8 +41,34 @@ const ProductCategory = () => {
                     <Button variant="light product-btn">Add Product Category</Button>{' '}
                 </Link>
             </span>
-            {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
+            <Form onSubmit={handleAddCategory} className="mb-4">
+                <Form.Group controlId="categoryName">
+                    <Form.Label>Category Name</Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="name"
+                        value={newCategory.name}
+                        onChange={handleInputChange}
+                        placeholder="Enter category name"
+                        required
+                    />
+                </Form.Group>
+                <Form.Group controlId="categoryDescription" className="mt-2">
+                    <Form.Label>Category Description</Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="description"
+                        value={newCategory.description}
+                        onChange={handleInputChange}
+                        placeholder="Enter category description"
+                    />
+                </Form.Group>
+                <Button type="submit" className="mt-3" disabled={isAdding}>
+                    {isAdding ? 'Adding...' : 'Add Category'}
+                </Button>
+            </Form>
+            {isLoading && <p>Loading...</p>}
+            {error && <p>{error.message}</p>}
             {categories && categories.content && categories.content.length > 0 ? (
                 <table className="table">
                     <thead>
@@ -51,23 +91,23 @@ const ProductCategory = () => {
             ) : (
                 <p>No categories available</p>
             )}
-            {pageable && (
+            {categories && categories.pageable && (
                 <nav aria-label="Page navigation example">
                     <ul className="pagination pagination-custom">
-                        <li className={`page-item ${pageable.pageNumber === 0 ? 'disabled' : ''}`}>
-                            <button className="page-link" onClick={() => handlePageChange(pageable.pageNumber - 1)} aria-label="Previous">
+                        <li className={`page-item ${categories.pageable.pageNumber === 0 ? 'disabled' : ''}`}>
+                            <button className="page-link" onClick={() => handlePageChange(categories.pageable.pageNumber - 1)} aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </button>
                         </li>
-                        {[...Array(pageable.totalPages)].map((_, pageIndex) => (
-                            <li key={pageIndex} className={`page-item ${pageIndex === pageable.pageNumber ? 'active' : ''}`}>
+                        {[...Array(categories.pageable.totalPages)].map((_, pageIndex) => (
+                            <li key={pageIndex} className={`page-item ${pageIndex === categories.pageable.pageNumber ? 'active' : ''}`}>
                                 <button className="page-link" onClick={() => handlePageChange(pageIndex)}>
                                     {pageIndex + 1}
                                 </button>
                             </li>
                         ))}
-                        <li className={`page-item ${pageable.pageNumber === pageable.totalPages - 1 ? 'disabled' : ''}`}>
-                            <button className="page-link" onClick={() => handlePageChange(pageable.pageNumber + 1)} aria-label="Next">
+                        <li className={`page-item ${categories.pageable.pageNumber === categories.pageable.totalPages - 1 ? 'disabled' : ''}`}>
+                            <button className="page-link" onClick={() => handlePageChange(categories.pageable.pageNumber + 1)} aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </button>
                         </li>

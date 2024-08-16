@@ -1,19 +1,23 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-import { addCategory } from '../store/actions/CategoryActions';
 import Header from '../header/Header';
+import { useAddCategory } from '../../services/ProductCategoryService';
 
 const AddProductCategory = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const { loading, error } = useSelector((state) => state.categories);
+    const { mutate: addCategory, isLoading, error } = useAddCategory();
 
     const onSubmit = async (data) => {
-        dispatch(addCategory(data));
-        navigate('/product/category');
+        addCategory(data, {
+            onSuccess: () => {
+                navigate('/product/category');
+            },
+            onError: (error) => {
+                console.error('Failed to create category:', error);
+            }
+        });
     };
 
     return (
@@ -22,8 +26,8 @@ const AddProductCategory = () => {
             <div className="container form-container">
                 <div className="register" id="register">
                     <h2 className="text-danger text-center my-5">Add Product Category</h2>
-                    {loading && <p>Loading...</p>}
-                    {error && <p>{error}</p>}
+                    {isLoading && <p>Loading...</p>}
+                    {error && <p>{error.message}</p>}
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="row g-3">
                             <div className="col-md-12 text-dark">

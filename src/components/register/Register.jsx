@@ -2,11 +2,11 @@ import NavBar from "../navbar/NavBar";
 import { useForm } from 'react-hook-form';
 import './Register.css';
 import { Link, useNavigate } from "react-router-dom";
-import axios from 'axios';
 import { useState } from "react";
 import { showToast } from "../layouts/Toast";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { register } from '../../services/AuthService';
 
 const states = [
     { name: "Alabama", code: "AL" },
@@ -66,32 +66,19 @@ const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const navigate = useNavigate();
-
-    const {
-        register: registerRegister,
-        handleSubmit: handleSubmitRegister,
-        formState: { errors: registerErrors },
-        watch
-    } = useForm();
+    const { register: registerRegister, handleSubmit: handleSubmitRegister, formState: { errors: registerErrors }, watch } = useForm();
+    
 
     const onSubmitRegister = async (data) => {
-        setErrorMessage(""); // Clear previous error message
         try {
-            const response = await axios.post('http://localhost:8082/auth/register', data);
-            console.log(response);
-            if (response.status === 201) {
-                showToast("Registration successful!", "success");
-                navigate("/login");
-            }
-        } catch (error) { 
-            if (error.response && error.response.status === 400) {
-                setErrorMessage(error.response.message || "Registration failed");
-                showToast(errorMessage, "error");
-            } else {
-                setErrorMessage("An unexpected error occurred. Please try again later.");
-                showToast(errorMessage, "error");
-            }
+            await register(data); // Directly call the logout function
+            showToast("Registration successful!", "success");
+            navigate("/login");
+        } catch (error) {
+            setErrorMessage(error.message || "Registration failed");
+            showToast(errorMessage, "error");
         }
+       
     };
 
     const password = watch("password");
@@ -111,6 +98,7 @@ const Register = () => {
                                 className="form-control"
                                 id="registerFullName"
                                 {...registerRegister("fullName", { required: true })}
+                                autoFocus
                             />
                             {registerErrors.fullName && (
                                 <span style={{ color: "red" }}>This field is required</span>

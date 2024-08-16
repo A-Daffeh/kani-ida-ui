@@ -1,35 +1,23 @@
 import React from "react";
 import PropTypes from "prop-types";
 import './Header.css';
-import { useSelector } from "react-redux";
 
 function Header({ pageTitle }) {
-  const user = useSelector((state) => state.auth.user.data.authResponse.user);
 
   return (
     <div className="d-flex justify-content-between align-items-center mb-4">
       <div>
         <h1 className="text-dark">{pageTitle}</h1>
-        <p className="text-dark">Welcome back, {user?.fullName}</p>
+        <p className="text-dark">Welcome back, Ida</p>
       </div>
       <div className="d-flex align-items-center">
-        {/*
-       
-        <div className="search-bar ">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Search for your item"
-          />
-        </div>
-         */}
         <div className="d-flex align-items-center text-right">
           <div className="avatar-group">
-            <img src={user?.imageUrl} alt="Profile" className="profile-image" />
+            <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" className="profile-image" />
           </div>
           <div className="ml-2">
-            <h5 className="text-dark">{user?.fullName}</h5>
-            <p className="text-dark">{user?.email}</p>
+            <h5 className="text-dark">Ida Bojang</h5>
+            <p className="text-dark">ida.bojang@gmail.com</p>
           </div>
         </div>
       </div>

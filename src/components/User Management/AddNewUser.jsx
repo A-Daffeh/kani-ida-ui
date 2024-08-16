@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { addProduct } from '../store/actions/ProductActions';
 import Header from '../header/Header';
 
 const AddNewUser = () => {

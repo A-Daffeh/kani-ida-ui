@@ -1,39 +1,38 @@
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import NavBar from "../components/navbar/NavBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { removeCartItem, updateCartItem, fetchCart, clearCart } from '../components/store/actions/CartActions';
+import {
+    useFetchCart,
+    useRemoveCartItem,
+    useUpdateCartItem,
+    useClearCart
+} from '../services/CartService';
 
 const Cart = ({ userId }) => {
-    const dispatch = useDispatch();
-    const { items, total, error } = useSelector((state) => state.cart);
-
-    useEffect(() => {
-        dispatch(fetchCart({ userId }));
-    }, [dispatch, userId]);
+    const { data: cart, isLoading, error } = useFetchCart(userId);
+    const removeCartItem = useRemoveCartItem();
+    const updateCartItem = useUpdateCartItem();
+    const clearCart = useClearCart();
 
     const handleRemove = (cartItemId) => {
-        dispatch(removeCartItem({ userId, cartItemId }));
+        removeCartItem.mutate({ userId, cartItemId });
     };
 
-    const handleUpdateCartItem = (cartItemId) => {
-        dispatch(updateCartItem({ cartItemId }));
+    const handleUpdateCartItem = (cartItemId, quantity) => {
+        updateCartItem.mutate({ cartItemId, quantity });
     };
-
-    // const handleDecrease = (cartItemId) => {
-    //     dispatch(decreaseQuantity({ cartItemId }));
-    // };
 
     const handleClearCart = () => {
-        dispatch(clearCart({ userId }));
+        clearCart.mutate({ userId });
     };
 
     const calculateTotal = () => {
-        return items.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+        return cart?.items.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
     };
 
-    if (error) return <p>{error}</p>;
+    if (isLoading) return <p>Loading...</p>;
+    if (error) return <p>{error.message}</p>;
 
     return (
         <>
@@ -53,7 +52,7 @@ const Cart = ({ userId }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {items.map(item => (
+                                {cart.items.map(item => (
                                     <tr key={item.id}>
                                         <th scope="row">
                                             <div className="d-flex align-items-center">
@@ -69,13 +68,13 @@ const Cart = ({ userId }) => {
                                         <td>
                                             <div className="input-group quantity mt-4" style={{ width: '100px' }}>
                                                 <div className="input-group-btn">
-                                                    <button className="btn btn-sm btn-minus rounded-circle bg-light border" onClick={() => handleUpdateCartItem(item.id)}>
+                                                    <button className="btn btn-sm btn-minus rounded-circle bg-light border" onClick={() => handleUpdateCartItem(item.id, item.quantity - 1)}>
                                                         <FontAwesomeIcon icon={faMinus} />
                                                     </button>
                                                 </div>
                                                 <input type="text" className="form-control form-control-sm text-center border-0" value={item.quantity} readOnly />
                                                 <div className="input-group-btn">
-                                                    <button className="btn btn-sm btn-plus rounded-circle bg-light border" onClick={() => handleUpdateCartItem(item.id)}>
+                                                    <button className="btn btn-sm btn-plus rounded-circle bg-light border" onClick={() => handleUpdateCartItem(item.id, item.quantity + 1)}>
                                                         <FontAwesomeIcon icon={faPlus} />
                                                     </button>
                                                 </div>

@@ -1,45 +1,27 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../store/actions/AuthActions';
 import NavBar from '../navbar/NavBar';
 import './Login.css';
 import { showToast } from '../layouts/Toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { login } from '../../services/AuthService'; // Import the new login function
 
 const Login = () => {
-    const [loginError, setLoginError] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const authState = useSelector((state) => state.auth);
     const { register, handleSubmit, formState: { errors } } = useForm();
-
-    const onSubmitLogin = (data) => {
-        dispatch(loginUser(data));
-    };
-
-    useEffect(() => {
-        if (authState.user) {
-            showToast(authState.user.message, "success");
+    
+    const onSubmitLogin = async (data) => {
+        try {
+            const user = await login(data); // Directly call the login function
+            showToast("Login successful", "success");
             navigate('/dashboard');
+        } catch (error) {
+            showToast(error.message, "error");
         }
-    }, [authState.user, navigate]);
-
-    useEffect(() => {
-        if (authState.error) {
-            if (authState.error.code === 400) {
-                setLoginError(authState.error.message);
-                showToast(loginError, "error");
-            } else {
-                setLoginError(authState.error);
-                showToast(loginError, "error");
-            }
-        }
-    }, [authState.error]);
+    };
 
     return (
         <>
@@ -55,6 +37,7 @@ const Login = () => {
                                 className="form-control"
                                 id="inputEmail"
                                 {...register("email", { required: true })}
+                                autoFocus
                             />
                             {errors.email && (
                                 <span style={{ color: "red" }}>Email is required</span>

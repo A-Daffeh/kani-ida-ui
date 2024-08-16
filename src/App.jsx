@@ -1,7 +1,5 @@
 import React from 'react';
-import { Provider } from 'react-redux';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import store from './components/store/store';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from './pages/Home';
@@ -26,6 +24,7 @@ import Cart from './pages/Cart';
 import AuthenticatedRoute from './components/AuthenticatedRoute';
 import Toast from './components/layouts/Toast';
 import AddNewUser from './components/User Management/AddNewUser';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const router = createBrowserRouter([
   {
@@ -186,14 +185,16 @@ const router = createBrowserRouter([
   
 ]);
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
-    <Provider store={store}>
-      <div className='app'>
+    <div className='app'>
+      <QueryClientProvider client={queryClient}>
         <Toast />
         <RouterProvider router={router} />
-      </div>
-    </Provider>
+      </QueryClientProvider>
+    </div>
   );
 }
 

@@ -1,19 +1,24 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-import { addProduct } from '../store/actions/ProductActions';
 import Header from '../header/Header';
+import { useAddProduct } from '../../services/ProductService';
 
 const AddNewProduct = () => {
     const { register, handleSubmit, reset } = useForm();
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const { loading, error } = useSelector((state) => state.products);
+    const { mutate: addProduct, isLoading, error } = useAddProduct();
 
     const onSubmit = async (data) => {
-        dispatch(addProduct(data));
-        reset();
+        addProduct(data, {
+            onSuccess: () => {
+                reset();
+                navigate('/product');
+            },
+            onError: (error) => {
+                console.error('Failed to create product:', error);
+            }
+        });
     };
 
     return (
@@ -22,8 +27,8 @@ const AddNewProduct = () => {
             <div className="container form-container">
                 <div className="register" id="register">
                     <h2 className="text-danger text-center my-5">Add New Product</h2>
-                    {loading && <p>Loading...</p>}
-                    {error && <p>{error}</p>}
+                    {isLoading && <p>Loading...</p>}
+                    {error && <p>{error.message}</p>}
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="row g-3">
                             <div className="col-md-6 text-dark">

@@ -1,7 +1,7 @@
 // src/services/ProductService.js
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8082/api/admin/products/create/1';
+const API_URL = 'http://localhost:8082/api/admin/products/create';
 
 const getAllProducts = () => {
     return axios.get(API_URL);
