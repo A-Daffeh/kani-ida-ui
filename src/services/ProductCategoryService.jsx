@@ -1,19 +1,22 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import api from '../components/config/api';
+import { showToast } from '../components/layouts/Toast';
 
 export const useAddCategory = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: async (newCategory) => {
-            const response = await axios.post('http://localhost:8082/admin/categories/create', newCategory, {
-                withCredentials: 'include',
-            });
+            const response = await api.post('/admin/categories/create', newCategory);
             return response.data;
         },
-        onSuccess: () => {
-            // Invalidate and refetch categories with all existing queryKeys for pagination
+        onSuccess: (data) => {
+            showToast(data.message, 'success');
             queryClient.invalidateQueries({ queryKey: 'categories' });
+        },
+        onError: (error) => {
+            const errorMessage = error.response?.data?.message || 'Failed to create category';
+            showToast(errorMessage, 'error');
         },
     });
 };
@@ -22,8 +25,8 @@ export const useFetchCategories = ({ page = 0, size = 10 }) => {
     return useQuery({
         queryKey: ['categories', page, size],
         queryFn: async () => {
-            const response = await axios.get(`http://localhost:8082/public/categories?page=${page}&size=${size}`);
-            return response.data.categories;
+            const response = await api.get(`/public/categories?page=${page}&size=${size}`);
+            return response.data.data.categories;
         },
     });
 };
