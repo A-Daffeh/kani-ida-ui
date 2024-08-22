@@ -1,14 +1,12 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-// Global axios configuration
-axios.defaults.withCredentials = true;  // Ensure credentials are sent with requests
-axios.defaults.baseURL = 'http://localhost:8082';  // Set your base URL
+axios.defaults.withCredentials = true; 
+axios.defaults.baseURL = 'http://localhost:8082';
 
 export const login = async (credentials) => {
     const response = await axios.post('/auth/login', credentials);
 
-   // Store the JWT and refresh token in cookies
    const { jwt, refreshToken } = response.data.data.authResponse;
    Cookies.set('access-token', jwt, { expires: 7 });
    Cookies.set('refresh-token', refreshToken, { expires: 7 });
@@ -23,6 +21,8 @@ export const register = async (data) => {
 
 export const logout = async () => {
     const response = await axios.post('/auth/logout', {}, { withCredentials: true });
+    Cookies.remove('access-token');
+    Cookies.remove('refresh-token');
     return response.data;
 };
 

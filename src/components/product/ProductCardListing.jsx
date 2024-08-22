@@ -3,7 +3,6 @@ import ProductCard from './ProductCard';
 import './ProductCardListing.css';
 
 const ProductCardListing = ({ products }) => {
-    
     return (
         <div className="product-card-listing m-4">
             {products.map((product) => (

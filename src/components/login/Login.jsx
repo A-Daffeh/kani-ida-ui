@@ -6,20 +6,26 @@ import './Login.css';
 import { showToast } from '../layouts/Toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import { login } from '../../services/AuthService'; // Import the new login function
+import { login } from '../../services/AuthService';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../config/AuthSlice';
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { register, handleSubmit, formState: { errors } } = useForm();
     
     const onSubmitLogin = async (data) => {
         try {
-            const user = await login(data); // Directly call the login function
+            const user = await login(data);
+
+            dispatch(setUser(user));
+
             showToast("Login successful", "success");
             navigate('/dashboard');
         } catch (error) {
-            showToast(error.message, "error");
+            showToast("Incorrect username/password", "error");
         }
     };
 
