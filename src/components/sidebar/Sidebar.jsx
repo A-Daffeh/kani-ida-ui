@@ -1,13 +1,16 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faShoppingBag, faThList, faUser, faBox } from '@fortawesome/free-solid-svg-icons';
 import { showToast } from "../layouts/Toast";
 import './Sidebar.css';
-import { logout } from "../../services/AuthService"; // Correctly import logout function
+import { logout } from "../../services/AuthService";
+import { clearUser } from '../config/AuthSlice';
 
 function Sidebar() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -15,6 +18,7 @@ function Sidebar() {
     try {
       await logout(); // Directly call the logout function
       showToast("Logout successful", "success");
+      dispatch(clearUser());
       navigate('/login');
     } catch (error) {
       showToast(error.message, "error");

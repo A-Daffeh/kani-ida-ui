@@ -75,7 +75,7 @@ const Register = () => {
             showToast("Registration successful!", "success");
             navigate("/login");
         } catch (error) {
-            setErrorMessage(error.message || "Registration failed");
+            setErrorMessage(error.response.data.message || "Registration failed");
             showToast(errorMessage, "error");
         }
        

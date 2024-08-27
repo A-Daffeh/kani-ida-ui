@@ -1,8 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import ProductCard from './ProductCard';
 import './ProductCardListing.css';
+import { useSelector } from 'react-redux';
 
 const ProductCardListing = ({ products }) => {
+    const userId = useSelector((state) => state.auth.user.data.authResponse.user.id);
+
     return (
         <div className="product-card-listing m-4">
             {products.map((product) => (
@@ -13,6 +16,8 @@ const ProductCardListing = ({ products }) => {
                     name={product.name}
                     description={product.description}
                     price={product.price}
+                    productId={product.id}
+                    userId={userId}
                 />
             ))}
         </div>

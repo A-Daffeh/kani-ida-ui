@@ -1,16 +1,21 @@
 import React, { useState } from "react";
 import { Nav, Navbar, NavDropdown, Container } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from 'react-router-dom';
-import {
-  faCartShopping,
-  faMagnifyingGlass,
-} from "@fortawesome/free-solid-svg-icons";
+import { Link, useNavigate } from 'react-router-dom';
+import { faCartShopping, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import "./NavBar.css";
+import { showToast } from "../layouts/Toast";
 import { assets } from "../../assets/assets";
+import { useSelector } from "react-redux";
+import { useFetchCart } from "../../services/CartService";
 
 const NavBar = () => {
   const [activeLink, setActiveLink] = useState("banner");
+  const navigate = useNavigate();
+
+  const  userId = useSelector((state) => state.auth.user.data.authResponse.user.id);
+  const { data: cart } = useFetchCart(userId);
+  const cartItemCount = cart.cartItems.length || 0;
 
   const onUpdateActiveLink = (link) => {
     if (window.location.pathname === "/") {
@@ -23,6 +28,14 @@ const NavBar = () => {
       window.location.href = "/";
     }
     setActiveLink(link);
+  };  
+
+  const handleCartClick = () => {
+    if (!userId) {
+      navigate('/login');
+    } else {
+      navigate('/cart');
+    }
   };
 
   return (
@@ -39,43 +52,28 @@ const NavBar = () => {
             <Nav className="me-auto">
               <Nav.Link
                 href="/"
-                className={
-                  activeLink === "#banner"
-                    ? "active navbar-link"
-                    : "navbar-link"
-                }
+                className={activeLink === "#banner" ? "active navbar-link" : "navbar-link"}
               >
                 Home
               </Nav.Link>
               <Nav.Link
                 href="#about"
-                className={
-                  activeLink === "#about" ? "active navbar-link" : "navbar-link"
-                }
+                className={activeLink === "#about" ? "active navbar-link" : "navbar-link"}
                 onClick={() => onUpdateActiveLink("#about")}
               >
                 About
               </Nav.Link>
               <NavDropdown title="Products" id="basic-nav-dropdown">
-                <NavDropdown.Item
-                  href="/products/savory"
-                  className="prod-category"
-                >
+                <NavDropdown.Item href="/products/savory" className="prod-category">
                   Savory & Seasoning
                 </NavDropdown.Item>
-
-                <NavDropdown.Item
-                  href="/products/spices"
-                  className="prod-category"
-                >
+                <NavDropdown.Item href="/products/spices" className="prod-category">
                   Spices
                 </NavDropdown.Item>
               </NavDropdown>
               <Nav.Link
                 href="/contact"
-                className={
-                  activeLink === "#" ? "active navbar-link" : "navbar-link"
-                }
+                className={activeLink === "#" ? "active navbar-link" : "navbar-link"}
                 onClick={() => onUpdateActiveLink("#")}
               >
                 Contact
@@ -86,13 +84,14 @@ const NavBar = () => {
                 <Link to="#" className="soc-icon">
                   <FontAwesomeIcon icon={faMagnifyingGlass} alt="Search" />
                 </Link>
-                <Link to="/cart" className="soc-icon">
+                <button onClick={handleCartClick} className="soc-icon btn btn-link p-0">
                   <FontAwesomeIcon icon={faCartShopping} alt="Add to Cart" />
-                </Link>
+                  {cartItemCount > 0 && <span className="cart-count text-white">{cartItemCount}</span>}
+                </button>
               </div>
-                <Link className="vvd" to="/login">
-                  Login
-                </Link>
+              <Link className="vvd" to="/login">
+                Login
+              </Link>
             </span>
           </Navbar.Collapse>
         </Container>

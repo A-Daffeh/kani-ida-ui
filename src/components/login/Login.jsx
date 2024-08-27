@@ -19,11 +19,15 @@ const Login = () => {
     const onSubmitLogin = async (data) => {
         try {
             const user = await login(data);
-
             dispatch(setUser(user));
 
             showToast("Login successful", "success");
-            navigate('/dashboard');
+            const role = user.data.authResponse.user.role;
+            if (role === 'ROLE_ADMIN') {
+                navigate('/dashboard');
+            } else {
+                navigate('/cart');
+            }
         } catch (error) {
             showToast("Incorrect username/password", "error");
         }

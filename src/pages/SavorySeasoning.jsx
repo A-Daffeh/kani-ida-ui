@@ -9,10 +9,8 @@ const SavorySeasoning = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const productsPerPage = 10;
 
-    // Fetch products using the useFetchProducts hook
     const { data: productsData, isLoading, error } = useFetchProducts({ page: currentPage, size: productsPerPage });
 
-    // Extract products from the response
     const products = productsData?.content || [];
     const totalPages = productsData?.totalPages || 0;
 
