@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Header from '../header/Header';
@@ -7,11 +7,31 @@ import { useFetchProducts } from '../../services/ProductService';
 
 const Product = () => {
     const [currentPage, setCurrentPage] = useState(0);
+    const [activeDropdown, setActiveDropdown] = useState(null);
+    const dropdownRef = useRef(null);
+
     const { data: products, isLoading, error } = useFetchProducts({ page: currentPage, size: 10 });
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
+
+    const handleDropdownClick = (index) => {
+        setActiveDropdown(activeDropdown === index ? null : index);
+    };
+
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setActiveDropdown(null);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     return (
         <>
@@ -46,7 +66,18 @@ const Product = () => {
                                 <td>{product.availability ? 'Available' : 'Not Available'}</td>
                                 <td>{product.quantity}</td>
                                 <td>{product.productCategory.name}</td>
-                                <td><button className="options-btn">...</button></td>
+                                <td style={{ position: 'relative' }}>
+                                    <button className="options-btn" onClick={() => handleDropdownClick(index)}>...</button>
+                                    {activeDropdown === index && (
+                                        <div className="dropdown-menu show" ref={dropdownRef}>
+                                            <button className="dropdown-item">View Product</button>
+                                            <button className="dropdown-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                Delete Product
+                                                <input type="checkbox" id={`delete-${index}`} style={{ marginLeft: '10px' }} />
+                                            </button>
+                                        </div>
+                                    )}
+                                </td>
                             </tr>
                         ))}
                     </tbody>
@@ -82,3 +113,4 @@ const Product = () => {
 }
 
 export default Product;
+
