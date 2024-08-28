@@ -6,16 +6,19 @@ import { faCartShopping, faMagnifyingGlass } from "@fortawesome/free-solid-svg-i
 import "./NavBar.css";
 import { showToast } from "../layouts/Toast";
 import { assets } from "../../assets/assets";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useFetchCart } from "../../services/CartService";
+import { logout } from "../../services/AuthService";
+import { clearUser } from '../config/AuthSlice';
 
 const NavBar = () => {
   const [activeLink, setActiveLink] = useState("banner");
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // To handle logout
 
-  const  userId = useSelector((state) => state.auth.user.data.authResponse.user.id);
+  const userId = useSelector((state) => state.auth.user?.data.authResponse.user.id);
   const { data: cart } = useFetchCart(userId);
-  const cartItemCount = cart.cartItems.length || 0;
+  const cartItemCount = cart?.cartItems.length || 0;
 
   const onUpdateActiveLink = (link) => {
     if (window.location.pathname === "/") {
@@ -28,13 +31,25 @@ const NavBar = () => {
       window.location.href = "/";
     }
     setActiveLink(link);
-  };  
+  };
 
   const handleCartClick = () => {
     if (!userId) {
+      showToast("Login to see items in your cart", "warning");
       navigate('/login');
     } else {
       navigate('/cart');
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      showToast("Logout successful", "success");
+      dispatch(clearUser());
+      navigate('/login');
+    } catch (error) {
+      showToast(error.message, "error");
     }
   };
 
@@ -89,9 +104,16 @@ const NavBar = () => {
                   {cartItemCount > 0 && <span className="cart-count text-white">{cartItemCount}</span>}
                 </button>
               </div>
-              <Link className="vvd" to="/login">
-                Login
-              </Link>
+              {userId ? (
+                <NavDropdown title="Settings" id="settings-dropdown">
+                  <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
+                  <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
+                </NavDropdown>
+              ) : (
+                <Link className="vvd" to="/login">
+                  Login
+                </Link>
+              )}
             </span>
           </Navbar.Collapse>
         </Container>

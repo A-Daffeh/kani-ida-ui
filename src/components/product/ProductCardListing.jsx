@@ -4,7 +4,7 @@ import './ProductCardListing.css';
 import { useSelector } from 'react-redux';
 
 const ProductCardListing = ({ products }) => {
-    const userId = useSelector((state) => state.auth.user.data.authResponse.user.id);
+    const userId = useSelector((state) => state.auth.user?.data.authResponse.user.id);
 
     return (
         <div className="product-card-listing m-4">

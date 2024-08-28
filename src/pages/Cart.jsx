@@ -11,7 +11,7 @@ import {
 import { useSelector } from 'react-redux';
 
 const Cart = () => {
-    const  userId = useSelector((state) => state.auth.user.data.authResponse.user.id);
+    const  userId = useSelector((state) => state.auth.user?.data.authResponse.user.id);
     
     const { data: cart, isLoading, error } = useFetchCart(userId);
     const removeCartItem = useRemoveCartItem();
@@ -28,10 +28,6 @@ const Cart = () => {
 
     const handleClearCart = () => {
         clearCart.mutate({ userId });
-    };
-
-    const calculateTotal = () => {
-        return cart.cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
     };
 
     if (isLoading) return <p>Loading...</p>;
@@ -68,8 +64,8 @@ const Cart = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {cart.cartItems.map( (item, index) => (
-                                    <tr key={index}>
+                                {cart.cartItems.map( item => (
+                                    <tr key={item.id}>
                                         <th scope="row">
                                             <div className="d-flex align-items-center">
                                                 <img src={item.imageUrl} className="img-fluid me-5 rounded-circle" style={{ width: '80px', height: '80px' }} />
