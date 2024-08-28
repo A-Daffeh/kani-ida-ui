@@ -26,7 +26,8 @@ import Toast from './components/layouts/Toast';
 import AddNewUser from './components/User Management/AddNewUser';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
-import store from './components/config/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from './components/config/store';
 
 const router = createBrowserRouter([
   {
@@ -105,82 +106,80 @@ const router = createBrowserRouter([
   {
     path: "/dashboard", // took out the AuthenticatedRoute, it was wrapping everything
     element: (
-     <AuthenticatedRoute>
+     
         <WithSidebarLayout>
           <Dashboard />
         </WithSidebarLayout>
-      </AuthenticatedRoute>
+    
     ),
   },
   {
     path: "/product/category",
     element: (
-      <AuthenticatedRoute>
         <WithSidebarLayout>
           <ProductCategory />
         </WithSidebarLayout>
-      </AuthenticatedRoute>
     ),
   },
   {
     path: "/new/product/category",
     element: (
-      <AuthenticatedRoute>
+      
         <WithSidebarLayout>
           <AddProductCategory />
         </WithSidebarLayout>
-      </AuthenticatedRoute>
+    
     ),
   },
   {
     path: "/products",
     element: (
-      <AuthenticatedRoute>
+      
         <WithSidebarLayout>
           <Product />
         </WithSidebarLayout>
-      </AuthenticatedRoute>
+    
     ),
   },
   {
     path: "/user/management",
     element: (
-      <AuthenticatedRoute>
+      
         <WithSidebarLayout>
           <UserManagement />
         </WithSidebarLayout>
-      </AuthenticatedRoute>
+    
     ),
   },
   {
     path: "/ordered/products",
     element: (
-      <AuthenticatedRoute>
+      
         <WithSidebarLayout>
           <OrderedProduct />
         </WithSidebarLayout>
-      </AuthenticatedRoute>
+    
     ),
   },
   {
     path: "/new/product",
     element: (
-      <AuthenticatedRoute>
+      
         <WithSidebarLayout>
           <AddNewProduct />
         </WithSidebarLayout>
-      </AuthenticatedRoute>
+    
     ),
   },
 
   {
     path: "/new/user",
     element: (
-      <AuthenticatedRoute>
+      
         <WithSidebarLayout>
           <AddNewUser />
         </WithSidebarLayout>
-      </AuthenticatedRoute>
+    
     ),
   },
 
@@ -194,8 +193,10 @@ function App() {
     <div className='app'>
       <QueryClientProvider client={queryClient}>
         <Provider store={store} >
-          <Toast />
-          <RouterProvider router={router} />
+          <PersistGate loading={null} persistor={persistor}>
+            <Toast />
+            <RouterProvider router={router} />
+          </PersistGate>
         </Provider>
       </QueryClientProvider>
     </div>

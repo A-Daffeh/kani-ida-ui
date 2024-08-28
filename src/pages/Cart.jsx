@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import NavBar from "../components/navbar/NavBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -8,8 +8,11 @@ import {
     useUpdateCartItem,
     useClearCart
 } from '../services/CartService';
+import { useSelector } from 'react-redux';
 
-const Cart = ({ userId }) => {
+const Cart = () => {
+    const  userId = useSelector((state) => state.auth.user?.data.authResponse.user.id);
+    
     const { data: cart, isLoading, error } = useFetchCart(userId);
     const removeCartItem = useRemoveCartItem();
     const updateCartItem = useUpdateCartItem();
@@ -27,12 +30,21 @@ const Cart = ({ userId }) => {
         clearCart.mutate({ userId });
     };
 
-    const calculateTotal = () => {
-        return cart?.items.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
-    };
-
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>{error.message}</p>;
+
+    if (!cart || cart.cartItems.length === 0) {
+        return (
+            <>
+                <NavBar />
+                <div className="container-fluid py-5 my-5">
+                    <div className="container py-5">
+                        <p className='text-danger'>Card is Empty</p>
+                    </div>
+                </div>
+            </>
+        )
+    }
 
     return (
         <>
@@ -52,18 +64,18 @@ const Cart = ({ userId }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {cart.items.map(item => (
+                                {cart.cartItems.map( item => (
                                     <tr key={item.id}>
                                         <th scope="row">
                                             <div className="d-flex align-items-center">
-                                                <img src={item.image} className="img-fluid me-5 rounded-circle" style={{ width: '80px', height: '80px' }} />
+                                                <img src={item.imageUrl} className="img-fluid me-5 rounded-circle" style={{ width: '80px', height: '80px' }} />
                                             </div>
                                         </th>
                                         <td>
-                                            <p className="mb-0 mt-4">{item.title}</p>
+                                            <p className="mb-0 mt-4">{item.productName}</p>
                                         </td>
                                         <td>
-                                            <p className="mb-0 mt-4">{item.price} $</p>
+                                            <p className="mb-0 mt-4">$ {item.price}</p>
                                         </td>
                                         <td>
                                             <div className="input-group quantity mt-4" style={{ width: '100px' }}>
@@ -81,7 +93,7 @@ const Cart = ({ userId }) => {
                                             </div>
                                         </td>
                                         <td>
-                                            <p className="mb-0 mt-4">{(item.price * item.quantity).toFixed(2)} $</p>
+                                            <p className="mb-0 mt-4">$ {(item.totalPrice).toFixed(2)}</p>
                                         </td>
                                         <td>
                                             <button className="btn btn-md rounded-circle bg-light border mt-4" onClick={() => handleRemove(item.id)}>
@@ -102,7 +114,7 @@ const Cart = ({ userId }) => {
                                     <h1 className="display-6 mb-4">Cart <span className="fw-normal">Total</span></h1>
                                     <div className="d-flex justify-content-between mb-4">
                                         <h5 className="mb-0 me-4">Subtotal:</h5>
-                                        <p className="mb-0">${calculateTotal()}</p>
+                                        <p className="mb-0">${(cart.totalAmount).toFixed(2)}</p>
                                     </div>
                                     <div className="d-flex justify-content-between">
                                         <h5 className="mb-0 me-4">Shipping</h5>
@@ -113,7 +125,7 @@ const Cart = ({ userId }) => {
                                 </div>
                                 <div className="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                                     <h5 className="mb-0 ps-4 me-4">Total</h5>
-                                    <p className="mb-0 pe-4">${(parseFloat(calculateTotal()) + 3).toFixed(2)}</p>
+                                    <p className="mb-0 pe-4">${(cart.totalAmount).toFixed(2)}</p>
                                 </div>
                                 <button className="btn border-white rounded-pill px-4 py-3 text-white text-uppercase mb-4 ms-4" type="button">Proceed Checkout</button>
                                 <button className="btn border-white rounded-pill px-4 py-3 text-white text-uppercase mb-4 ms-4" type="button" onClick={handleClearCart}>Clear Cart</button>

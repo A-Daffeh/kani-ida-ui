@@ -6,7 +6,7 @@ export const useAddProduct = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (data) => { // Ensure mutationFn is defined
+        mutationFn: async (data) => {
             const formData = new FormData();
             formData.append('productRequest', new Blob([JSON.stringify({
                 name: data.name,

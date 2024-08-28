@@ -12,6 +12,7 @@ const AddNewProduct = () => {
     const { data: categories, isLoading: isCategoriesLoading, error: categoriesError } = useFetchCategories({ page: 0, size: 100 });
 
     const onSubmit = (data) => {
+        console.log(data);
         addProduct(data, {
             onSuccess: () => {
                 navigate('/products');
