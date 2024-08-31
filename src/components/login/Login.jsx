@@ -53,7 +53,7 @@ const Login = () => {
                                 <span style={{ color: "red" }}>Email is required</span>
                             )}
                         </div>
-                        <div className="form-group text-dark m-2">
+                        <div className="form-group text-dark m-2 position-relative">
                             <label className='form-label' htmlFor="inputPassword">Password</label>
                             <input
                                 type={showPassword ? "text" : "password"}
@@ -65,8 +65,7 @@ const Login = () => {
                             />
                             <FontAwesomeIcon
                                 icon={showPassword ? faEyeSlash : faEye}
-                                className="position-absolute"
-                                style={{ top: "65%", right: "0px", cursor: "pointer" }}
+                                className="position-absolute password-toggle-icon"
                                 onClick={() => setShowPassword(!showPassword)}
                             />
                             {errors.password && (
@@ -112,3 +111,4 @@ const Login = () => {
 }
 
 export default Login;
+

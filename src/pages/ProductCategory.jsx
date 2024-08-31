@@ -64,7 +64,10 @@ const ProductCategory = () => {
                                     <button className="options-btn" onClick={() => handleDropdownClick(index)}>...</button>
                                     {activeDropdown === index && (
                                         <div className="dropdown-menu show" ref={dropdownRef}>
-                                            <button className="dropdown-item">View Category</button>
+                                            <Link to={`/view/product/category/${category.id}`} className="dropdown-item">
+                                            View Category
+                                            </Link>
+
                                             <button className="dropdown-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                 Delete Category
                                                 <input type="checkbox" id={`delete-${index}`} style={{ marginLeft: '10px' }} />

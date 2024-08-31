@@ -28,6 +28,24 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from './components/config/store';
+import ViewProductCategory from './components/product-category/ViewProductCategory';
+import ViewProduct from './components/product/ViewProduct';
+
+const categoryData = {
+  name: "Example Category Name",
+  description: "This is an example description that will be for the category",
+};
+
+const productData = {
+  name: "Example product Name",
+  description: "This is an example description that will be for the category",
+  price : "This is a sample price of $50",
+  availability : "This is available",
+  quantity : "50", 
+  category : "type of category",
+  imageurl : "Sample image",
+};
+
 
 const router = createBrowserRouter([
   {
@@ -131,6 +149,16 @@ const router = createBrowserRouter([
     
     ),
   },
+
+  {
+    path:  "/view/product/category/:id",
+    element: (
+      <WithSidebarLayout>
+        <ViewProductCategory category={categoryData} />
+      </WithSidebarLayout>
+    ),
+  },
+
   {
     path: "/products",
     element: (
@@ -141,6 +169,17 @@ const router = createBrowserRouter([
     
     ),
   },
+
+  {
+    path:  "/view/product/:id",
+    element: (
+      <WithSidebarLayout>
+        <ViewProduct product={productData } />
+      </WithSidebarLayout>
+    ),
+  },
+
+
   {
     path: "/user/management",
     element: (
