@@ -30,11 +30,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from './components/config/store';
 import ViewProductCategory from './components/product-category/ViewProductCategory';
 import ViewProduct from './components/product/ViewProduct';
-
-const categoryData = {
-  name: "Example Category Name",
-  description: "This is an example description that will be for the category",
-};
+import UpdateProductCategory from './components/product-category/UpdateProductCategory';
 
 const productData = {
   name: "Example product Name",
@@ -45,7 +41,6 @@ const productData = {
   category : "type of category",
   imageurl : "Sample image",
 };
-
 
 const router = createBrowserRouter([
   {
@@ -124,11 +119,9 @@ const router = createBrowserRouter([
   {
     path: "/dashboard", // took out the AuthenticatedRoute, it was wrapping everything
     element: (
-     
         <WithSidebarLayout>
           <Dashboard />
         </WithSidebarLayout>
-    
     ),
   },
   {
@@ -142,34 +135,35 @@ const router = createBrowserRouter([
   {
     path: "/new/product/category",
     element: (
-      
         <WithSidebarLayout>
           <AddProductCategory />
         </WithSidebarLayout>
-    
     ),
   },
-
   {
     path:  "/view/product/category/:id",
     element: (
       <WithSidebarLayout>
-        <ViewProductCategory category={categoryData} />
+        <ViewProductCategory />
       </WithSidebarLayout>
     ),
   },
-
+  {
+    path:  "/update/product/category/:id",
+    element: (
+      <WithSidebarLayout>
+        <UpdateProductCategory />
+      </WithSidebarLayout>
+    ),
+  },
   {
     path: "/products",
     element: (
-      
         <WithSidebarLayout>
           <Product />
         </WithSidebarLayout>
-    
     ),
   },
-
   {
     path:  "/view/product/:id",
     element: (
@@ -178,51 +172,38 @@ const router = createBrowserRouter([
       </WithSidebarLayout>
     ),
   },
-
-
   {
     path: "/user/management",
     element: (
-      
         <WithSidebarLayout>
           <UserManagement />
         </WithSidebarLayout>
-    
     ),
   },
   {
     path: "/ordered/products",
     element: (
-      
         <WithSidebarLayout>
           <OrderedProduct />
         </WithSidebarLayout>
-    
     ),
   },
   {
     path: "/new/product",
     element: (
-      
         <WithSidebarLayout>
           <AddNewProduct />
         </WithSidebarLayout>
-    
     ),
   },
-
   {
     path: "/new/user",
     element: (
-      
         <WithSidebarLayout>
           <AddNewUser />
         </WithSidebarLayout>
-    
     ),
   },
-
-  
 ]);
 
 const queryClient = new QueryClient();

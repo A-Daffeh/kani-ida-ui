@@ -30,3 +30,36 @@ export const useFetchCategories = ({ page = 0, size = 10 }) => {
         },
     });
 };
+
+export const useFetchCategoryById = (id) => {
+    return useQuery({
+        queryKey: ['category', id],
+        queryFn: async () => {
+            const response = await api.get(`/admin/categories/${id}`);
+            return response.data.data.category;
+        },
+        onError: (error) => {
+            const errorMessage = error.response?.data?.message || 'Failed to fetch category';
+            showToast(errorMessage, 'error');
+        },
+    });
+};
+
+export const useUpdateCategory = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async ({ id, updatedCategory }) => {
+            const response = await api.put(`/admin/categories/${id}`, updatedCategory);
+            return response.data;
+        },
+        onSuccess: (data) => {
+            showToast(data.message, 'success');
+            queryClient.invalidateQueries({ queryKey: 'categories' });
+        },
+        onError: (error) => {
+            const errorMessage = error.response?.data?.message || 'Failed to update category';
+            showToast(errorMessage, 'error');
+        },
+    });
+};

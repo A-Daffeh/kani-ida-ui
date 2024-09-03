@@ -65,9 +65,11 @@ const ProductCategory = () => {
                                     {activeDropdown === index && (
                                         <div className="dropdown-menu show" ref={dropdownRef}>
                                             <Link to={`/view/product/category/${category.id}`} className="dropdown-item">
-                                            View Category
+                                                View Category
                                             </Link>
-
+                                            <Link to={`/update/product/category/${category.id}`} className="dropdown-item">
+                                                Edit Category
+                                            </Link>
                                             <button className="dropdown-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                 Delete Category
                                                 <input type="checkbox" id={`delete-${index}`} style={{ marginLeft: '10px' }} />
@@ -110,4 +112,3 @@ const ProductCategory = () => {
 };
 
 export default ProductCategory;
-
