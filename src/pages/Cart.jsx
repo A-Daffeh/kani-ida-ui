@@ -1,4 +1,3 @@
-import React from 'react';
 import NavBar from "../components/navbar/NavBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";

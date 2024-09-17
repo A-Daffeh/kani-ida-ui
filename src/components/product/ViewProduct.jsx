@@ -1,13 +1,24 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../header/Header';
+import { useFetchProductById } from '../../services/ProductService';
 
-function ViewProduct({ product }) {
+function ViewProduct() {
     const navigate = useNavigate();
+    const { id } = useParams(); 
+    const { data: product, isLoading, error } = useFetchProductById(id);
 
-    const HandleReturn = () => {
+    const handleReturn = () => {
         navigate("/products");
     };
+
+    if (isLoading) {
+        return <p>Loading...</p>;
+    }
+
+    if (error) {
+        return <p>{error.message}</p>;
+    }
 
     return (
         <>
@@ -27,7 +38,7 @@ function ViewProduct({ product }) {
                         </div>
                         <div className="col-md-6 text-dark">
                             <h5>Availability</h5>
-                            <p className="form-control">{product.availability}</p>
+                            <p className="form-control">{product.availability ? 'Yes' : 'No'}</p>
                         </div>
                         <div className="col-md-6 text-dark">
                             <h5>Quantity</h5>
@@ -35,7 +46,7 @@ function ViewProduct({ product }) {
                         </div>
                         <div className="col-md-6 text-dark">
                             <h5>Category</h5>
-                            <p className="form-control">{product.category}</p>
+                            <p className="form-control">{product.productCategory.name}</p>
                         </div>
                         <div className="col-12 text-dark">
                             <h5>Description</h5>
@@ -43,7 +54,9 @@ function ViewProduct({ product }) {
                         </div>
                         <div className="col-12 text-dark">
                             <h5>Image URL</h5>
-                            <p className="form-control">{product.imageurl}</p>
+                            <p className="form-control">
+                                <img src={product.imageUrl} alt={product.name} />
+                            </p>
                         </div>
                     </div>
 
@@ -51,7 +64,7 @@ function ViewProduct({ product }) {
                         <button
                             className="btn btn-secondary"
                             type="button"
-                            onClick={HandleReturn}
+                            onClick={handleReturn}
                         >
                             Back
                         </button>
@@ -63,19 +76,3 @@ function ViewProduct({ product }) {
 }
 
 export default ViewProduct;
-
-
-
-/*
-
-
-
-              <button
-                className="btn btn-secondary"
-                type="button"
-                onClick={HandleReturn}
-              >
-                Back
-              </button>
-           
-              */

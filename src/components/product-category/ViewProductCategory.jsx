@@ -5,7 +5,7 @@ import { useFetchCategoryById } from "../../services/ProductCategoryService";
 
 function ViewProductCategory() {
   const navigate = useNavigate();
-  const { id } = useParams(); // Get the category ID from the URL params
+  const { id } = useParams();
   const { data: category, isLoading, error } = useFetchCategoryById(id);
 
   const handleReturn = () => {

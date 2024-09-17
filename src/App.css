@@ -132,12 +132,20 @@ body {
   color: #007bff;
 }
 
-.badge-admin {
+.badge {
+  color: white;
+}
+
+.badge-role_admin {
   background-color: #ff4d4d;
 }
 
-.badge-user {
+.badge-role_user {
   background-color: #4da6ff;
+}
+
+.badge-role_customer {
+  background-color: #379a6e;
 }
   
 

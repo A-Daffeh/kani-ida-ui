@@ -70,8 +70,12 @@ const Product = () => {
                                     <button className="options-btn" onClick={() => handleDropdownClick(index)}>...</button>
                                     {activeDropdown === index && (
                                         <div className="dropdown-menu show" ref={dropdownRef}>
-                                             <Link to={`/view/product/${product.id}`} className="dropdown-item">
+                                            <Link to={`/view/product/${product.id}`} className="dropdown-item">
                                             View Product
+                                            </Link>
+
+                                            <Link to={`/update/product/${product.id}`} className="dropdown-item">
+                                            Edit Product
                                             </Link>
 
                                             <button className="dropdown-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

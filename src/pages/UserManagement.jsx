@@ -1,17 +1,27 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Header from "../components/header/Header";
 import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import SearchBar from "../components/layouts/SearchBar";
+import { useFetchUsers } from '../services/AuthService';
+import { showToast } from "../components/layouts/Toast";
 
 const UserManagement = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [permissionsExpanded, setPermissionsExpanded] = useState(false);
   const dropdownRef = useRef(null);
 
+  // State for pagination
+  const [currentPage, setCurrentPage] = useState(0);
+  const pageSize = 10; // Define the number of users per page
+
+  // Fetch users with pagination (currentPage and pageSize as params)
+  const { data, error, isLoading } = useFetchUsers(currentPage, pageSize);
+  console.log(data);
+
   const handleDropdownClick = (index) => {
     setActiveDropdown(activeDropdown === index ? null : index);
-    setPermissionsExpanded(false); 
+    setPermissionsExpanded(false);
   };
 
   const handlePermissionsClick = () => {
@@ -32,6 +42,34 @@ const UserManagement = () => {
     };
   }, []);
 
+  const users = data?.content || [];
+  const totalPages = data?.totalPages || 1;
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage(prevPage => prevPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(prevPage => prevPage - 1);
+    }
+  };
+
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
+  };
+
+  if (isLoading) {
+    return <div>Loading users...</div>;
+  }
+
+  if (error) {
+    showToast("Failed to fetch users", "error");
+    return <div>Error fetching users</div>;
+  }
+
   return (
     <>
       <Header pageTitle="User Management" />
@@ -48,7 +86,7 @@ const UserManagement = () => {
         <thead>
           <tr className="header-border">
             <th scope="col">Full Name</th>
-            <th scope="col">Phone Number</th>
+            <th scope="col">Email</th>
             <th scope="col">Joined</th>
             <th scope="col">Status</th>
             <th scope="col">Permissions</th>
@@ -56,23 +94,13 @@ const UserManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {[
-            { name: "Ida Bojang", phone: "425-212-2322", joined: "July 1st 2024", status: "Active", permission: "Admin" },
-            { name: "Amadou Trawally", phone: "425-323-3456", joined: "July 1st 2024", status: "Active", permission: "User" },
-            { name: "Bakary Jammeh", phone: "425-234-4389", joined: "July 2nd 2024", status: "Inactive", permission: "User" },
-            { name: "Bakary Jammeh", phone: "425-214-2222", joined: "July 4th 2024", status: "Active", permission: "User" },
-            { name: "Khadija Drammeh", phone: "425-445-5545", joined: "July 6th 2024", status: "Active", permission: "User" },
-            { name: "Yaya Colley", phone: "425-332-2211", joined: "July 7th 2024", status: "Inactive", permission: "Admin" },
-            { name: "Momodou Jallow", phone: "206-343-3422", joined: "July 7th 2024", status: "Inactive", permission: "User" },
-            { name: "Musa Janneh", phone: "206-234-7578", joined: "July 7th 2024", status: "Active", permission: "User" },
-            { name: "Saikou Sanyang", phone: "206-234-7578", joined: "July 7th 2024", status: "Active", permission: "User" }
-          ].map((user, index) => (
-            <tr key={index}>
-              <td>{user.name}</td>
-              <td>{user.phone}</td>
-              <td>{user.joined}</td>
-              <td>{user.status}</td>
-              <td><span className={`badge badge-${user.permission.toLowerCase()}`}>{user.permission}</span></td>
+          {users.map((user, index) => (
+            <tr key={user.id}>
+              <td>{user.fullName}</td>
+              <td>{user.email}</td>
+              <td>{new Date(user.createdAt).toLocaleDateString()}</td>
+              <td>{user.enabled ? "Active" : "Inactive"}</td>
+              <td><span className={`badge badge-${user.authorities[0].authority.toLowerCase()}`}>{user.authorities[0].authority}</span></td>
               <td style={{ position: 'relative' }}>
                 <button className="options-btn" onClick={() => handleDropdownClick(index)}>...</button>
                 {activeDropdown === index && (
@@ -100,20 +128,27 @@ const UserManagement = () => {
           ))}
         </tbody>
       </table>
-      <nav aria-label="Page navigation example">
+
+      {/* Pagination Controls */}
+      <nav aria-label="Page navigation">
         <ul className="pagination pagination-custom">
-          <li className="page-item">
-            <a className="page-link" href="#" aria-label="Previous">
+          <li className={`page-item ${currentPage === 0 ? 'disabled' : ''}`}>
+            <button className="page-link" onClick={handlePreviousPage} aria-label="Previous">
               <span aria-hidden="true">&laquo;</span>
-            </a>
+            </button>
           </li>
-          <li className="page-item"><a className="page-link" href="#">1</a></li>
-          <li className="page-item"><a className="page-link" href="#">2</a></li>
-          <li className="page-item"><a className="page-link" href="#">3</a></li>
-          <li className="page-item">
-            <a className="page-link" href="#" aria-label="Next">
+
+          {/* Create pagination numbers */}
+          {[...Array(totalPages).keys()].map((page) => (
+            <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
+              <button className="page-link" onClick={() => handlePageClick(page)}>{page + 1}</button>
+            </li>
+          ))}
+
+          <li className={`page-item ${currentPage === totalPages - 1 ? 'disabled' : ''}`}>
+            <button className="page-link" onClick={handleNextPage} aria-label="Next">
               <span aria-hidden="true">&raquo;</span>
-            </a>
+            </button>
           </li>
         </ul>
       </nav>
@@ -122,4 +157,3 @@ const UserManagement = () => {
 };
 
 export default UserManagement;
-

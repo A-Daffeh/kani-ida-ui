@@ -31,16 +31,7 @@ import { store, persistor } from './components/config/store';
 import ViewProductCategory from './components/product-category/ViewProductCategory';
 import ViewProduct from './components/product/ViewProduct';
 import UpdateProductCategory from './components/product-category/UpdateProductCategory';
-
-const productData = {
-  name: "Example product Name",
-  description: "This is an example description that will be for the category",
-  price : "This is a sample price of $50",
-  availability : "This is available",
-  quantity : "50", 
-  category : "type of category",
-  imageurl : "Sample image",
-};
+import UpdateProduct from './components/product/UpdateProduct';
 
 const router = createBrowserRouter([
   {
@@ -168,7 +159,15 @@ const router = createBrowserRouter([
     path:  "/view/product/:id",
     element: (
       <WithSidebarLayout>
-        <ViewProduct product={productData } />
+        <ViewProduct />
+      </WithSidebarLayout>
+    ),
+  },
+  {
+    path:  "/update/product/:id",
+    element: (
+      <WithSidebarLayout>
+        <UpdateProduct />
       </WithSidebarLayout>
     ),
   },

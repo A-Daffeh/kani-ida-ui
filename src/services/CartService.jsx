@@ -88,7 +88,7 @@ export const useClearCart = () => {
     return useMutation({
         mutationFn: async ({ userId }) => {
             const response = await api.put(`/public/cart/${userId}/clear`);
-            return response.data.cart;
+            return response.data.data.cartResponse;
         },
         onSuccess: (data, variables) => {
             showToast('Cart cleared successfully', 'success');
