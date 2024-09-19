@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Banner from "../components/banner/Banner";
 import NavBar from "../components/navbar/NavBar";
 import ProductCardListing from "../components/product/ProductCardListing";
 import Footer from "../components/layouts/Footer";
-import { useFetchProducts } from '../services/ProductService';
+import { useFetchProductsByCategory } from '../services/ProductService';
 
 const SavorySeasoning = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const productsPerPage = 10;
 
-    const { data: productsData, isLoading, error } = useFetchProducts({ page: currentPage, size: productsPerPage });
+    const { data: productsData, isLoading, error } = useFetchProductsByCategory('savory', currentPage, productsPerPage);
 
     const products = productsData?.content || [];
     const totalPages = productsData?.totalPages || 0;

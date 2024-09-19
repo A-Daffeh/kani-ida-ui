@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import ProductCard from './ProductCard';
 import './ProductCardListing.css';
 import { useSelector } from 'react-redux';
@@ -14,7 +14,6 @@ const ProductCardListing = ({ products }) => {
                     image={product.imageUrl}
                     category={product.productCategory.name}
                     name={product.name}
-                    description={product.description}
                     price={product.price}
                     productId={product.id}
                     userId={userId}
@@ -22,6 +21,19 @@ const ProductCardListing = ({ products }) => {
             ))}
         </div>
     );
+};
+
+ProductCardListing.propTypes = {
+    products: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        imageUrl: PropTypes.string.isRequired,
+        productCategory: PropTypes.shape({
+            name: PropTypes.string.isRequired
+        }).isRequired,
+        name: PropTypes.string.isRequired,
+        description: PropTypes.string,
+        price: PropTypes.number.isRequired,
+    })).isRequired,
 };
 
 export default ProductCardListing;

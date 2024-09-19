@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import NavBar from '../navbar/NavBar';
@@ -23,7 +23,7 @@ const Login = () => {
 
             showToast("Login successful", "success");
             const role = user.data.authResponse.user.role;
-            if (role === 'ROLE_ADMIN') {
+            if (role === 'ROLE_ADMIN' || role === 'ROLE_OWNER') {
                 navigate('/dashboard');
             } else {
                 navigate('/cart');
@@ -97,7 +97,7 @@ const Login = () => {
                                 Login
                             </button>
                             <span className="have-account">
-                                Don't have an account?{" "}
+                                Don&apos;t have an account?{" "}
                                 <Link className="forgot-password mb-0" to="/register">
                                     Register
                                 </Link>

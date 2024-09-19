@@ -3,21 +3,19 @@ import Header from "../components/header/Header";
 import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import SearchBar from "../components/layouts/SearchBar";
-import { useFetchUsers } from '../services/AuthService';
+import { useFetchUsers, useUpdateUserRole } from '../services/UserService';
 import { showToast } from "../components/layouts/Toast";
 
 const UserManagement = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [permissionsExpanded, setPermissionsExpanded] = useState(false);
   const dropdownRef = useRef(null);
+  const { mutate: updateUserRole } = useUpdateUserRole();
 
-  // State for pagination
   const [currentPage, setCurrentPage] = useState(0);
-  const pageSize = 10; // Define the number of users per page
+  const pageSize = 10; 
 
-  // Fetch users with pagination (currentPage and pageSize as params)
   const { data, error, isLoading } = useFetchUsers(currentPage, pageSize);
-  console.log(data);
 
   const handleDropdownClick = (index) => {
     setActiveDropdown(activeDropdown === index ? null : index);
@@ -34,6 +32,19 @@ const UserManagement = () => {
       setPermissionsExpanded(false);
     }
   };
+
+  const handleRoleChange = (userId, newRole) => {
+    updateUserRole({ userId, role: newRole }, {
+      onSuccess: () => {
+        showToast(`User role updated to ${newRole === 'ROLE_ADMIN' ? 'Admin' : 'User'}`, 'success');
+      },
+      onError: (error) => {
+        showToast(`Failed to update user role: ${error.message}`, 'error');
+      }
+    });
+    setActiveDropdown(null);
+  };
+
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -113,8 +124,8 @@ const UserManagement = () => {
                     </div>
                     {permissionsExpanded && (
                       <div className="permissions-options">
-                        <button className="dropdown-item">Admin</button>
-                        <button className="dropdown-item">User</button>
+                        <button className="dropdown-item" onClick={() => handleRoleChange(user.id, 'ROLE_ADMIN')}>Admin</button>
+                        <button className="dropdown-item" onClick={() => handleRoleChange(user.id, 'ROLE_CUSTOMER')}>User</button>
                       </div>
                     )}
                     <div style={{ display: 'flex', alignItems: 'center', padding: '10px' }}>
@@ -138,7 +149,6 @@ const UserManagement = () => {
             </button>
           </li>
 
-          {/* Create pagination numbers */}
           {[...Array(totalPages).keys()].map((page) => (
             <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
               <button className="page-link" onClick={() => handlePageClick(page)}>{page + 1}</button>

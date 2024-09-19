@@ -105,3 +105,17 @@ export const useFetchProductById = (id) => {
         }
     });
 };
+
+export const useFetchProductsByCategory = (category, page = 0, size = 10) => {
+    return useQuery({
+        queryKey: ['products', category, page, size],
+        queryFn: async () => {
+            const response = await api.get(`/public/products/category/${category}`, { params: { page, size } });
+            return response.data.data.products;
+        },
+        onError: (error) => {
+            const errorMessage = error.response?.data?.message || 'Failed to fetch products by category';
+            showToast(errorMessage, 'error');
+        }
+    });
+};

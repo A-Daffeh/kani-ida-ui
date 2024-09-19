@@ -1,4 +1,3 @@
-import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -21,7 +20,6 @@ import SavorySeasoning from './pages/SavorySeasoning';
 import Spices from './pages/Spices';
 import AddProductCategory from './components/product-category/AddProductCategory';
 import Cart from './pages/Cart';
-import AuthenticatedRoute from './components/AuthenticatedRoute';
 import Toast from './components/layouts/Toast';
 import AddNewUser from './components/User Management/AddNewUser';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';

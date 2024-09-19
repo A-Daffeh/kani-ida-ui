@@ -1,25 +1,57 @@
-import React, { useEffect } from 'react';
+import { useState } from 'react';
 import Banner from "../components/banner/Banner";
-import { useDispatch, useSelector } from 'react-redux';
 import NavBar from "../components/navbar/NavBar";
 import ProductCardListing from "../components/product/ProductCardListing";
 import Footer from "../components/layouts/Footer";
-
-const products = [];
+import { useFetchProductsByCategory } from '../services/ProductService';
 
 const Spices = () => {
+    const [currentPage, setCurrentPage] = useState(0);
+    const productsPerPage = 10;
+
+    const { data: productsData, isLoading, error } = useFetchProductsByCategory('spices', currentPage, productsPerPage);
+
+    const products = productsData?.content || [];
+    const totalPages = productsData?.totalPages || 0;
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
 
     return (
         <>
             <NavBar />
             <Banner banner_title="Spices" className="spices-banner" />
             <div className="container-fluid">
-                {loading && <p>Loading...</p>}
-                {error && <p>Error: {error}</p>}
-                {!loading && !error && products.length > 0 && (
-                    <ProductCardListing products={products} />
+                {isLoading && <p>Loading...</p>}
+                {error && <p>Error: {error.message}</p>}
+                {!isLoading && !error && products.length > 0 && (
+                    <>
+                        <ProductCardListing products={products} />
+                        <nav aria-label="Page navigation">
+                            <ul className="pagination justify-content-center mt-4">
+                                <li className={`page-item ${currentPage === 0 ? 'disabled' : ''}`}>
+                                    <button className="page-link" onClick={() => handlePageChange(currentPage - 1)} aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </button>
+                                </li>
+                                {[...Array(totalPages)].map((_, index) => (
+                                    <li key={index} className={`page-item ${index === currentPage ? 'active' : ''}`}>
+                                        <button className="page-link" onClick={() => handlePageChange(index)}>
+                                            {index + 1}
+                                        </button>
+                                    </li>
+                                ))}
+                                <li className={`page-item ${currentPage === totalPages - 1 ? 'disabled' : ''}`}>
+                                    <button className="page-link" onClick={() => handlePageChange(currentPage + 1)} aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </nav>
+                    </>
                 )}
-                {!loading && !error && products.length === 0 && (
+                {!isLoading && !error && products.length === 0 && (
                     <p>No products available</p>
                 )}
             </div>

@@ -53,7 +53,7 @@ ProductCard.propTypes = {
     image: PropTypes.string.isRequired,
     category: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
+    description: PropTypes.string,
     price: PropTypes.number.isRequired,
     productId: PropTypes.string.isRequired,
     userId: PropTypes.number,
