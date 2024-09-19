@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../components/config/api';
 import { showToast } from '../components/layouts/Toast';
 
+
 export const useFetchUsers = (page = 0, size = 10) => {
     return useQuery({
         queryKey: ['users', page, size],
@@ -38,3 +39,7 @@ export const useUpdateUserRole = () => {
         },
     });
 };
+
+
+
+
