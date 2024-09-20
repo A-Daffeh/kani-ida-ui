@@ -33,6 +33,7 @@ import UpdateProduct from './components/product/UpdateProduct';
 import ViewAdminProfile from './components/header/ViewAdminProfile';
 import ViewCustomerProfile from './components/header/ViewCustomerProfile';
 import ViewCustomerAddresses from './components/header/ViewCustomerAddresses';
+import CustomerViewProductPage from './pages/CustomerViewProduct';
 
 const router = createBrowserRouter([
   {
@@ -148,6 +149,12 @@ const router = createBrowserRouter([
       </WithSidebarLayout>
     ),
   },
+
+  {
+    path: '/customer/view/product/:id',
+    element: <CustomerViewProductPage/>
+  },
+  
   {
     path: "/products",
     element: (
@@ -196,6 +203,7 @@ const router = createBrowserRouter([
      
     ),
   },
+  
 
 
 
