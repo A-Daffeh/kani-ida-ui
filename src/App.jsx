@@ -30,6 +30,7 @@ import ViewProductCategory from './components/product-category/ViewProductCatego
 import ViewProduct from './components/product/ViewProduct';
 import UpdateProductCategory from './components/product-category/UpdateProductCategory';
 import UpdateProduct from './components/product/UpdateProduct';
+import Checkout from './pages/Checkout';
 
 const router = createBrowserRouter([
   {
@@ -102,6 +103,14 @@ const router = createBrowserRouter([
     element: (
       <WithoutSidebarLayout>
         <Cart />
+      </WithoutSidebarLayout>
+    ),
+  },
+  {
+    path: "/checkout",
+    element: (
+      <WithoutSidebarLayout>
+        <Checkout />
       </WithoutSidebarLayout>
     ),
   },

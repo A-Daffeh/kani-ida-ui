@@ -1,4 +1,5 @@
 import NavBar from "../components/navbar/NavBar";
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -11,6 +12,7 @@ import { useSelector } from 'react-redux';
 
 const Cart = () => {
     const  userId = useSelector((state) => state.auth.user?.data.authResponse.user.id);
+    const navigate = useNavigate();
     
     const { data: cart, isLoading, error } = useFetchCart(userId);
     const removeCartItem = useRemoveCartItem();
@@ -27,6 +29,11 @@ const Cart = () => {
 
     const handleClearCart = () => {
         clearCart.mutate({ userId });
+    };
+
+    const handleProceedToCheckout = () => {
+        console.log("Clicked");
+        navigate('/checkout', { state: { cartItems: cart.cartItems, totalAmount: cart.totalAmount } });
     };
 
     if (isLoading) return <p>Loading...</p>;
@@ -126,7 +133,9 @@ const Cart = () => {
                                     <h5 className="mb-0 ps-4 me-4">Total</h5>
                                     <p className="mb-0 pe-4">${(cart.totalAmount).toFixed(2)}</p>
                                 </div>
-                                <button className="btn border-white rounded-pill px-4 py-3 text-white text-uppercase mb-4 ms-4" type="button">Proceed Checkout</button>
+                                <button className="btn border-white rounded-pill px-4 py-3 text-white text-uppercase mb-4 ms-4" onClick={handleProceedToCheckout}>
+                                    Proceed to Checkout
+                                </button>
                                 <button className="btn border-white rounded-pill px-4 py-3 text-white text-uppercase mb-4 ms-4" type="button" onClick={handleClearCart}>Clear Cart</button>
                             </div>
                         </div>
