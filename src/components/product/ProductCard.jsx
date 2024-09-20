@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import './ProductCard.css';
 import { useAddItemToCart } from '../../services/CartService';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { showToast } from '../layouts/Toast';
 
 const ProductCard = ({ image, name, category, description, price, productId, userId }) => {
@@ -35,7 +35,10 @@ const ProductCard = ({ image, name, category, description, price, productId, use
                 <img src={image} className="img-fluid w-100 rounded-top" alt={name} />
             </div>
             <div className="p-4 border border-secondary border-top-0 rounded-bottom product-info">
-                <h4>{name}</h4>
+                {/* Make product name clickable */}
+                <Link to={`/customer/view/product/${productId}`} className="text-decoration-none">
+                    <h4 className="text-primary">{name}</h4>
+                </Link>
                 <h6 className='text-danger'>{category}</h6>
                 <p>{description}</p>
                 <div className="d-flex justify-content-between flex-lg-wrap">

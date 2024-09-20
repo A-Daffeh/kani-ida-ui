@@ -30,6 +30,10 @@ import ViewProductCategory from './components/product-category/ViewProductCatego
 import ViewProduct from './components/product/ViewProduct';
 import UpdateProductCategory from './components/product-category/UpdateProductCategory';
 import UpdateProduct from './components/product/UpdateProduct';
+import ViewAdminProfile from './components/header/ViewAdminProfile';
+import ViewCustomerProfile from './components/header/ViewCustomerProfile';
+import ViewCustomerAddresses from './components/header/ViewCustomerAddresses';
+import CustomerViewProductPage from './pages/CustomerViewProduct';
 import Checkout from './pages/Checkout';
 
 const router = createBrowserRouter([
@@ -154,6 +158,12 @@ const router = createBrowserRouter([
       </WithSidebarLayout>
     ),
   },
+
+  {
+    path: '/customer/view/product/:id',
+    element: <CustomerViewProductPage/>
+  },
+  
   {
     path: "/products",
     element: (
@@ -170,6 +180,42 @@ const router = createBrowserRouter([
       </WithSidebarLayout>
     ),
   },
+
+  {
+    path:  "/admin/view/profile",
+    element: (
+      <WithSidebarLayout>
+        <ViewAdminProfile/>
+      </WithSidebarLayout>
+    ),
+  },
+
+  {
+    path:  "/user/view/profile",
+    element: (
+      <WithoutSidebarLayout>
+    <ViewCustomerProfile/>
+      </WithoutSidebarLayout>
+      
+     
+    ),
+  },
+
+  
+  {
+    path:  "/user/view/addresses",
+    element: (
+      <WithoutSidebarLayout>
+   <ViewCustomerAddresses/>
+      </WithoutSidebarLayout>
+      
+     
+    ),
+  },
+  
+
+
+
   {
     path:  "/update/product/:id",
     element: (
