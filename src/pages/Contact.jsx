@@ -2,9 +2,9 @@ import { useState } from "react";
 import NavBar from "../components/navbar/NavBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone, faEnvelope, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
-
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Footer from "../components/layouts/Footer";
 
 function Contact() {
   const [formState, setFormState] = useState({
@@ -29,24 +29,34 @@ function Contact() {
     console.log("Form Data:", formState);
     axios
       .post("http://localhost:8080/public/contact/create", formState)
-      .then(() => navigate("/thankyoupage")) // should navigate to the thank you page
+      .then(() => navigate("/thankyoupage"))
       .catch((err) => console.log(err));
   };
 
   return (
     <>
       <NavBar />
-      <div className="contact">
-        <div className="container">
-          <div className="row mb-2">
-          </div>
+      <div className="contact" style={{ overflowX: "hidden", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+        <div className="container flex-grow-1">
           <div className="row justify-content-center">
-            
             <div className="col-12 col-md-10">
-              <div className="contact-container p-4" style={{ border: "1px solid #ddd", borderRadius: "10px", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+              <div
+                className="contact-container p-4"
+                style={{
+                  border: "1px solid black",
+                  borderRadius: "10px",
+                  display: "flex",
+                  flexWrap: "wrap", 
+                  justifyContent: "space-between",
+                  alignItems: "flex-start",
+                  maxWidth: "100%", 
+                  marginBottom: "20px", // Added to ensure space before the footer
+                }}
+              >
                 <div className="col-12 col-lg-7">
-                <h2 className=" text-dark">Contact Us</h2>
-                <p className="text-center text-muted">Fill out the following form and we will be in contact with you as soon as possible</p>
+                  <p className="text-left text-muted">
+                    Fill out the following form and we will be in contact with you as soon as possible
+                  </p>
                   <form onSubmit={handleSubmit}>
                     <div className="form-group text-dark m-2">
                       <label htmlFor="exampleInputName">Enter your name</label>
@@ -94,26 +104,42 @@ function Contact() {
                     </div>
 
                     <div className="col-12 text-center mt-4">
-                      <button type="submit" className="btn btn-danger w-100">
-                        Submit
-                      </button>
+                      <button type="submit" className="btn btn-danger w-100">Submit</button>
                     </div>
                   </form>
                 </div>
-                <div className="col-12 col-lg-4 text-dark">
-                  <div className="contact-info">
-                    <p><FontAwesomeIcon icon={faMapMarkerAlt} /> 1234 Maple Street Everett, WA 98201</p>
-                    <p><FontAwesomeIcon icon={faPhone} /> 425-333-4353</p>
-                    <p><FontAwesomeIcon icon={faEnvelope} /> ldabojang@gmail.com</p>
+
+                <div className="col-12 col-lg-4 text-dark mt-4 mt-lg-0">
+                  <div className="text-center">
+                    <img
+                      className="img-fluid"
+                      src="src/assets/contactcard.png"
+                      alt="Light Bulb"
+                      style={{ maxWidth: "100%", marginBottom: "20px" }}
+                    />
+                  </div>
+
+                  <div className="contact-info text-left" style={{ fontSize: "1.20rem" }}>
+                    <p>
+                      <FontAwesomeIcon icon={faMapMarkerAlt} /> 1234 Maple Street Everett, WA 98201
+                    </p>
+                    <p>
+                      <FontAwesomeIcon icon={faPhone} /> 425-333-4353
+                    </p>
+                    <p>
+                      <FontAwesomeIcon icon={faEnvelope} /> InspirationalGenerations@gmail.com
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     </>
   );
 }
 
 export default Contact;
+
