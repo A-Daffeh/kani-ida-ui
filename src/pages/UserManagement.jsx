@@ -45,7 +45,6 @@ const UserManagement = () => {
     setActiveDropdown(null);
   };
 
-
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -100,7 +99,7 @@ const UserManagement = () => {
             <th scope="col">Email</th>
             <th scope="col">Joined</th>
             <th scope="col">Status</th>
-            <th scope="col">Permissions</th>
+            <th scope="col">Role</th> {/* Changed from Permissions to Role */}
             <th scope="col"></th>
           </tr>
         </thead>
@@ -110,8 +109,8 @@ const UserManagement = () => {
               <td>{user.fullName}</td>
               <td>{user.email}</td>
               <td>{new Date(user.createdAt).toLocaleDateString()}</td>
-              <td>{user.enabled ? "Active" : "Inactive"}</td>
-              <td><span className={`badge badge-${user.authorities[0].authority.toLowerCase()}`}>{user.authorities[0].authority}</span></td>
+              <td>{user.isEnabled ? "Active" : "Inactive"}</td>
+              <td><span className={`badge badge-${user.role.name.toLowerCase()}`}>{user.role.name}</span></td> {/* Updated for role */}
               <td style={{ position: 'relative' }}>
                 <button className="options-btn" onClick={() => handleDropdownClick(index)}>...</button>
                 {activeDropdown === index && (

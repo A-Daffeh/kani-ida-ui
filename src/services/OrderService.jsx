@@ -7,13 +7,16 @@ export const useCreateOrder = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async ({ userId, orderRequest }) => {
-            const response = await api.post(`/public/order/${userId}`, orderRequest);
-            return response.data.data.orderResponse;
+        mutationFn: async ({ userId, cartId, orderRequest }) => {
+            const response = await api.post(`/public/order/${userId}/payment/${cartId}`, orderRequest);
+            return response.data.data.payment;
         },
-        onSuccess: () => {
+        onSuccess: (payment) => {
             showToast('Order created successfully', 'success');
             queryClient.invalidateQueries(['orders']);
+            if (payment?.paymentUrl) {
+                window.location.href = payment.paymentUrl;
+            }
         },
         onError: (error) => {
             const errorMessage = error.response?.data?.message || 'Failed to create order';
@@ -21,6 +24,8 @@ export const useCreateOrder = () => {
         },
     });
 };
+
+
 
 // Fetch Order History
 export const useFetchOrderHistory = (userId) => {
@@ -68,3 +73,36 @@ export const useCancelOrder = () => {
         },
     });
 };
+
+// Update Order Status
+export const useUpdateOrderStatus = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async ({ orderId, status }) => {
+            const response = await api.put(`/admin/orders/${orderId}/update/${status}`);
+            return response.data.data.orderResponse;
+        },
+        onSuccess: () => {
+            showToast('Order status updated successfully', 'success');
+            queryClient.invalidateQueries(['orders']);
+        },
+        onError: (error) => {
+            const errorMessage = error.response?.data?.message || 'Failed to update order status';
+            showToast(errorMessage, 'error');
+        },
+    });
+};
+
+// Fetch Orders
+export const useFetchOrders = (page = 0, size = 10) => {
+    return useQuery({
+        queryKey: ['adminOrders', page, size],
+        queryFn: async () => {
+            const response = await api.get(`/admin/orders?page=${page}&size=${size}`);
+            return response.data.data.orders;
+        },
+    });
+};
+
+

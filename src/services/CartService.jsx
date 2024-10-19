@@ -15,12 +15,13 @@ export const useFetchCart = (userId) => {
             if (!response.data.data || !response.data.data.cartResponse) {
                 throw new Error("Cart data is not available");
             }
-            
+
             return response.data.data.cartResponse;
         },
         enabled: !!userId,
     });
 };
+
 
 // Add Item To Cart
 export const useAddItemToCart = () => {
@@ -29,7 +30,7 @@ export const useAddItemToCart = () => {
     return useMutation({
         mutationFn: async ({ userId, item }) => {
             const response = await api.post(`/public/cart/add/${userId}`, item);
-            return response.data.cartResponse;
+            return response.data.data.cartResponse;
         },
         onSuccess: (data, variables) => {
             queryClient.invalidateQueries(['cart', variables.userId]);
@@ -41,6 +42,7 @@ export const useAddItemToCart = () => {
     });
 };
 
+
 // Update Cart Item
 export const useUpdateCartItem = () => {
     const queryClient = useQueryClient();
@@ -48,7 +50,7 @@ export const useUpdateCartItem = () => {
     return useMutation({
         mutationFn: async ({ cartItemId, quantity }) => {
             const response = await api.put(`/public/cart/item/update`, { cartItemId, quantity });
-            return response.data.cartItem;
+            return response.data.data.cartItem;
         },
         onSuccess: (data, variables) => {
             showToast('Cart item updated successfully', 'success');
@@ -61,6 +63,7 @@ export const useUpdateCartItem = () => {
     });
 };
 
+
 // Remove Cart Item
 export const useRemoveCartItem = () => {
     const queryClient = useQueryClient();
@@ -68,7 +71,7 @@ export const useRemoveCartItem = () => {
     return useMutation({
         mutationFn: async ({ userId, cartItemId }) => {
             const response = await api.delete(`/public/cart/item/${userId}/remove/${cartItemId}`);
-            return response.data.cartResponse;
+            return response.data.data.cartResponse;
         },
         onSuccess: (data, variables) => {
             showToast('Item removed from cart', 'success');
@@ -80,6 +83,7 @@ export const useRemoveCartItem = () => {
         },
     });
 };
+
 
 // Clear Cart
 export const useClearCart = () => {

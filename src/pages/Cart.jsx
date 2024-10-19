@@ -11,9 +11,9 @@ import {
 import { useSelector } from 'react-redux';
 
 const Cart = () => {
-    const  userId = useSelector((state) => state.auth.user?.data.authResponse.user.id);
+    const userId = useSelector((state) => state.auth.user?.data.authResponse.user.id);
     const navigate = useNavigate();
-    
+
     const { data: cart, isLoading, error } = useFetchCart(userId);
     const removeCartItem = useRemoveCartItem();
     const updateCartItem = useUpdateCartItem();
@@ -32,8 +32,7 @@ const Cart = () => {
     };
 
     const handleProceedToCheckout = () => {
-        console.log("Clicked");
-        navigate('/checkout', { state: { cartItems: cart.cartItems, totalAmount: cart.totalAmount } });
+        navigate('/checkout', { state: { cartItems: cart.cartItems, totalAmount: cart.totalAmount, cartId: cart.cartId } });
     };
 
     if (isLoading) return <p>Loading...</p>;
@@ -45,7 +44,7 @@ const Cart = () => {
                 <NavBar />
                 <div className="container-fluid py-5 my-5">
                     <div className="container py-5">
-                        <p className='text-danger'>Card is Empty</p>
+                        <p className='text-danger'>Cart is Empty</p>
                     </div>
                 </div>
             </>
@@ -116,21 +115,8 @@ const Cart = () => {
                         <div className="col-8"></div>
                         <div className="col-sm-8 col-md-7 col-lg-6 col-xl-4">
                             <div className="bg-danger rounded">
-                                <div className="p-4">
-                                    <h1 className="display-6 mb-4">Cart <span className="fw-normal">Total</span></h1>
-                                    <div className="d-flex justify-content-between mb-4">
-                                        <h5 className="mb-0 me-4">Subtotal:</h5>
-                                        <p className="mb-0">${(cart.totalAmount).toFixed(2)}</p>
-                                    </div>
-                                    <div className="d-flex justify-content-between">
-                                        <h5 className="mb-0 me-4">Shipping</h5>
-                                        <div className="">
-                                            <p className="mb-0">Flat rate: $3.00</p>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div className="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
-                                    <h5 className="mb-0 ps-4 me-4">Total</h5>
+                                    <h5 className="mb-0 ps-4 me-4">Subtotal</h5>
                                     <p className="mb-0 pe-4">${(cart.totalAmount).toFixed(2)}</p>
                                 </div>
                                 <button className="btn border-white rounded-pill px-4 py-3 text-white text-uppercase mb-4 ms-4" onClick={handleProceedToCheckout}>
@@ -145,5 +131,6 @@ const Cart = () => {
         </>
     );
 }
+
 
 export default Cart;
