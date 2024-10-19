@@ -34,6 +34,7 @@ import ViewAdminProfile from './components/header/ViewAdminProfile';
 import ViewCustomerProfile from './components/header/ViewCustomerProfile';
 import ViewCustomerAddresses from './components/header/ViewCustomerAddresses';
 import CustomerViewProductPage from './pages/CustomerViewProduct';
+import OrderSuccess from './components/product/OrderSuccess';
 import Checkout from './pages/Checkout';
 
 const router = createBrowserRouter([
@@ -212,6 +213,19 @@ const router = createBrowserRouter([
      
     ),
   },
+
+  {
+    path:  "/user/ordersuccess",
+    element: (
+      <WithoutSidebarLayout>
+  <OrderSuccess/>
+      </WithoutSidebarLayout>
+      
+     
+    ),
+  },
+
+
   
 
 
