@@ -107,6 +107,7 @@ const NavBar = () => {
               {userId ? (
                 <NavDropdown title="Settings" id="settings-dropdown">
                   <NavDropdown.Item href="/user/view/profile">Profile</NavDropdown.Item>
+                  <NavDropdown.Item href="/user/edit/profile">Edit Profile</NavDropdown.Item>
                   <NavDropdown.Item href="/user/view/addresses">View Addresses</NavDropdown.Item>
                   <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
                 </NavDropdown>

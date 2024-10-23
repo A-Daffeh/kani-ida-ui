@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { getCurrentUser } from "../../services/AuthService"; // Import the getCurrentUser function
 import { useSelector } from "react-redux";
 import NavBar from "../navbar/NavBar";
 
@@ -24,7 +22,8 @@ const ViewCustomerProfile = () => {
           <h2 className="text-danger text-center my-5">View Profile</h2>
 
           <div className="row g-3">
-            <div className="col-12 text-dark">
+            {/* Align Name and Email on the same line */}
+            <div className="col-md-6 text-dark">
               <h5>Name</h5>
               <p className="form-control">{currentUser.fullName}</p>
             </div>
@@ -32,27 +31,8 @@ const ViewCustomerProfile = () => {
               <h5>Email</h5>
               <p className="form-control">{currentUser.email}</p>
             </div>
-            <div className="col-md-6 text-dark">
-              <h5>Address</h5>
-              {/* Check if addresses exist, then map through them */}
-              {currentUser?.addresses?.length > 0 ? (
-                currentUser.addresses.map((address, index) => (
-                  <div key={index} className="form-control mb-2">
-                    <p>Street: {address.street}</p>
-                    <p>City: {address.city}</p>
-                    <p>State: {address.state}</p>
-                    <p>Postal Code: {address.postalCode}</p>
-                  </div>
-                ))
-              ) : (
-                <p className="form-control">No address available</p>
-              )}
-            </div>
 
-            <div className="col-md-6 text-dark">
-              <h5>Role</h5>
-              <p className="form-control">{currentUser.role}</p>
-            </div>
+            {/* Description */}
             <div className="col-12 text-dark">
               <h5>Description</h5>
               <textarea className="form-control" rows="3" readOnly>

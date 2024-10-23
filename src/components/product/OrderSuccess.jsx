@@ -1,5 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../layouts/Footer';
+import NavBar from '../navbar/NavBar';
 
 function OrderSuccess() {
     const navigate = useNavigate();
@@ -9,6 +11,8 @@ function OrderSuccess() {
     }
 
     return (
+      <>
+      <NavBar/>
         <div className="container text-center mt-5">
             <div className="order-success p-5" style={{ backgroundColor: '#f0f8ff', borderRadius: '15px' }}>
                 <h2 className="mb-4 text-dark">Congratulations your order has been placed!</h2>
@@ -32,6 +36,9 @@ function OrderSuccess() {
                 </button>
             </div>
         </div>
+
+        <Footer/>
+        </>
     );
 }
 
