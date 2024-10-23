@@ -20,7 +20,7 @@ const Login = () => {
         try {
             const user = await login(data);
             dispatch(setUser(user));
-
+            
             showToast("Login successful", "success");
             const role = user.data.authResponse.user.role;
             if (role === 'ROLE_ADMIN' || role === 'ROLE_OWNER') {

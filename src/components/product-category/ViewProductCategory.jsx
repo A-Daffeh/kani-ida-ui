@@ -1,4 +1,3 @@
-import React from "react";
 import Header from "../header/Header";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetchCategoryById } from "../../services/ProductCategoryService";

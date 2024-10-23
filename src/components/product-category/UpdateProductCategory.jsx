@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Header from '../header/Header';
 import { useFetchCategoryById, useUpdateCategory } from '../../services/ProductCategoryService';
-import { showToast } from '../layouts/Toast';
 
 const UpdateProductCategory = () => {
     const { id } = useParams();

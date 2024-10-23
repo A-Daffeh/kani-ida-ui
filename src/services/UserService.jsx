@@ -9,15 +9,16 @@ export const useFetchUsers = (page = 0, size = 10) => {
         queryFn: async () => {
             const response = await api.get(`/admin/users`, { params: { page, size } });
 
-            if (!response.data.data || !response.data.data.users) {
+            if (!response.data.data || !response.data.data.content) {
                 throw new Error("User data is not available");
             }
 
-            return response.data.data.users;
+            return response.data.data;
         },
         enabled: true,
     });
 };
+
 
 
 export const useUpdateUserRole = () => {

@@ -35,7 +35,11 @@ import ViewCustomerProfile from './components/header/ViewCustomerProfile';
 import ViewCustomerAddresses from './components/header/ViewCustomerAddresses';
 import CustomerViewProductPage from './pages/CustomerViewProduct';
 import OrderSuccess from './components/product/OrderSuccess';
+<<<<<<< HEAD
 import EditCustomerProfile from './components/header/EditCustomerProfile';
+=======
+import Checkout from './pages/Checkout';
+>>>>>>> c49bde869736089404864f5d8a76392b7f1f4263
 
 const router = createBrowserRouter([
   {
@@ -108,6 +112,14 @@ const router = createBrowserRouter([
     element: (
       <WithoutSidebarLayout>
         <Cart />
+      </WithoutSidebarLayout>
+    ),
+  },
+  {
+    path: "/checkout",
+    element: (
+      <WithoutSidebarLayout>
+        <Checkout />
       </WithoutSidebarLayout>
     ),
   },

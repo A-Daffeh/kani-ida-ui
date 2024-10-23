@@ -1,15 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Header from "../components/header/Header";
+import { useFetchOrders, useUpdateOrderStatus } from '../services/OrderService';
+import { showToast } from "../components/layouts/Toast";
 import SearchBar from "../components/layouts/SearchBar";
 
 const OrderedProduct = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [statusExpanded, setStatusExpanded] = useState(false);
+  const [activeOrderItems, setActiveOrderItems] = useState(null); // To store active order's items
   const dropdownRef = useRef(null);
 
-  const handleDropdownClick = (index) => {
+  const [currentPage, setCurrentPage] = useState(0);
+  const pageSize = 10; // Pagination size
+
+  const { data, error, isLoading } = useFetchOrders(currentPage, pageSize);
+  const { mutate: updateOrderStatus, error: updateError, isSuccess: updateSuccess } = useUpdateOrderStatus();
+
+  const handleDropdownClick = (index, orderItems) => {
     setActiveDropdown(activeDropdown === index ? null : index);
-    setStatusExpanded(false); 
+    setActiveOrderItems(orderItems || []); // Set order items for the clicked dropdown
+    setStatusExpanded(false);
   };
 
   const handleStatusClick = () => {
@@ -20,7 +30,13 @@ const OrderedProduct = () => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setActiveDropdown(null);
       setStatusExpanded(false);
+      setActiveOrderItems(null); // Close the active order's items
     }
+  };
+
+  const handleStatusChange = (orderId, newStatus) => {
+    updateOrderStatus({ orderId, status: newStatus });
+    setActiveDropdown(null);
   };
 
   useEffect(() => {
@@ -29,6 +45,46 @@ const OrderedProduct = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  // Handle showing toast for fetch errors or update success/failure
+  useEffect(() => {
+    if (error) {
+      showToast('Failed to fetch orders', 'error');
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (updateSuccess) {
+      showToast('Order status updated successfully', 'success');
+    } else if (updateError) {
+      showToast('Failed to update order status', 'error');
+    }
+  }, [updateSuccess, updateError]);
+
+  const orders = data?.content || [];
+  const totalPages = data?.totalPages || 1;
+
+  console.log(data);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage(prevPage => prevPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(prevPage => prevPage - 1);
+    }
+  };
+
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
+  };
+
+  if (isLoading) {
+    return <div>Loading orders...</div>;
+  }
 
   return (
     <>
@@ -46,43 +102,37 @@ const OrderedProduct = () => {
             <th scope="col">Location</th>
             <th scope="col">Amount</th>
             <th scope="col">Status</th>
-            <th scope="col"></th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {[
-            { id: "#5522351", date: "July 1st 2024, 9:37 AM", customer: "Mustapha Samura", location: "1216 126th St SE Everett, WA 98208", amount: "$164.52", status: "New Order" },
-            { id: "#5532030", date: "July 1st 2024, 11:23 AM", customer: "Modoulamin Sanneh", location: "1216 126th St SE Everett, WA 98208", amount: "$32.58", status: "On Delivery" },
-            { id: "#5383201", date: "July 2nd 2024, 7:42 AM", customer: "Bakary Jammeh", location: "1216 126th St SE Everett, WA 98208", amount: "$43.32", status: "On Delivery" },
-            { id: "#5383201", date: "July 3rd 2024, 11:25 AM", customer: "Ebrima Darboe", location: "1216 126th St SE Everett, WA 98208", amount: "$12.22", status: "Delivered" },
-            // Repeat similar rows for other orders
-          ].map((order, index) => (
-            <tr key={index}>
-              <td>{order.id}</td>
-              <td>{order.date}</td>
+          {orders.map((order, index) => (
+            <tr key={order.orderId}>
+              <td>#{order.orderId}</td>
+              <td>{new Date(order.createdAt).toLocaleString()}</td>
               <td>{order.customer}</td>
-              <td>{order.location}</td>
-              <td>{order.amount}</td>
-              <td><span className={`status-badge ${order.status.replace(/\s+/g, '-').toLowerCase()}`}>{order.status}</span></td>
+              <td>{`${order.deliveryAddress.city}, ${order.deliveryAddress.state}`}</td>
+              <td>${order.totalAmount.toFixed(2)}</td>
+              <td>{order.orderStatus}</td>
               <td style={{ position: 'relative' }}>
-                <button className="options-btn" onClick={() => handleDropdownClick(index)}>...</button>
+                <button className="options-btn" onClick={() => handleDropdownClick(index, order.orderItems)}>...</button>
                 {activeDropdown === index && (
                   <div className="dropdown-menu show" ref={dropdownRef}>
                     <div className="dropdown-header" onClick={handleStatusClick}>
-                      <span>Status</span> 
+                      <span>Status</span>
                       <span style={{ float: 'right', cursor: 'pointer' }}>
                         {statusExpanded ? '▲' : '▼'}
                       </span>
                     </div>
                     {statusExpanded && (
                       <div className="status-options">
-                        <button className="dropdown-item">New Order</button>
-                        <button className="dropdown-item">On Delivery</button>
-                        <button className="dropdown-item">Delivered</button>
+                        <button className="dropdown-item" onClick={() => handleStatusChange(order.orderId, 'New Order')}>New Order</button>
+                        <button className="dropdown-item" onClick={() => handleStatusChange(order.orderId, 'On Delivery')}>On Delivery</button>
+                        <button className="dropdown-item" onClick={() => handleStatusChange(order.orderId, 'Delivered')}>Delivered</button>
                       </div>
                     )}
-                    <button className="dropdown-item">View Order</button>
-                    <div style={{ display: 'flex', alignItems: 'center', padding: '10px 0' }}>
+                    <div className="dropdown-item">View Order</div>
+                    <div className="dropdown-item">
                       <input type="checkbox" id={`delete-${index}`} />
                       <label htmlFor={`delete-${index}`} style={{ marginLeft: '5px' }}>Delete Order</label>
                     </div>
@@ -93,20 +143,51 @@ const OrderedProduct = () => {
           ))}
         </tbody>
       </table>
-      <nav aria-label="Page navigation example">
+
+      {/* Display active order's items */}
+      {activeOrderItems && activeOrderItems.length > 0 && (
+        <div className="order-items">
+          <h3>Order Items</h3>
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">Product Name</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {activeOrderItems.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.productName}</td>
+                  <td>{item.quantity}</td>
+                  <td>${item.totalPrice.toFixed(2)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Pagination Controls */}
+      <nav aria-label="Page navigation">
         <ul className="pagination pagination-custom">
-          <li className="page-item">
-            <a className="page-link" href="#" aria-label="Previous">
+          <li className={`page-item ${currentPage === 0 ? 'disabled' : ''}`}>
+            <button className="page-link" onClick={handlePreviousPage} aria-label="Previous">
               <span aria-hidden="true">&laquo;</span>
-            </a>
+            </button>
           </li>
-          <li className="page-item"><a className="page-link" href="#">1</a></li>
-          <li className="page-item"><a className="page-link" href="#">2</a></li>
-          <li className="page-item"><a className="page-link" href="#">3</a></li>
-          <li className="page-item">
-            <a className="page-link" href="#" aria-label="Next">
+
+          {[...Array(totalPages).keys()].map((page) => (
+            <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
+              <button className="page-link" onClick={() => handlePageClick(page)}>{page + 1}</button>
+            </li>
+          ))}
+
+          <li className={`page-item ${currentPage === totalPages - 1 ? 'disabled' : ''}`}>
+            <button className="page-link" onClick={handleNextPage} aria-label="Next">
               <span aria-hidden="true">&raquo;</span>
-            </a>
+            </button>
           </li>
         </ul>
       </nav>
@@ -115,4 +196,3 @@ const OrderedProduct = () => {
 };
 
 export default OrderedProduct;
-
