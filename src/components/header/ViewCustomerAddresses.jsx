@@ -1,34 +1,61 @@
 import React, { useState } from "react";
-import { Modal, Button, Form } from "react-bootstrap"; // Assuming Bootstrap for styling
+import { Modal, Button, Form } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import NavBar from "../navbar/NavBar";
 import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import NavBar from "../navbar/NavBar";
+import api from "../config/api"; // Assuming you have an API config for axios instance
+import { showToast } from "../layouts/Toast"; // Assuming a toast notification system
 
 const ViewCustomerAddresses = () => {
   const user = useSelector((state) => state.auth.user);
-  const currentUser = user?.data?.authResponse?.user || {}; // Fallback to an empty object
+  const currentUser = user?.data?.authResponse?.user || {};
   const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
-  const [newAddress, setNewAddress] = useState({
-    street: "",
-    city: "",
-    state: "",
-    postalCode: ""
-  });
-  const [addresses, setAddresses] = useState(currentUser?.addresses || []); // Fallback to an empty array
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [addresses, setAddresses] = useState(currentUser?.addresses || []);
+  const queryClient = useQueryClient();
 
-  const handleModalClose = () => setShowModal(false);
-  const handleModalShow = () => setShowModal(true);
+  // Mutation to update an address
+  const { mutate: updateAddress, isLoading: isUpdating } = useMutation({
+    mutationFn: async (data) => {
+      const response = await api.put(`/admin/users/${currentUser.id}/addresses/${data.id}`, data);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["user", currentUser.id]); // Invalidate cache to refresh data
+      showToast("Address updated successfully", "success");
+      handleModalClose();
+    },
+    onError: (error) => {
+      const errorMessage = error.response?.data?.message || "Failed to update address";
+      showToast(errorMessage, "error");
+    },
+  });
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    setSelectedAddress(null);
+  };
+
+  const handleModalShow = (address) => {
+    setSelectedAddress(address);
+    setShowModal(true);
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewAddress({ ...newAddress, [name]: value });
+    setSelectedAddress((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleSaveAddress = () => {
-    setAddresses([...addresses, newAddress]); // Add new address to the list
-    handleModalClose();
+    if (selectedAddress) {
+      updateAddress(selectedAddress);
+    }
   };
 
   const handleReturn = () => {
@@ -39,20 +66,16 @@ const ViewCustomerAddresses = () => {
     <>
       <NavBar />
       <div className="container">
-        <h2 className="text-danger text-center my-5">View User Addresses</h2>
-
-        {/* Add Address button at the top */}
-        <div className="d-flex justify-content-start mb-4">
-          <button 
-            className="btn btn-primary mb-3" 
-            onClick={handleModalShow}
-          >
-            Add Address
+        {/* Header with "Edit Addresses" button */}
+        <div className="d-flex justify-content-between align-items-center my-5">
+          <h2 className="text-danger">View User Addresses</h2>
+          <button className="btn btn-primary" onClick={() => handleModalShow({})}>
+            Edit Addresses
           </button>
         </div>
 
         <div className="row">
-          {addresses?.length > 0 ? (
+          {addresses.length > 0 ? (
             addresses.map((address, index) => (
               <div key={index} className="col-md-4 mb-4">
                 <div className="card h-100">
@@ -64,7 +87,9 @@ const ViewCustomerAddresses = () => {
                     <p className="card-text">Postal Code: {address.postalCode}</p>
                   </div>
                   <div className="card-footer d-flex justify-content-between">
-                    <button className="btn btn-link">Edit</button>
+                    <button className="btn btn-link" onClick={() => handleModalShow(address)}>
+                      Edit
+                    </button>
                     <button className="btn btn-link text-danger">Remove</button>
                   </div>
                 </div>
@@ -81,73 +106,67 @@ const ViewCustomerAddresses = () => {
           </button>
         </div>
 
-        {/* Modal for adding a new address */}
-       {/* Modal for adding a new address */}
-<Modal 
-  show={showModal} 
-  onHide={handleModalClose} 
-  style={{ marginTop: '100px' }} // Adjust this value to move it down
->
-  <Modal.Header closeButton>
-    <Modal.Title className="text-dark">Add New Address</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
-    <Form>
-      <Form.Group controlId="formStreet">
-        <Form.Label>Street</Form.Label>
-        <Form.Control 
-          type="text" 
-          name="street" 
-          value={newAddress.street} 
-          onChange={handleInputChange} 
-          placeholder="Enter street" 
-        />
-      </Form.Group>
+        {/* Modal for adding/updating an address */}
+        <Modal show={showModal} onHide={handleModalClose} style={{ marginTop: "100px" }}>
+          <Modal.Header closeButton>
+            <Modal.Title className="text-dark">{selectedAddress?.id ? "Edit Address" : "Add New Address"}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group controlId="formStreet">
+                <Form.Label>Street</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="street"
+                  value={selectedAddress?.street || ""}
+                  onChange={handleInputChange}
+                  placeholder="Enter street"
+                />
+              </Form.Group>
 
-      <Form.Group controlId="formCity">
-        <Form.Label>City</Form.Label>
-        <Form.Control 
-          type="text" 
-          name="city" 
-          value={newAddress.city} 
-          onChange={handleInputChange} 
-          placeholder="Enter city" 
-        />
-      </Form.Group>
+              <Form.Group controlId="formCity">
+                <Form.Label>City</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="city"
+                  value={selectedAddress?.city || ""}
+                  onChange={handleInputChange}
+                  placeholder="Enter city"
+                />
+              </Form.Group>
 
-      <Form.Group controlId="formState">
-        <Form.Label>State</Form.Label>
-        <Form.Control 
-          type="text" 
-          name="state" 
-          value={newAddress.state} 
-          onChange={handleInputChange} 
-          placeholder="Enter state" 
-        />
-      </Form.Group>
+              <Form.Group controlId="formState">
+                <Form.Label>State</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="state"
+                  value={selectedAddress?.state || ""}
+                  onChange={handleInputChange}
+                  placeholder="Enter state"
+                />
+              </Form.Group>
 
-      <Form.Group controlId="formPostalCode">
-        <Form.Label>Postal Code</Form.Label>
-        <Form.Control 
-          type="text" 
-          name="postalCode" 
-          value={newAddress.postalCode} 
-          onChange={handleInputChange} 
-          placeholder="Enter postal code" 
-        />
-      </Form.Group>
-    </Form>
-  </Modal.Body>
-  <Modal.Footer>
-    <Button variant="secondary" onClick={handleModalClose}>
-      Close
-    </Button>
-    <Button variant="primary" onClick={handleSaveAddress}>
-      Save Address
-    </Button>
-  </Modal.Footer>
-</Modal>
-
+              <Form.Group controlId="formPostalCode">
+                <Form.Label>Postal Code</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="postalCode"
+                  value={selectedAddress?.postalCode || ""}
+                  onChange={handleInputChange}
+                  placeholder="Enter postal code"
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleModalClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleSaveAddress} disabled={isUpdating}>
+              {isUpdating ? "Saving..." : "Save Address"}
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </>
   );

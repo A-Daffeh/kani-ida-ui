@@ -32,13 +32,22 @@ const ViewCustomerProfile = () => {
               <p className="form-control">{currentUser.email}</p>
             </div>
 
-            {/* Description */}
+            <div className="col-12 text-dark">
+              <h5>Join Date</h5>
+              <p className="form-control">{currentUser.joinDate}</p>
+              
+            </div>
+
+            
             <div className="col-12 text-dark">
               <h5>Description</h5>
               <textarea className="form-control" rows="3" readOnly>
                 a user
               </textarea>
             </div>
+
+            
+
           </div>
 
           <div className="d-flex justify-content-end mt-5">
@@ -59,4 +68,3 @@ const ViewCustomerProfile = () => {
 export default ViewCustomerProfile;
 
 
-// create another item in the dropdown in settings and call it my addresses, and add a seperate page with multiple cards with multiple addresses
