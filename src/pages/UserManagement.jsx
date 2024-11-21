@@ -99,7 +99,7 @@ const UserManagement = () => {
             <th scope="col">Email</th>
             <th scope="col">Joined</th>
             <th scope="col">Status</th>
-            <th scope="col">Role</th> {/* Changed from Permissions to Role */}
+            <th scope="col">Role</th>
             <th scope="col"></th>
           </tr>
         </thead>
@@ -110,7 +110,7 @@ const UserManagement = () => {
               <td>{user.email}</td>
               <td>{new Date(user.createdAt).toLocaleDateString()}</td>
               <td>{user.isEnabled ? "Active" : "Inactive"}</td>
-              <td><span className={`badge badge-${user.role.name.toLowerCase()}`}>{user.role.name}</span></td> {/* Updated for role */}
+              <td><span className={`badge badge-${user.role.name.toLowerCase()}`}>{user.role.name}</span></td>
               <td style={{ position: 'relative' }}>
                 <button className="options-btn" onClick={() => handleDropdownClick(index)}>...</button>
                 {activeDropdown === index && (

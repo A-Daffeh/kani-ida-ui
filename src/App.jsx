@@ -36,6 +36,8 @@ import ViewCustomerAddresses from './components/header/ViewCustomerAddresses';
 import CustomerViewProductPage from './pages/CustomerViewProduct';
 import OrderSuccess from './components/product/OrderSuccess';
 import Checkout from './pages/Checkout';
+import OrderDetails from './pages/OrderDetails';
+import OrderHistory from './pages/OrderHistory';
 
 const router = createBrowserRouter([
   {
@@ -195,41 +197,48 @@ const router = createBrowserRouter([
     path:  "/user/view/profile",
     element: (
       <WithoutSidebarLayout>
-    <ViewCustomerProfile/>
+        <ViewCustomerProfile/>
       </WithoutSidebarLayout>
       
      
     ),
   },
-
-  
   {
     path:  "/user/view/addresses",
     element: (
       <WithoutSidebarLayout>
-   <ViewCustomerAddresses/>
+        <ViewCustomerAddresses/>
       </WithoutSidebarLayout>
       
      
     ),
   },
-
   {
-    path:  "/user/ordersuccess",
+    path: "/user/orders", 
+    element: (
+        <WithoutSidebarLayout>
+            <OrderHistory />
+        </WithoutSidebarLayout>
+    ),
+},
+  {
+    path: "/user/orders/:orderId",
+    element: (
+        <WithoutSidebarLayout>
+            <OrderDetails />
+        </WithoutSidebarLayout>
+    ),
+},
+  {
+    path:  "/user/order/success",
     element: (
       <WithoutSidebarLayout>
-  <OrderSuccess/>
+        <OrderSuccess/>
       </WithoutSidebarLayout>
       
      
     ),
   },
-
-
-  
-
-
-
   {
     path:  "/update/product/:id",
     element: (

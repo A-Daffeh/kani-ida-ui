@@ -12,8 +12,13 @@ const authSlice = createSlice({
     clearUser(state) {
       state.user = null;
     },
+    updateAddresses(state, action) {
+      if (state.user && state.user.data && state.user.data.authResponse) {
+        state.user.data.authResponse.user.addresses = action.payload;
+      }
+    },
   },
 });
 
-export const { setUser, clearUser } = authSlice.actions;
+export const { setUser, clearUser, updateAddresses } = authSlice.actions;
 export default authSlice.reducer;

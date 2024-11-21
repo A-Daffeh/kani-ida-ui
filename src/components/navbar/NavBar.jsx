@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Nav, Navbar, NavDropdown, Container } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate } from 'react-router-dom';
@@ -108,6 +108,7 @@ const NavBar = () => {
                 <NavDropdown title="Settings" id="settings-dropdown">
                   <NavDropdown.Item href="/user/view/profile">Profile</NavDropdown.Item>
                   <NavDropdown.Item href="/user/view/addresses">View Addresses</NavDropdown.Item>
+                  <NavDropdown.Item href={`/user/orders`}>Orders</NavDropdown.Item>
                   <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
                 </NavDropdown>
               ) : (

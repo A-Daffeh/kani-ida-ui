@@ -1,12 +1,16 @@
-import React, { useState } from "react";
-import { Modal, Button, Form } from "react-bootstrap"; // Assuming Bootstrap for styling
-import { useSelector } from "react-redux";
+import { useState } from "react";
+import { Modal, Button, Form } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
 import NavBar from "../navbar/NavBar";
 import { useNavigate } from "react-router-dom";
+import { useAddUserAddress, useRemoveUserAddress } from "../../services/UserService";
+import { showToast } from "../layouts/Toast";
+import { updateAddresses } from "../config/AuthSlice";
 
 const ViewCustomerAddresses = () => {
+  const dispatch = useDispatch(); // Initialize dispatch
   const user = useSelector((state) => state.auth.user);
-  const currentUser = user?.data?.authResponse?.user || {}; // Fallback to an empty object
+  const currentUser = user?.data?.authResponse?.user || {};
   const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
@@ -14,9 +18,14 @@ const ViewCustomerAddresses = () => {
     street: "",
     city: "",
     state: "",
-    postalCode: ""
+    postalCode: "",
   });
-  const [addresses, setAddresses] = useState(currentUser?.addresses || []); // Fallback to an empty array
+  const [addresses, setAddresses] = useState(currentUser?.addresses || []);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6; // Number of items per page
+
+  const { mutate: addAddress } = useAddUserAddress();
+  const { mutate: removeAddress } = useRemoveUserAddress();
 
   const handleModalClose = () => setShowModal(false);
   const handleModalShow = () => setShowModal(true);
@@ -27,12 +36,66 @@ const ViewCustomerAddresses = () => {
   };
 
   const handleSaveAddress = () => {
-    setAddresses([...addresses, newAddress]); // Add new address to the list
+    addAddress(
+      {
+        userId: currentUser.id,
+        addressRequest: newAddress,
+      },
+      {
+        onSuccess: (data) => {
+          const updatedAddresses = data.data.user.addresses;
+
+          // Update local state
+          setAddresses(updatedAddresses);
+
+          // Update Redux state
+          dispatch(updateAddresses(updatedAddresses));
+
+          showToast("Address added successfully", "success");
+        },
+        onError: () => {
+          showToast("Failed to add address", "error");
+        },
+      }
+    );
     handleModalClose();
+  };
+
+  const handleRemoveAddress = (addressId) => {
+    removeAddress(
+      { userId: currentUser.id, addressId },
+      {
+        onSuccess: (data) => {
+          const updatedAddresses = data.data.user.addresses;
+
+          // Update local state
+          setAddresses(updatedAddresses);
+
+          // Update Redux state
+          dispatch(updateAddresses(updatedAddresses));
+
+          showToast("Address removed successfully", "success");
+        },
+        onError: () => {
+          showToast("Failed to remove address", "error");
+        },
+      }
+    );
   };
 
   const handleReturn = () => {
     navigate("/");
+  };
+
+  // Pagination logic
+  const totalPages = Math.ceil(addresses.length / itemsPerPage);
+  const paginatedAddresses = addresses.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   return (
@@ -41,19 +104,15 @@ const ViewCustomerAddresses = () => {
       <div className="container">
         <h2 className="text-danger text-center my-5">View User Addresses</h2>
 
-        {/* Add Address button at the top */}
         <div className="d-flex justify-content-start mb-4">
-          <button 
-            className="btn btn-primary mb-3" 
-            onClick={handleModalShow}
-          >
+          <button className="btn btn-primary mb-3" onClick={handleModalShow}>
             Add Address
           </button>
         </div>
 
         <div className="row">
-          {addresses?.length > 0 ? (
-            addresses.map((address, index) => (
+          {paginatedAddresses.length > 0 ? (
+            paginatedAddresses.map((address, index) => (
               <div key={index} className="col-md-4 mb-4">
                 <div className="card h-100">
                   <div className="card-body">
@@ -65,7 +124,12 @@ const ViewCustomerAddresses = () => {
                   </div>
                   <div className="card-footer d-flex justify-content-between">
                     <button className="btn btn-link">Edit</button>
-                    <button className="btn btn-link text-danger">Remove</button>
+                    <button
+                      className="btn btn-link text-danger"
+                      onClick={() => handleRemoveAddress(address.id)}
+                    >
+                      Remove
+                    </button>
                   </div>
                 </div>
               </div>
@@ -75,79 +139,105 @@ const ViewCustomerAddresses = () => {
           )}
         </div>
 
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="d-flex justify-content-center mt-4">
+            <nav>
+              <ul className="pagination">
+                {[...Array(totalPages)].map((_, index) => (
+                  <li
+                    key={index}
+                    className={`page-item ${
+                      index + 1 === currentPage ? "active" : ""
+                    }`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() => handlePageChange(index + 1)}
+                    >
+                      {index + 1}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+        )}
+
         <div className="d-flex justify-content-end mt-5">
-          <button className="btn btn-secondary" type="button" onClick={handleReturn}>
+          <button
+            className="btn btn-secondary"
+            type="button"
+            onClick={handleReturn}
+          >
             Back
           </button>
         </div>
 
-        {/* Modal for adding a new address */}
-       {/* Modal for adding a new address */}
-<Modal 
-  show={showModal} 
-  onHide={handleModalClose} 
-  style={{ marginTop: '100px' }} // Adjust this value to move it down
->
-  <Modal.Header closeButton>
-    <Modal.Title className="text-dark">Add New Address</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
-    <Form>
-      <Form.Group controlId="formStreet">
-        <Form.Label>Street</Form.Label>
-        <Form.Control 
-          type="text" 
-          name="street" 
-          value={newAddress.street} 
-          onChange={handleInputChange} 
-          placeholder="Enter street" 
-        />
-      </Form.Group>
+        <Modal
+          show={showModal}
+          onHide={handleModalClose}
+          style={{ marginTop: "100px" }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title className="text-dark">Add New Address</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group controlId="formStreet">
+                <Form.Label>Street</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="street"
+                  value={newAddress.street}
+                  onChange={handleInputChange}
+                  placeholder="Enter street"
+                />
+              </Form.Group>
 
-      <Form.Group controlId="formCity">
-        <Form.Label>City</Form.Label>
-        <Form.Control 
-          type="text" 
-          name="city" 
-          value={newAddress.city} 
-          onChange={handleInputChange} 
-          placeholder="Enter city" 
-        />
-      </Form.Group>
+              <Form.Group controlId="formCity">
+                <Form.Label>City</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="city"
+                  value={newAddress.city}
+                  onChange={handleInputChange}
+                  placeholder="Enter city"
+                />
+              </Form.Group>
 
-      <Form.Group controlId="formState">
-        <Form.Label>State</Form.Label>
-        <Form.Control 
-          type="text" 
-          name="state" 
-          value={newAddress.state} 
-          onChange={handleInputChange} 
-          placeholder="Enter state" 
-        />
-      </Form.Group>
+              <Form.Group controlId="formState">
+                <Form.Label>State</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="state"
+                  value={newAddress.state}
+                  onChange={handleInputChange}
+                  placeholder="Enter state"
+                />
+              </Form.Group>
 
-      <Form.Group controlId="formPostalCode">
-        <Form.Label>Postal Code</Form.Label>
-        <Form.Control 
-          type="text" 
-          name="postalCode" 
-          value={newAddress.postalCode} 
-          onChange={handleInputChange} 
-          placeholder="Enter postal code" 
-        />
-      </Form.Group>
-    </Form>
-  </Modal.Body>
-  <Modal.Footer>
-    <Button variant="secondary" onClick={handleModalClose}>
-      Close
-    </Button>
-    <Button variant="primary" onClick={handleSaveAddress}>
-      Save Address
-    </Button>
-  </Modal.Footer>
-</Modal>
-
+              <Form.Group controlId="formPostalCode">
+                <Form.Label>Postal Code</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="postalCode"
+                  value={newAddress.postalCode}
+                  onChange={handleInputChange}
+                  placeholder="Enter postal code"
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleModalClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleSaveAddress}>
+              Save Address
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </>
   );

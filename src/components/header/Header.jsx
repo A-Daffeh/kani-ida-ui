@@ -1,14 +1,14 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
-import './Header.css'; // Ensure this contains the necessary styles
+import './Header.css';
 import { useSelector } from "react-redux";
-import { FaChevronDown } from 'react-icons/fa'; // Importing FontAwesome down arrow icon
-import { useNavigate } from 'react-router-dom'; // Importing useNavigate for navigation
+import { FaChevronDown } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 function Header({ pageTitle }) {
   const user = useSelector((state) => state.auth.user);
-  const navigate = useNavigate(); // Initialize navigate hook
-  const [dropdownOpen, setDropdownOpen] = useState(false); // State to control dropdown visibility
+  const navigate = useNavigate();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   const fullName = user?.data?.authResponse?.user?.fullName || "Ida Bojang";
