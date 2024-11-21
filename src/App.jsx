@@ -196,7 +196,7 @@ const router = createBrowserRouter([
     path:  "/user/view/profile",
     element: (
       <WithoutSidebarLayout>
-    <ViewCustomerProfile/>
+        <ViewCustomerProfile/>
       </WithoutSidebarLayout>
       
      
@@ -222,29 +222,22 @@ const router = createBrowserRouter([
     path:  "/user/view/addresses",
     element: (
       <WithoutSidebarLayout>
-   <ViewCustomerAddresses/>
+        <ViewCustomerAddresses/>
       </WithoutSidebarLayout>
       
      
     ),
   },
-
   {
     path:  "/payment/success",
     element: (
       <WithoutSidebarLayout>
-  <OrderSuccess/>
+        <OrderSuccess/>
       </WithoutSidebarLayout>
       
      
     ),
   },
-
-
-  
-
-
-
   {
     path:  "/update/product/:id",
     element: (

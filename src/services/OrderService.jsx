@@ -42,17 +42,19 @@ export const useFetchOrderHistory = (userId) => {
     });
 };
 
+
 // Fetch Order by ID
-export const useFetchOrder = (orderId) => {
+export const useFetchOrder = (orderId, page = 0, size = 10) => {
     return useQuery({
-        queryKey: ['order', orderId],
+        queryKey: ['order', orderId, page, size],
         queryFn: async () => {
-            const response = await api.get(`/public/order/${orderId}`);
+            const response = await api.get(`/public/order/${orderId}?page=${page}&size=${size}`);
             return response.data.data.orderResponse;
         },
         enabled: !!orderId,
     });
 };
+
 
 // Cancel Order
 export const useCancelOrder = () => {
@@ -104,5 +106,25 @@ export const useFetchOrders = (page = 0, size = 10) => {
         },
     });
 };
+
+// Fetch Shipment Tracking URL
+export const useFetchShipmentTracking = (orderId) => {
+    return useQuery({
+        queryKey: ['shipmentTracking', orderId],
+        queryFn: async () => {
+            if (!orderId) {
+                throw new Error("Order ID is required to fetch shipment tracking");
+            }
+            const response = await api.get(`/public/order/${orderId}/shipment`);
+            return response.data.data.shipmentTrackingUrl;
+        },
+        enabled: !!orderId,
+        onError: (error) => {
+            const errorMessage = error.response?.data?.message || 'Failed to fetch shipment tracking URL';
+            showToast(errorMessage, 'error');
+        },
+    });
+};
+
 
 

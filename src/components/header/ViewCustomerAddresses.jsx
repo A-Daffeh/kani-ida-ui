@@ -8,6 +8,7 @@ import api from "../config/api"; // Assuming you have an API config for axios in
 import { showToast } from "../layouts/Toast"; // Assuming a toast notification system
 
 const ViewCustomerAddresses = () => {
+  const dispatch = useDispatch(); // Initialize dispatch
   const user = useSelector((state) => state.auth.user);
   const currentUser = user?.data?.authResponse?.user || {};
   const navigate = useNavigate();
@@ -58,8 +59,41 @@ const ViewCustomerAddresses = () => {
     }
   };
 
+  const handleRemoveAddress = (addressId) => {
+    removeAddress(
+      { userId: currentUser.id, addressId },
+      {
+        onSuccess: (data) => {
+          const updatedAddresses = data.data.user.addresses;
+
+          // Update local state
+          setAddresses(updatedAddresses);
+
+          // Update Redux state
+          dispatch(updateAddresses(updatedAddresses));
+
+          showToast("Address removed successfully", "success");
+        },
+        onError: () => {
+          showToast("Failed to remove address", "error");
+        },
+      }
+    );
+  };
+
   const handleReturn = () => {
     navigate("/");
+  };
+
+  // Pagination logic
+  const totalPages = Math.ceil(addresses.length / itemsPerPage);
+  const paginatedAddresses = addresses.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   return (
@@ -100,8 +134,37 @@ const ViewCustomerAddresses = () => {
           )}
         </div>
 
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="d-flex justify-content-center mt-4">
+            <nav>
+              <ul className="pagination">
+                {[...Array(totalPages)].map((_, index) => (
+                  <li
+                    key={index}
+                    className={`page-item ${
+                      index + 1 === currentPage ? "active" : ""
+                    }`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() => handlePageChange(index + 1)}
+                    >
+                      {index + 1}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+        )}
+
         <div className="d-flex justify-content-end mt-5">
-          <button className="btn btn-secondary" type="button" onClick={handleReturn}>
+          <button
+            className="btn btn-secondary"
+            type="button"
+            onClick={handleReturn}
+          >
             Back
           </button>
         </div>

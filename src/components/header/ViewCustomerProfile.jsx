@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import NavBar from "../navbar/NavBar";
@@ -10,14 +9,14 @@ const ViewCustomerProfile = () => {
   const navigate = useNavigate();
 
   const handleReturn = () => {
-    navigate("/dashboard");
+    navigate("/");
   };
 
   console.log(user);
   return (
     <>
       <NavBar />
-      <div className="container form-container">
+      <div className="container">
         <div className="register" id="register">
           <h2 className="text-danger text-center my-5">View Profile</h2>
 
@@ -48,6 +47,10 @@ const ViewCustomerProfile = () => {
 
             
 
+            <div className="col-md-6 text-dark">
+              <h5>Role</h5>
+              <p className="form-control">{currentUser.role}</p>
+            </div>
           </div>
 
           <div className="d-flex justify-content-end mt-5">
