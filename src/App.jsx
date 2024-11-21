@@ -35,12 +35,9 @@ import ViewCustomerProfile from './components/header/ViewCustomerProfile';
 import ViewCustomerAddresses from './components/header/ViewCustomerAddresses';
 import CustomerViewProductPage from './pages/CustomerViewProduct';
 import OrderSuccess from './components/product/OrderSuccess';
-<<<<<<< HEAD
 import EditCustomerProfile from './components/header/EditCustomerProfile';
-=======
+import CheckoutForm from './components/checkout/CheckoutForm';
 import Checkout from './pages/Checkout';
->>>>>>> c49bde869736089404864f5d8a76392b7f1f4263
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -119,7 +116,7 @@ const router = createBrowserRouter([
     path: "/checkout",
     element: (
       <WithoutSidebarLayout>
-        <Checkout />
+        <Checkout/>
       </WithoutSidebarLayout>
     ),
   },
