@@ -13,7 +13,12 @@ function OrderSuccess() {
     return (
       <>
       <NavBar/>
-        <div className="container text-center mt-5">
+        
+<div className="contact" style={{ overflowX: "hidden", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+<div className="container flex-grow-1">
+<div className="flex-grow-1">
+        <div className="container">
+            <div className="row justify-content-center align-items-center">
             <div className="order-success p-5" style={{ backgroundColor: '#f0f8ff', borderRadius: '15px' }}>
                 <h2 className="mb-4 text-dark">Congratulations your order has been placed!</h2>
                 <img 
@@ -35,7 +40,16 @@ function OrderSuccess() {
                     <i className="fas fa-arrow-left"></i> Back
                 </button>
             </div>
+                
+            </div>
         </div>
+    </div>
+
+</div>
+
+
+<Footer />
+</div>
 
         <Footer/>
         </>
@@ -43,3 +57,4 @@ function OrderSuccess() {
 }
 
 export default OrderSuccess;
+

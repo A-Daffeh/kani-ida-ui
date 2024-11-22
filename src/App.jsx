@@ -162,7 +162,7 @@ const router = createBrowserRouter([
   },
 
   {
-    path: '/customer/view/product/:id',
+    path: '/customer/view/product/:150', /*Should be id, will change later */
     element: <CustomerViewProductPage/>
   },
   
