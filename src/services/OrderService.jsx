@@ -28,17 +28,26 @@ export const useCreateOrder = () => {
 
 
 // Fetch Order History
-export const useFetchOrderHistory = (userId) => {
+export const useFetchOrderHistory = (userId, page = 0, size = 10) => {
     return useQuery({
-        queryKey: ['orders', userId],
+        queryKey: ['orders', userId, page, size],
         queryFn: async () => {
             if (!userId) {
                 throw new Error("User ID is required to fetch order history");
             }
-            const response = await api.get(`/public/order/user/${userId}`);
+            const response = await api.get(`/public/order/user/${userId}`, { params: { page, size } });
+
+            if (!response.data?.data?.orders) {
+                throw new Error("Failed to fetch orders");
+            }
+
             return response.data.data.orders;
         },
         enabled: !!userId,
+        onError: (error) => {
+            const errorMessage = error.response?.data?.message || 'Failed to fetch order history';
+            showToast(errorMessage, 'error');
+        },
     });
 };
 
@@ -79,22 +88,23 @@ export const useCancelOrder = () => {
 // Update Order Status
 export const useUpdateOrderStatus = () => {
     const queryClient = useQueryClient();
-
+  
     return useMutation({
-        mutationFn: async ({ orderId, status }) => {
-            const response = await api.put(`/admin/orders/${orderId}/update/${status}`);
-            return response.data.data.orderResponse;
-        },
-        onSuccess: () => {
-            showToast('Order status updated successfully', 'success');
-            queryClient.invalidateQueries(['orders']);
-        },
-        onError: (error) => {
-            const errorMessage = error.response?.data?.message || 'Failed to update order status';
-            showToast(errorMessage, 'error');
-        },
+      mutationFn: async ({ orderId, status }) => {
+        const response = await api.put(`/admin/orders/${orderId}/update/${status}`);
+        return response.data.data.orderResponse;
+      },
+      onSuccess: () => {
+        showToast('Order status updated successfully', 'success');
+        queryClient.invalidateQueries(['adminOrders']);
+      },
+      onError: (error) => {
+        const errorMessage = error.response?.data?.message || 'Failed to update order status';
+        showToast(errorMessage, 'error');
+      },
     });
 };
+  
 
 // Fetch Orders
 export const useFetchOrders = (page = 0, size = 10) => {
@@ -103,25 +113,6 @@ export const useFetchOrders = (page = 0, size = 10) => {
         queryFn: async () => {
             const response = await api.get(`/admin/orders?page=${page}&size=${size}`);
             return response.data.data.orders;
-        },
-    });
-};
-
-// Fetch Shipment Tracking URL
-export const useFetchShipmentTracking = (orderId) => {
-    return useQuery({
-        queryKey: ['shipmentTracking', orderId],
-        queryFn: async () => {
-            if (!orderId) {
-                throw new Error("Order ID is required to fetch shipment tracking");
-            }
-            const response = await api.get(`/public/order/${orderId}/shipment`);
-            return response.data.data.shipmentTrackingUrl;
-        },
-        enabled: !!orderId,
-        onError: (error) => {
-            const errorMessage = error.response?.data?.message || 'Failed to fetch shipment tracking URL';
-            showToast(errorMessage, 'error');
         },
     });
 };

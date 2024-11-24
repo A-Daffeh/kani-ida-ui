@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Header from '../header/Header';
@@ -15,8 +14,8 @@ const AddProductCategory = () => {
             onSuccess: () => {
                 navigate('/product/category');
             },
-            onError: (error) => {
-                console.error('Failed to create category:', error);
+            onError: () => {
+                showToast('Failed to create category', 'error');
             }
         });
     };

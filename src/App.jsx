@@ -192,7 +192,14 @@ const router = createBrowserRouter([
       </WithSidebarLayout>
     ),
   },
-
+  {
+    path: "/admin/orders/:orderId",
+    element: (
+        <WithSidebarLayout>
+            <OrderDetails />
+        </WithSidebarLayout>
+    ),
+},
   {
     path:  "/user/view/profile",
     element: (
@@ -218,14 +225,6 @@ const router = createBrowserRouter([
     element: (
         <WithoutSidebarLayout>
             <OrderHistory />
-        </WithoutSidebarLayout>
-    ),
-},
-  {
-    path: "/user/orders/:orderId",
-    element: (
-        <WithoutSidebarLayout>
-            <OrderDetails />
         </WithoutSidebarLayout>
     ),
 },

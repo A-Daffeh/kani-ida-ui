@@ -13,9 +13,16 @@ const UserManagement = () => {
   const { mutate: updateUserRole } = useUpdateUserRole();
 
   const [currentPage, setCurrentPage] = useState(0);
-  const pageSize = 10; 
+  const pageSize = 10;
 
-  const { data, error, isLoading } = useFetchUsers(currentPage, pageSize);
+  const { data, isLoading, error } = useFetchUsers(currentPage, pageSize);
+
+  useEffect(() => {
+    if (error) {
+      const errorMessage = error.response?.data?.message || "Error fetching users";
+      showToast(errorMessage, "error");
+    }
+  }, [error]);
 
   const handleDropdownClick = (index) => {
     setActiveDropdown(activeDropdown === index ? null : index);
@@ -34,14 +41,17 @@ const UserManagement = () => {
   };
 
   const handleRoleChange = (userId, newRole) => {
-    updateUserRole({ userId, role: newRole }, {
-      onSuccess: () => {
-        showToast(`User role updated to ${newRole === 'ROLE_ADMIN' ? 'Admin' : 'User'}`, 'success');
-      },
-      onError: (error) => {
-        showToast(`Failed to update user role: ${error.message}`, 'error');
+    updateUserRole(
+      { userId, role: newRole },
+      {
+        onSuccess: () => {
+          showToast(`User role updated to ${newRole === 'ROLE_ADMIN' ? 'Admin' : 'User'}`, 'success');
+        },
+        onError: (error) => {
+          showToast(`Failed to update user role: ${error.message}`, 'error');
+        },
       }
-    });
+    );
     setActiveDropdown(null);
   };
 
@@ -57,13 +67,13 @@ const UserManagement = () => {
 
   const handleNextPage = () => {
     if (currentPage < totalPages - 1) {
-      setCurrentPage(prevPage => prevPage + 1);
+      setCurrentPage((prevPage) => prevPage + 1);
     }
   };
 
   const handlePreviousPage = () => {
     if (currentPage > 0) {
-      setCurrentPage(prevPage => prevPage - 1);
+      setCurrentPage((prevPage) => prevPage - 1);
     }
   };
 
@@ -76,7 +86,6 @@ const UserManagement = () => {
   }
 
   if (error) {
-    showToast("Failed to fetch users", "error");
     return <div>Error fetching users</div>;
   }
 
@@ -89,7 +98,7 @@ const UserManagement = () => {
       </div>
       <span className="d-flex justify-content-end mb-2">
         <Link to="/new/user">
-          <Button variant="light product-btn">Add new User </Button>{' '}
+          <Button variant="light product-btn">Add new User</Button>
         </Link>
       </span>
       <table className="table">
@@ -110,33 +119,57 @@ const UserManagement = () => {
               <td>{user.email}</td>
               <td>{new Date(user.createdAt).toLocaleDateString()}</td>
               <td>{user.isEnabled ? "Active" : "Inactive"}</td>
-              <td><span className={`badge badge-${user.role.name.toLowerCase()}`}>{user.role.name}</span></td>
+              <td>
+                <span className={`badge badge-${user.role?.toLowerCase()}`}>
+                  {user.role}
+                </span>
+              </td>
+
               <td style={{ position: 'relative' }}>
-                <button className="options-btn" onClick={() => handleDropdownClick(index)}>...</button>
-                {activeDropdown === index && (
-                  <div className="dropdown-menu show" ref={dropdownRef}>
-                    <div className="dropdown-header" onClick={handlePermissionsClick}>
-                      <span>Permissions</span> 
-                      <span style={{ float: 'right', cursor: 'pointer' }}>
-                        {permissionsExpanded ? '▲' : '▼'}
-                      </span>
-                    </div>
-                    {permissionsExpanded && (
-                      <div className="permissions-options">
-                        <button className="dropdown-item" onClick={() => handleRoleChange(user.id, 'ROLE_ADMIN')}>Admin</button>
-                        <button className="dropdown-item" onClick={() => handleRoleChange(user.id, 'ROLE_CUSTOMER')}>User</button>
+                {user.role !== 'ROLE_OWNER' && (
+                  <>
+                    <button
+                      className="options-btn"
+                      onClick={() => handleDropdownClick(index)}
+                    >
+                      ...
+                    </button>
+                    {activeDropdown === index && (
+                      <div className="dropdown-menu show" ref={dropdownRef}>
+                        <div
+                          className="dropdown-header"
+                          onClick={handlePermissionsClick}
+                        >
+                          <span>Permissions</span>
+                          <span style={{ float: 'right', cursor: 'pointer' }}>
+                            {permissionsExpanded ? '▲' : '▼'}
+                          </span>
+                        </div>
+                        {permissionsExpanded && (
+                          <div className="permissions-options">
+                            <button
+                              className="dropdown-item"
+                              onClick={() => handleRoleChange(user.id, 'ROLE_ADMIN')}
+                            >
+                              Admin
+                            </button>
+                            <button
+                              className="dropdown-item"
+                              onClick={() => handleRoleChange(user.id, 'ROLE_CUSTOMER')}
+                            >
+                              User
+                            </button>
+                          </div>
+                        )}
                       </div>
                     )}
-                    <div style={{ display: 'flex', alignItems: 'center', padding: '10px' }}>
-                      <input type="checkbox" id={`delete-${index}`} />
-                      <label htmlFor={`delete-${index}`} style={{ marginLeft: '5px' }}>Delete User</label>
-                    </div>
-                  </div>
+                  </>
                 )}
               </td>
             </tr>
           ))}
         </tbody>
+
       </table>
 
       {/* Pagination Controls */}

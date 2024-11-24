@@ -7,15 +7,15 @@ export const useFetchUsers = (page = 0, size = 10) => {
     return useQuery({
         queryKey: ['users', page, size],
         queryFn: async () => {
-            const response = await api.get(`/admin/users`, { params: { page, size } });
+            const response = await api.get('/admin/users', { params: { page, size } });
+            
+            const users = response.data?.data?.users;
 
-            if (!response.data.data || !response.data.data.content) {
+            if (!users || !users.content) {
                 throw new Error("User data is not available");
             }
 
-            console.log(response.data);
-
-            return response.data.data;
+            return users;
         },
         enabled: true,
     });
