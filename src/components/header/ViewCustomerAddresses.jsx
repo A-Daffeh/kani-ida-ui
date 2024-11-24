@@ -1,11 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
-import NavBar from "../navbar/NavBar";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useAddUserAddress, useRemoveUserAddress } from "../../services/UserService";
-import { showToast } from "../layouts/Toast";
-import { updateAddresses } from "../config/AuthSlice";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import NavBar from "../navbar/NavBar";
+import api from "../config/api"; // Assuming you have an API config for axios instance
+import { showToast } from "../layouts/Toast"; // Assuming a toast notification system
 
 const ViewCustomerAddresses = () => {
   const dispatch = useDispatch(); // Initialize dispatch
@@ -14,51 +14,49 @@ const ViewCustomerAddresses = () => {
   const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
-  const [newAddress, setNewAddress] = useState({
-    street: "",
-    city: "",
-    state: "",
-    postalCode: "",
-  });
+  const [selectedAddress, setSelectedAddress] = useState(null);
   const [addresses, setAddresses] = useState(currentUser?.addresses || []);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6; // Number of items per page
+  const queryClient = useQueryClient();
 
-  const { mutate: addAddress } = useAddUserAddress();
-  const { mutate: removeAddress } = useRemoveUserAddress();
+  // Mutation to update an address
+  const { mutate: updateAddress, isLoading: isUpdating } = useMutation({
+    mutationFn: async (data) => {
+      const response = await api.put(`/admin/users/${currentUser.id}/addresses/${data.id}`, data);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["user", currentUser.id]); // Invalidate cache to refresh data
+      showToast("Address updated successfully", "success");
+      handleModalClose();
+    },
+    onError: (error) => {
+      const errorMessage = error.response?.data?.message || "Failed to update address";
+      showToast(errorMessage, "error");
+    },
+  });
 
-  const handleModalClose = () => setShowModal(false);
-  const handleModalShow = () => setShowModal(true);
+  const handleModalClose = () => {
+    setShowModal(false);
+    setSelectedAddress(null);
+  };
+
+  const handleModalShow = (address) => {
+    setSelectedAddress(address);
+    setShowModal(true);
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewAddress({ ...newAddress, [name]: value });
+    setSelectedAddress((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleSaveAddress = () => {
-    addAddress(
-      {
-        userId: currentUser.id,
-        addressRequest: newAddress,
-      },
-      {
-        onSuccess: (data) => {
-          const updatedAddresses = data.data.user.addresses;
-
-          // Update local state
-          setAddresses(updatedAddresses);
-
-          // Update Redux state
-          dispatch(updateAddresses(updatedAddresses));
-
-          showToast("Address added successfully", "success");
-        },
-        onError: () => {
-          showToast("Failed to add address", "error");
-        },
-      }
-    );
-    handleModalClose();
+    if (selectedAddress) {
+      updateAddress(selectedAddress);
+    }
   };
 
   const handleRemoveAddress = (addressId) => {
@@ -102,17 +100,17 @@ const ViewCustomerAddresses = () => {
     <>
       <NavBar />
       <div className="container">
-        <h2 className="text-danger text-center my-5">View User Addresses</h2>
-
-        <div className="d-flex justify-content-start mb-4">
-          <button className="btn btn-primary mb-3" onClick={handleModalShow}>
-            Add Address
+        {/* Header with "Edit Addresses" button */}
+        <div className="d-flex justify-content-between align-items-center my-5">
+          <h2 className="text-danger">View User Addresses</h2>
+          <button className="btn btn-primary" onClick={() => handleModalShow({})}>
+            Edit Addresses
           </button>
         </div>
 
         <div className="row">
-          {paginatedAddresses.length > 0 ? (
-            paginatedAddresses.map((address, index) => (
+          {addresses.length > 0 ? (
+            addresses.map((address, index) => (
               <div key={index} className="col-md-4 mb-4">
                 <div className="card h-100">
                   <div className="card-body">
@@ -123,13 +121,10 @@ const ViewCustomerAddresses = () => {
                     <p className="card-text">Postal Code: {address.postalCode}</p>
                   </div>
                   <div className="card-footer d-flex justify-content-between">
-                    <button className="btn btn-link">Edit</button>
-                    <button
-                      className="btn btn-link text-danger"
-                      onClick={() => handleRemoveAddress(address.id)}
-                    >
-                      Remove
+                    <button className="btn btn-link" onClick={() => handleModalShow(address)}>
+                      Edit
                     </button>
+                    <button className="btn btn-link text-danger">Remove</button>
                   </div>
                 </div>
               </div>
@@ -174,13 +169,10 @@ const ViewCustomerAddresses = () => {
           </button>
         </div>
 
-        <Modal
-          show={showModal}
-          onHide={handleModalClose}
-          style={{ marginTop: "100px" }}
-        >
+        {/* Modal for adding/updating an address */}
+        <Modal show={showModal} onHide={handleModalClose} style={{ marginTop: "100px" }}>
           <Modal.Header closeButton>
-            <Modal.Title className="text-dark">Add New Address</Modal.Title>
+            <Modal.Title className="text-dark">{selectedAddress?.id ? "Edit Address" : "Add New Address"}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -189,7 +181,7 @@ const ViewCustomerAddresses = () => {
                 <Form.Control
                   type="text"
                   name="street"
-                  value={newAddress.street}
+                  value={selectedAddress?.street || ""}
                   onChange={handleInputChange}
                   placeholder="Enter street"
                 />
@@ -200,7 +192,7 @@ const ViewCustomerAddresses = () => {
                 <Form.Control
                   type="text"
                   name="city"
-                  value={newAddress.city}
+                  value={selectedAddress?.city || ""}
                   onChange={handleInputChange}
                   placeholder="Enter city"
                 />
@@ -211,7 +203,7 @@ const ViewCustomerAddresses = () => {
                 <Form.Control
                   type="text"
                   name="state"
-                  value={newAddress.state}
+                  value={selectedAddress?.state || ""}
                   onChange={handleInputChange}
                   placeholder="Enter state"
                 />
@@ -222,7 +214,7 @@ const ViewCustomerAddresses = () => {
                 <Form.Control
                   type="text"
                   name="postalCode"
-                  value={newAddress.postalCode}
+                  value={selectedAddress?.postalCode || ""}
                   onChange={handleInputChange}
                   placeholder="Enter postal code"
                 />
@@ -233,8 +225,8 @@ const ViewCustomerAddresses = () => {
             <Button variant="secondary" onClick={handleModalClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={handleSaveAddress}>
-              Save Address
+            <Button variant="primary" onClick={handleSaveAddress} disabled={isUpdating}>
+              {isUpdating ? "Saving..." : "Save Address"}
             </Button>
           </Modal.Footer>
         </Modal>

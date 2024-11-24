@@ -21,7 +21,8 @@ const ViewCustomerProfile = () => {
           <h2 className="text-danger text-center my-5">View Profile</h2>
 
           <div className="row g-3">
-            <div className="col-12 text-dark">
+            {/* Align Name and Email on the same line */}
+            <div className="col-md-6 text-dark">
               <h5>Name</h5>
               <p className="form-control">{currentUser.fullName}</p>
             </div>
@@ -29,6 +30,23 @@ const ViewCustomerProfile = () => {
               <h5>Email</h5>
               <p className="form-control">{currentUser.email}</p>
             </div>
+
+            <div className="col-12 text-dark">
+              <h5>Join Date</h5>
+              <p className="form-control">{currentUser.joinDate}</p>
+              
+            </div>
+
+            
+            <div className="col-12 text-dark">
+              <h5>Description</h5>
+              <textarea className="form-control" rows="3" readOnly>
+                a user
+              </textarea>
+            </div>
+
+            
+
             <div className="col-md-6 text-dark">
               <h5>Role</h5>
               <p className="form-control">{currentUser.role}</p>
@@ -53,4 +71,3 @@ const ViewCustomerProfile = () => {
 export default ViewCustomerProfile;
 
 
-// create another item in the dropdown in settings and call it my addresses, and add a seperate page with multiple cards with multiple addresses
