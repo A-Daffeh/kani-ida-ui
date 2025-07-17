@@ -6,23 +6,9 @@ export const useAddProduct = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (data) => {
-            const formData = new FormData();
-            formData.append('productRequest', new Blob([JSON.stringify({
-                name: data.name,
-                description: data.description,
-                price: parseFloat(data.price),
-                availability: data.availability === 'true',
-                quantity: data.quantity,
-                category: data.category
-            })], { type: 'application/json' }));
-
-            formData.append('file', data.file[0]);
-
-            const response = await api.post(`/admin/products/create/${data.category}`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                }
+        mutationFn: async (formData) => {
+            const response = await api.post(`/admin/products/create/${formData.get("category")}`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
             });
             return response.data;
         },
@@ -41,30 +27,24 @@ export const useUpdateProduct = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (data) => {
-            const id = data.id;
-            data = data.data;
-            
+        mutationFn: async ({ id, data }) => {
             const formData = new FormData();
-            formData.append('productRequest', new Blob([JSON.stringify({
-                name: data.name,
-                description: data.description,
-                price: parseFloat(data.price),
-                availability: data.availability === 'true',
-                quantity: data.quantity,
-                category: data.category
-            })], { type: 'application/json' }));
+            
+            formData.append("name", data.name);
+            formData.append("description", data.description);
+            formData.append("price", parseFloat(data.price));
+            formData.append("availability", data.availability === 'true');
+            formData.append("quantity", data.quantity);
+            formData.append("category", data.category);
 
             if (data.file && data.file.length > 0) {
-                formData.append('file', data.file[0]); 
+                formData.append("file", data.file[0]); 
             }
             
             const response = await api.put(`/admin/products/update/${id}`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                }
+                headers: { 'Content-Type': 'multipart/form-data' }
             });
-            return response;
+            return response.data;
         },
         onSuccess: (data) => {
             showToast(data.message, 'success');

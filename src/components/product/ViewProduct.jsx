@@ -49,7 +49,7 @@ function ViewProduct() {
                         </div>
                         <div className="col-12 text-dark">
                             <h5>Description</h5>
-                            <textarea className="form-control" rows="3" readOnly>{product.description}</textarea>
+                            <textarea className="form-control" rows="3" readOnly value={product.description}></textarea>
                         </div>
                         <div className="col-12 text-dark">
                             <h5>Image URL</h5>

@@ -75,16 +75,17 @@ const CheckoutForm = ({ cartItems, totalAmount, cartId }) => {
             };
     
             createOrder.mutate(
-                { userId: user?.id, cartId, orderRequest },  // Pass userId, cartId, and orderRequest
+                { userId: user?.id, cartId, orderRequest }, // Pass userId, cartId, and orderRequest
                 {
                     onSuccess: (data) => {
-                        const paymentUrl = data.payment?.paymentUrl;  // Retrieve payment link from response
-                        if (paymentUrl) {
+                        console.log(data);
+                        const redirectUrl = data.data?.redirectUrl; // Retrieve redirect URL from response
+                        if (redirectUrl) {
                             setTimeout(() => {
-                                window.location.href = paymentUrl;  // Redirect to payment
+                                window.location.href = redirectUrl; // Redirect to the provided URL
                             }, 1000);
                         } else {
-                            setError('Unable to retrieve payment link. Please try again.');
+                            setError('Unable to retrieve redirection link. Please try again.');
                         }
                         setLoading(false);
                     },
@@ -93,7 +94,7 @@ const CheckoutForm = ({ cartItems, totalAmount, cartId }) => {
                         setLoading(false);
                     }
                 }
-            );
+            );            
         } catch (err) {
             setError('Something went wrong. Try again.');
             setLoading(false);

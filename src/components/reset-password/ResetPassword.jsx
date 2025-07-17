@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import NavBar from '../navbar/NavBar';
 import axios from 'axios';
@@ -11,11 +11,14 @@ const ResetPassword = () => {
         register: registerResetPassword,
         handleSubmit: handleSubmitResetPassword,
         formState: { errors: resetErrors },
+        watch,
     } = useForm();
 
+    const password = watch("password");
+
     const onSubmitResetPassword = async (data) => {
-        console.log(data);
         try {
+            // const response = await axios.post('https://kaniidaandbeyond.com/auth/reset/password', data);
             const response = await axios.post('http://localhost:8082/auth/reset/password', data);
             if (response.status === 200) {
                 navigate("/login");

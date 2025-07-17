@@ -1,10 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
-import Header from "../components/header/Header";
 import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
-import SearchBar from "../components/layouts/SearchBar";
 import { useFetchUsers, useUpdateUserRole } from '../services/UserService';
 import { showToast } from "../components/layouts/Toast";
+import { useEffect, useRef, useState } from 'react';
+import Header from '../components/header/Header';
+import SearchBar from '../components/layouts/SearchBar';
 
 const UserManagement = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -161,6 +161,12 @@ const UserManagement = () => {
                             </button>
                           </div>
                         )}
+                        <Link
+                          to={`/admin/view/user/${user.id}`}
+                          className="dropdown-item"
+                        >
+                          View Profile
+                        </Link>
                       </div>
                     )}
                   </>
@@ -169,7 +175,6 @@ const UserManagement = () => {
             </tr>
           ))}
         </tbody>
-
       </table>
 
       {/* Pagination Controls */}

@@ -1,6 +1,7 @@
 // src/services/ProductService.js
 import axios from 'axios';
 
+// const API_URL = 'https://kaniidaandbeyond.com/api/admin/products/create';
 const API_URL = 'http://localhost:8082/api/admin/products/create';
 
 const getAllProducts = () => {

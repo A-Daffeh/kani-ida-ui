@@ -28,7 +28,8 @@ function Contact() {
     e.preventDefault();
     console.log("Form Data:", formState);
     axios
-      .post("http://localhost:8080/public/contact/create", formState)
+      // .post("https://kaniidaandbeyond.com/public/contact/create", formState)
+      .post("http://localhost:8082/public/contact/create", formState)
       .then(() => navigate("/thankyoupage"))
       .catch((err) => console.log(err));
   };

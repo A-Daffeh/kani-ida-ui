@@ -16,6 +16,7 @@ const ForgotPassword = () => {
     const onSubmitForgotPassword = async (data) => {
         console.log(data);
         try {
+            // const response = await axios.post('https://kaniidaandbeyond.com/auth/reset/password', data);
             const response = await axios.post('http://localhost:8082/auth/reset/password', data);
             if (response.status === 200) {
                 navigate("/login");

@@ -98,7 +98,7 @@ const OrderedProduct = () => {
         <thead>
           <tr className="header-border">
             <th scope="col">Order ID</th>
-            <th scope="col">Date</th>
+            <th scope="col">Order Date</th>
             <th scope="col">Customer Name</th>
             <th scope="col">Amount</th>
             <th scope="col">Status</th>
@@ -132,19 +132,13 @@ const OrderedProduct = () => {
                       <div className="status-options">
                         <button
                           className="dropdown-item"
-                          onClick={() => handleStatusChange(order.id, 'New Order')}
-                        >
-                          New Order
-                        </button>
-                        <button
-                          className="dropdown-item"
-                          onClick={() => handleStatusChange(order.id, 'On Delivery')}
+                          onClick={() => handleStatusChange(order.id, 'OUT_FOR_DELIVERY')}
                         >
                           On Delivery
                         </button>
                         <button
                           className="dropdown-item"
-                          onClick={() => handleStatusChange(order.id, 'Delivered')}
+                          onClick={() => handleStatusChange(order.id, 'DELIVERED')}
                         >
                           Delivered
                         </button>

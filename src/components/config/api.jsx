@@ -4,7 +4,9 @@ import Cookies from 'js-cookie';
 
 // Global axios configuration
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = 'http://localhost:8082';
+// axios.defaults.baseURL = 'https://kaniidaandbeyond.com/';
+axios.defaults.baseURL = 'http://localhost:8082/';
+
 
 let isRefreshing = false;
 let refreshSubscribers = [];

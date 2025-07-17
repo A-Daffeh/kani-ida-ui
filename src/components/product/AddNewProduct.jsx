@@ -12,13 +12,22 @@ const AddNewProduct = () => {
 
     const onSubmit = (data) => {
         console.log(data);
-        addProduct(data, {
-            onSuccess: () => {
-                navigate('/products');
-            },
-            onError: (error) => {
-                console.error('Failed to create product:', error);
-            }
+        const formData = new FormData();
+        
+        formData.append("name", data.name);
+        formData.append("description", data.description);
+        formData.append("price", data.price);
+        formData.append("availability", data.availability);
+        formData.append("quantity", data.quantity);
+        formData.append("category", data.category);
+        
+        if (data.file.length > 0) {
+            formData.append("file", data.file[0]);
+        }
+
+        addProduct(formData, {
+            onSuccess: () => navigate('/products'),
+            onError: (error) => console.error('Failed to create product:', error)
         });
     };
 
@@ -32,11 +41,12 @@ const AddNewProduct = () => {
                     {productError && <p>{productError.message}</p>}
                     {isCategoriesLoading && <p>Loading categories...</p>}
                     {categoriesError && <p>{categoriesError.message}</p>}
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    
+                    <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
                         <div className="row g-3">
                             <div className="col-md-6 text-dark">
-                                <label className="form-label" htmlFor="file">Image URL</label>
-                                <input type="file" className="form-control" id="file" {...register('file', { required: true })} />
+                                <label className="form-label" htmlFor="file">Product Image</label>
+                                <input type="file" className="form-control" id="file" {...register('file')} />
                             </div>
 
                             <div className="col-md-6 text-dark">
@@ -69,10 +79,10 @@ const AddNewProduct = () => {
 
                             <div className="col-md-6 text-dark">
                                 <label className="form-label" htmlFor="quantity">Quantity</label>
-                                <input type="number" className="form-control" id="quantity" step="1" {...register('quantity', { required: true })} />
+                                <input type="number" className="form-control" id="quantity" {...register('quantity', { required: true })} />
                             </div>
 
-                            <div className="col-md-12 text-dark">
+                            <div className="col-12 text-dark">
                                 <label className="form-label" htmlFor="description">Description</label>
                                 <textarea className="form-control" id="description" rows="4" {...register('description', { required: true })}></textarea>
                             </div>

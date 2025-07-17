@@ -24,9 +24,13 @@ const Cart = () => {
     };
 
     const handleUpdateCartItem = (cartItemId, quantity) => {
-        updateCartItem.mutate({ cartItemId, quantity });
+        if (quantity <= 0) {
+            handleRemove(cartItemId);
+        } else {
+            updateCartItem.mutate({ cartItemId, quantity });
+        }
     };
-
+    
     const handleClearCart = () => {
         clearCart.mutate({ userId });
     };

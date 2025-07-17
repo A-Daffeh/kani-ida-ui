@@ -70,7 +70,7 @@ const Register = () => {
 
     const onSubmitRegister = async (data) => {
         try {
-            await register(data); // Directly call the register function
+            await register(data);
             showToast("Registration successful!", "success");
             navigate("/login");
         } catch (error) {

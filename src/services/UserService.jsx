@@ -80,6 +80,25 @@ export const useRemoveUserAddress = () => {
     });
 };
 
+export const useFetchUserById = (userId) => {
+    return useQuery({
+        queryKey: ['user', userId],
+        queryFn: async () => {
+            const response = await api.get(`/admin/users/${userId}`);
+            const user = response.data?.data?.user;
 
+            if (!user) {
+                throw new Error("User data is not available");
+            }
+
+            return user;
+        },
+        enabled: !!userId, // Only fetch if userId is provided
+        onError: (error) => {
+            const errorMessage = error.response?.data?.message || 'Failed to fetch user';
+            showToast(errorMessage, 'error');
+        },
+    });
+};
 
 

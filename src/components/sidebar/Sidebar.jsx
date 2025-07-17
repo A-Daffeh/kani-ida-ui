@@ -1,4 +1,3 @@
-import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,7 +15,7 @@ function Sidebar() {
 
   const handleLogout = async () => {
     try {
-      await logout(); // Directly call the logout function
+      await logout();
       showToast("Logout successful", "success");
       dispatch(clearUser());
       navigate('/login');

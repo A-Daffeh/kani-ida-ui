@@ -1,30 +1,38 @@
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import { Card, Row, Col, Button, Container } from "react-bootstrap";
-import Header from "./Header";
+import Header from "../components/header/Header";
+import { useFetchUserById } from "../services/UserService";
 
-const ViewAdminProfile = () => {
-  const user = useSelector((state) => state.auth.user);
-  const currentUser = user?.data?.authResponse?.user;
+const AdminViewCustomerProfile = () => {
+    const { userId } = useParams();
+    const { data: user, isLoading, error } = useFetchUserById(userId);
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const handleReturn = () => {
-    navigate("/dashboard");
-  };
+    const handleReturn = () => {
+        navigate("/user/management");
+    };
 
-  return (
+    if (isLoading) {
+        return <div>Loading user profile...</div>;
+    }
+
+    if (error) {
+        return <div>Error loading user profile</div>;
+    }
+
+    return (
         <>
-            <Header pageTitle="Profile" />
+            <Header pageTitle="User Management" />
             <Container className="mt-5">
-                <h2 className="text-muted">My Profile</h2>
+                <h2 className="text-muted">User Profile</h2>
             <Card className="mb-4 shadow">
                 <Card.Body>
                 <Row className="align-items-center">
                     {/* Profile Image */}
                     <Col md={3} className="text-center">
                     <img
-                        src={currentUser.imageUrl || "https://via.placeholder.com/150"}
+                        src={user.imageUrl || "https://via.placeholder.com/150"}
                         alt="Profile"
                         className="img-fluid rounded-circle"
                         style={{ maxWidth: "120px" }}
@@ -33,10 +41,10 @@ const ViewAdminProfile = () => {
 
                     {/* User Information */}
                     <Col md={9} className="text-md-end">
-                    <h3>{currentUser.fullName}</h3>
-                    <p className="text-muted mb-1">{currentUser.role}</p>
+                    <h3>{user.fullName}</h3>
+                    <p className="text-muted mb-1">{user.role}</p>
                     <p className="text-muted">
-                        {currentUser.addresses[0]?.city}, {currentUser.addresses[0]?.country}
+                        {user.addresses[0]?.city}, {user.addresses[0]?.country}
                     </p>
                     </Col>
                 </Row>
@@ -49,24 +57,24 @@ const ViewAdminProfile = () => {
                 <Row>
                     <Col md={6}>
                     <p>
-                        <strong>First Name:</strong> {currentUser.fullName.split(" ")[0]}
+                        <strong>First Name:</strong> {user.fullName.split(" ")[0]}
                     </p>
                     <p>
-                        <strong>Email Address:</strong> {currentUser.email}
+                        <strong>Email Address:</strong> {user.email}
                     </p>
                     <p>
-                        <strong>Phone Number:</strong> {currentUser.phoneNumber || "N/A"}
+                        <strong>Phone Number:</strong> {user.phoneNumber || "N/A"}
                     </p>
                     </Col>
                     <Col md={6}>
                     <p>
-                        <strong>Last Name:</strong> {currentUser.fullName.split(" ")[1]}
+                        <strong>Last Name:</strong> {user.fullName.split(" ")[1]}
                     </p>
                     <p>
-                        <strong>Date of Birth:</strong> {currentUser.dob || "N/A"}
+                        <strong>Date of Birth:</strong> {user.dob || "N/A"}
                     </p>
                     <p>
-                        <strong>User Role:</strong> {currentUser.role}
+                        <strong>User Role:</strong> {user.role}
                     </p>
                     </Col>
                 </Row>
@@ -79,23 +87,21 @@ const ViewAdminProfile = () => {
                 <Row>
                     <Col md={6}>
                     <p>
-                        <strong>Country:</strong> {currentUser.addresses[0]?.country || "N/A"}
+                        <strong>Country:</strong> {user.addresses[0]?.country || "N/A"}
                     </p>
                     <p>
-                        <strong>City:</strong> {currentUser.addresses[0]?.city || "N/A"}
+                        <strong>Street:</strong> {user.addresses[0]?.street || "N/A"}
                     </p>
                     </Col>
                     <Col md={6}>
                     <p>
-                        <strong>Postal Code:</strong> {currentUser.addresses[0]?.postalCode || "N/A"}
+                        <strong>City:</strong> {user.addresses[0]?.city || "N/A"}
+                    </p>
+                    <p>
+                        <strong>Postal Code:</strong> {user.addresses[0]?.postalCode || "N/A"}
                     </p>
                     </Col>
                 </Row>
-                <div className="d-flex justify-content-end">
-                    <Button variant="outline-primary" onClick={() => alert("Edit Address clicked")}>
-                    Edit
-                    </Button>
-                </div>
                 </Card.Body>
             </Card>
 
@@ -107,6 +113,6 @@ const ViewAdminProfile = () => {
             </Container>
         </>
   );
-};
+}
 
-export default ViewAdminProfile;
+export default AdminViewCustomerProfile;

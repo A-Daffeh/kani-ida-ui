@@ -2,6 +2,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 axios.defaults.withCredentials = true; 
+// axios.defaults.baseURL = 'https://kaniidaandbeyond.com';
 axios.defaults.baseURL = 'http://localhost:8082';
 
 export const login = async (credentials) => {
