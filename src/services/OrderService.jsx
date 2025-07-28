@@ -8,18 +8,65 @@ export const useCreateOrder = () => {
 
     return useMutation({
         mutationFn: async ({ userId, cartId, orderRequest }) => {
-            const response = await api.post(`/public/order/${userId}/payment/${cartId}`, orderRequest);
-            return response.data.data.payment;
+            try {
+                console.log('Making API request with:', { userId, cartId, orderRequest });
+                
+                const response = await api.post(`/public/order/${userId}/payment/${cartId}`, orderRequest);
+                
+                console.log('API response:', response);
+                console.log('Response data:', response.data);
+                
+                // Safely access nested properties
+                if (!response.data) {
+                    throw new Error('No data received from server');
+                }
+                
+                // Based on your API response, the payment data is directly in response.data
+                const paymentData = response.data;
+                
+                if (!paymentData) {
+                    console.error('Payment data not found in response:', response.data);
+                    throw new Error('Payment information not found in server response');
+                }
+                
+                // Ensure we have a payment URL
+                if (!paymentData.paymentUrl) {
+                    console.error('Payment URL not found in response:', paymentData);
+                    throw new Error('Payment URL not found in server response');
+                }
+                
+                console.log('Payment data:', paymentData);
+                return paymentData;
+                
+            } catch (error) {
+                console.error('Error in mutationFn:', error);
+                console.error('Error response:', error.response);
+                throw error;
+            }
         },
-        onSuccess: (payment) => {
+        onSuccess: (paymentData) => {
+            console.log('Order creation successful, payment data:', paymentData);
             showToast('Order created successfully', 'success');
             queryClient.invalidateQueries(['orders']);
-            if (payment?.paymentUrl) {
-                window.location.href = payment.paymentUrl;
+            
+            // Based on your API response structure, paymentUrl is directly available
+            const paymentUrl = paymentData.paymentUrl;
+            
+            if (paymentUrl) {
+                console.log('Redirecting to payment URL:', paymentUrl);
+                setTimeout(() => {
+                    window.location.href = paymentUrl;
+                }, 1000);
+            } else {
+                console.warn('No payment URL found in payment data:', paymentData);
+                showToast('Order created but payment URL not found. Please contact support.', 'warning');
             }
         },
         onError: (error) => {
-            const errorMessage = error.response?.data?.message || 'Failed to create order';
+            console.error('Order creation error:', error);
+            const errorMessage = error.response?.data?.message || 
+                                error.message || 
+                                'Failed to create order';
             showToast(errorMessage, 'error');
         },
     });
@@ -35,17 +82,32 @@ export const useFetchOrderHistory = (userId, page = 0, size = 10) => {
             if (!userId) {
                 throw new Error("User ID is required to fetch order history");
             }
-            const response = await api.get(`/public/order/user/${userId}`, { params: { page, size } });
+            
+            console.log(`Fetching orders for userId: ${userId}, page: ${page}, size: ${size}`);
+            
+            const response = await api.get(`/public/order/customerorders/${userId}`, { 
+                params: { page, size } 
+            });
 
-            if (!response.data?.data?.orders) {
-                throw new Error("Failed to fetch orders");
+            console.log('Order history response:', response.data);
+
+            // The backend returns Page<OrderResponse> directly, not wrapped in a data object
+            if (!response.data) {
+                throw new Error("No data received from server");
             }
 
-            return response.data.data.orders;
+            // Return the response data directly (it contains content, totalPages, etc.)
+            console.log(response.data);
+            return response.data;
         },
         enabled: !!userId,
+        retry: 3,
+        retryDelay: 1000,
         onError: (error) => {
-            const errorMessage = error.response?.data?.message || 'Failed to fetch order history';
+            console.error('Order history fetch error:', error);
+            const errorMessage = error.response?.data?.message || 
+                                error.message || 
+                                'Failed to fetch order history';
             showToast(errorMessage, 'error');
         },
     });
