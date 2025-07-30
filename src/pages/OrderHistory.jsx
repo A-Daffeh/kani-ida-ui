@@ -12,7 +12,7 @@ const OrderHistory = () => {
     const pageSize = 10;
 
     const { data: orders, isLoading, error } = useFetchOrderHistory(userId, currentPage, pageSize);
-
+    
     const totalPages = orders?.totalPages || 1;
 
     if (isLoading) {
